@@ -1,0 +1,15 @@
+# Object files
+*.o
+
+# from MacOSX
+.DS_Store
+
+# GDB
+.gdb_history
+
+# Output files
+out*
+
+# Binary files
+mtsim
+a.out
