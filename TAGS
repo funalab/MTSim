@@ -1,0 +1,217 @@
+
+color_setting.c,65
+void color_setting(mtGraphics *mtg, int p) {color_setting9,293
+
+display_setting.c,62
+void display_setting(mtGraphics *mtg) {display_setting8,162
+
+draw_graphs.c,218
+void draw_graphs(int i, mtGraphics *mtg, double PVecCen[2][3], double MT[][3], double Nuc[3], double DistanceFromPP, double min, double max, double sum, int currentN, double OldVel, double NewVel) {draw_graphs12,244
+
+free.c,94
+void free_return(double *fvec, double **fjac, int n, double *p, int *indx) {free_return6,77
+
+lubksb_double.c,67
+void lubksb(double **a, int n, int *indx, double b[])lubksb6,123
+
+ludcmp_double.c,92
+#define TINY TINY8,179
+void ludcmp(double **a, int n, int *indx, double *d)ludcmp10,202
+
+main.c,2018
+static double Buckling_forward_sum;Buckling_forward_sum14,373
+static double Buckling_backward_sum;Buckling_backward_sum15,409
+static double Stokes_rad;Stokes_rad16,446
+static double Visco;Visco17,472
+static double Stokes_rotation;Stokes_rotation18,493
+static double Stokes_translation;Stokes_translation19,524
+static double **DVecNucCen;DVecNucCen20,558
+static double Vg;Vg21,586
+static double k_on;k_on22,604
+static double F_dependency;F_dependency23,624
+int N; /* the (maximum) number of MTs per two centrosomes */N24,652
+int NN;NN25,713
+static double **u;u26,721
+static unsigned char *pushing_phase;pushing_phase27,740
+static unsigned char *pulling_phase;pulling_phase28,777
+static unsigned char *phase;phase29,814
+static double Fbuckle[3];Fbuckle30,843
+static double Fbackward[6];Fbackward31,869
+static double fjac_pull[6][6];fjac_pull32,897
+static int step_counter;step_counter33,928
+static double BucklingConst;BucklingConst34,953
+double *L;L35,982
+static double *NumberOfMotor;NumberOfMotor36,993
+static unsigned int phase_transition_count;phase_transition_count37,1023
+static void (*usrfun)(double *x, int n, double *fvec, double **fjac);usrfun38,1067
+static double MotorDensity;MotorDensity39,1137
+static double MotorMaxVel;MotorMaxVel40,1165
+static double MotorStallF;MotorStallF41,1192
+static unsigned char mnewtconverge;mnewtconverge42,1219
+static int mt_start;mt_start43,1255
+static int mt_end;mt_end44,1276
+FILE *f_out8;f_out845,1295
+void FV_solution(double xx, double *f_v, double *fp_v) {FV_solution47,1310
+void function_FV3D(double *x, int n, double *fvec, double **fjac) {function_FV3D52,1543
+void function_MotorFV (double *x, int n, double *fvec, double **fjac) {function_MotorFV97,2719
+void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {function_laserMotorFV135,3894
+void mnewt(int ntrial, double x[], int n, double tolx, double tolf) {mnewt172,5064
+int main(int argc, char* argv[]) {main218,6258
+
+math_func.c,968
+#define PI PI11,219
+double Length(double a[3]) {Length14,295
+void UnitVector(double vector1[3], double vector2[3]) {UnitVector22,449
+void MakeRotationMatrix(double RotationMatrix[3][3], double RotationVector[3], double dt) {MakeRotationMatrix32,622
+void AddVector(double vector1[3], double vector2[3], double result[3]) {AddVector66,1897
+void SubVector(double vector1[3], double vector2[3], double result[3]) {SubVector75,2112
+double InnProdVector(double vector1[3], double vector2[3]) {InnProdVector84,2327
+void OutProdVector(double vector1[3], double vector2[3], double result[3]) {OutProdVector92,2560
+void QuadEqu2(double a[3], double b[2]) {QuadEqu2100,2876
+void ProductJacVec(double aa_out[3], double bb_jac[3][3], double cc_in[3]) {ProductJacVec123,3403
+void VectorRotation(double out[3], double in[3], double rotAx[3], double rotStd[3], double degree) {VectorRotation139,4071
+double Poisson(double np, int motornumber) {Poisson174,5059
+
+nrutil.c,3170
+#define NR_END NR_END11,252
+#define FREE_ARG FREE_ARG12,269
+void nrerror(char error_text[])nrerror15,294
+float *vector(long nl, long nh)vector25,537
+int *ivector(long nl, long nh)ivector35,787
+unsigned char *cvector(long nl, long nh)cvector45,1030
+unsigned long *lvector(long nl, long nh)lvector55,1323
+double *dvector(long nl, long nh)dvector65,1616
+float **matrix(long nrl, long nrh, long ncl, long nch)matrix75,1873
+double **dmatrix(long nrl, long nrh, long ncl, long nch)dmatrix100,2570
+int **imatrix(long nrl, long nrh, long ncl, long nch)imatrix125,3277
+float **submatrix(float **a, long oldrl, long oldrh, long oldcl, long oldch, long newrl, long newcl)submatrix150,3964
+float **convert_matrix(float *a, long nrl, long nrh, long ncl, long nch)convert_matrix170,4554
+float ***f3tensor(long nrl, long nrh, long ncl, long nch, long ndl, long ndh)f3tensor191,5286
+void free_vector(float *v, long nl, long nh)free_vector227,6454
+void free_ivector(int *v, long nl, long nh)free_ivector234,6589
+void free_cvector(unsigned char *v, long nl, long nh)free_cvector241,6723
+void free_lvector(unsigned long *v, long nl, long nh)free_lvector248,6877
+void free_dvector(double *v, long nl, long nh)free_dvector255,7031
+void free_matrix(float **m, long nrl, long nrh, long ncl, long nch)free_matrix262,7170
+void free_dmatrix(double **m, long nrl, long nrh, long ncl, long nch)free_dmatrix270,7369
+void free_imatrix(int **m, long nrl, long nrh, long ncl, long nch)free_imatrix278,7572
+void free_submatrix(float **b, long nrl, long nrh, long ncl, long nch)free_submatrix286,7770
+void free_convert_matrix(float **b, long nrl, long nrh, long ncl, long nch)free_convert_matrix293,7932
+void free_f3tensor(float ***t, long nrl, long nrh, long ncl, long nch, long ndl, long ndh)free_f3tensor300,8109
+#define NR_END NR_END313,8439
+#define FREE_ARG FREE_ARG314,8456
+void nrerror(error_text)nrerror317,8481
+float *vector(nl,nh)vector329,8751
+int *ivector(nl,nh)ivector340,9002
+unsigned char *cvector(nl,nh)cvector351,9246
+unsigned long *lvector(nl,nh)lvector362,9540
+double *dvector(nl,nh)dvector373,9834
+float **matrix(nrl,nrh,ncl,nch)matrix384,10092
+double **dmatrix(nrl,nrh,ncl,nch)dmatrix410,10791
+int **imatrix(nrl,nrh,ncl,nch)imatrix436,11500
+float **submatrix(a,oldrl,oldrh,oldcl,oldch,newrl,newcl)submatrix462,12189
+float **convert_matrix(a,nrl,nrh,ncl,nch)convert_matrix484,12793
+float ***f3tensor(nrl, nrh, ncl, nch, ndl, ndh)f3tensor507,13529
+void free_vector(v,nl,nh)free_vector544,14701
+void free_ivector(v,nl,nh)free_ivector553,14840
+void free_cvector(v,nl,nh)free_cvector562,14978
+void free_lvector(v,nl,nh)free_lvector571,15136
+void free_dvector(v,nl,nh)free_dvector580,15294
+void free_matrix(m, nrl, nrh, ncl, nch)free_matrix589,15437
+void free_dmatrix(m, nrl, nrh, ncl, nch)free_dmatrix599,15644
+void free_imatrix(m, nrl, nrh, ncl, nch)free_imatrix609,15855
+void free_submatrix(b, nrl, nrh, ncl, nch)free_submatrix619,16061
+void free_convert_matrix(b, nrl, nrh, ncl, nch)free_convert_matrix628,16231
+void free_f3tensor(t,nrl, nrh, ncl, nch, ndl, ndh)free_f3tensor637,16416
+
+ran1_double.c,247
+#define IA IA9,292
+#define IM IM10,309
+#define AM AM11,331
+#define IQ IQ12,351
+#define IR IR13,369
+#define NTAB NTAB14,385
+#define NDIV NDIV15,401
+#define EPS EPS16,430
+#define RNMX RNMX17,449
+double ran1(long *idum)ran119,473
+
+save_logs.c,197
+void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FILE* f_out4, FILE* f_out10, FILE* data_for_3D, double Nuc[3], double PVecCen[2][3], double MT[][3]) {save_logs8,198
+
+solve_1D_double.c,427
+#define MAXIT MAXIT6,94
+#define PI PI7,112
+double Stokes_function(double ff, double gr, double fb)Stokes_function11,207
+double FV_function(double ff, double vg, double ko, double fd)FV_function18,325
+double rtsafe(void (*funcd)(double,double *, double *), double x1, double x2, double xacc)rtsafe25,463
+double rtsafe_mod(void (*funcd)(double,double *, double *), double x1, double x2, double xacc)rtsafe_mod73,1532
+
+store_graphs.c,45
+void store_graphs(void) {store_graphs8,136
+
+mtgraphics.h,1613
+#define __mtgraphics____mtgraphics__5,80
+typedef struct _mtGraphics {_mtGraphics10,150
+  int Scale1;Scale111,179
+  Display *d;d12,193
+  Colormap cm;cm13,207
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w114,222
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w214,222
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w314,222
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w414,222
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w514,222
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w614,222
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w714,222
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w814,222
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w914,222
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc115,259
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc215,259
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc315,259
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc415,259
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc515,259
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc615,259
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc715,259
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc815,259
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc915,259
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc_clr15,259
+  Pixmap pixmap;pixmap16,317
+  XSetWindowAttributes att;att17,334
+  XColor c1,c2,c3,c4,c5,cc;c118,362
+  XColor c1,c2,c3,c4,c5,cc;c218,362
+  XColor c1,c2,c3,c4,c5,cc;c318,362
+  XColor c1,c2,c3,c4,c5,cc;c418,362
+  XColor c1,c2,c3,c4,c5,cc;c518,362
+  XColor c1,c2,c3,c4,c5,cc;cc18,362
+} mtGraphics;mtGraphics19,390
+
+mtsim.h,756
+#define __mtsim____mtsim__6,76
+#define false false15,215
+#define true true16,231
+#define DEBUG DEBUG18,247
+#define RED RED20,264
+#define GREEN GREEN21,291
+#define YELLOW YELLOW22,318
+#define BLUE BLUE23,345
+#define MAGENTA MAGENTA24,372
+#define CYAN CYAN25,399
+#define DEFAULT DEFAULT26,426
+#define UNDER_LINE UNDER_LINE27,453
+#define BOLD BOLD28,484
+#define FONT_DEFAULT FONT_DEFAULT29,515
+#define PI PI32,590
+#define WIN_WIDTH WIN_WIDTH33,628
+#define WIN_HEIGHT WIN_HEIGHT34,682
+#define SC3 SC335,737
+#define UNITTIME UNITTIME36,791
+#define ST ST37,856
+#define laserST laserST38,924
+#define metaST metaST39,1000
+#define dT dT40,1109
+#define LL LL41,1175
+#define Rad Rad42,1235
+#define RadS RadS43,1291
+
+nrutil.h,40
+#define _NR_UTILS_H__NR_UTILS_H_7,144
