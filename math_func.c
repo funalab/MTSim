@@ -1,7 +1,7 @@
 /*
  * filename: function8.c
  * this code is a collection of mathematical functions used in the simulation
- * Last modified: Wed, 17 Apr 2013 04:08:53 +0900
+ * Last modified: Mon, 01 Jul 2013 02:50:07 +0900
  */
 
 #include <stdio.h>
@@ -122,15 +122,15 @@ void QuadEqu2(double a[3], double b[2]) {
 // center of nucleus, centrosome,
 void ProductJacVec(double aa_out[3], double bb_jac[3][3], double cc_in[3]) {
   int i, j;
-  //  printf("in=(%lf, %lf, %lf)\n",cc_in[0],cc_in[1],cc_in[2]);
+  //  TRACE(("in=(%lf, %lf, %lf)\n",cc_in[0],cc_in[1],cc_in[2]));
   for (i=0; i<3; i++) {
-    //    printf("in[%d]=%lf in=%d out[%d]=%lf out=%d\n",i,cc_in[i],cc_in,i,aa_out[i],aa_out);
+    //    TRACE(("in[%d]=%lf in=%d out[%d]=%lf out=%d\n",i,cc_in[i],cc_in,i,aa_out[i],aa_out));
     aa_out[i] = 0.0;
-    //    printf("in[%d]=%lf in=%d out[%d]=%lf out=%d\n",i,cc_in[i],cc_in,i,aa_out[i],aa_out);
+    //    TRACE(("in[%d]=%lf in=%d out[%d]=%lf out=%d\n",i,cc_in[i],cc_in,i,aa_out[i],aa_out));
     for (j=0; j<3; j++) {
-      //      printf("jac[%d][%d]=%lf,in[%d]=%lf\n",i,j,bb_jac[i][j],j,cc_in[j]);
+      //      TRACE(("jac[%d][%d]=%lf,in[%d]=%lf\n",i,j,bb_jac[i][j],j,cc_in[j]));
       aa_out[i] += bb_jac[i][j]*cc_in[j];
-      //      printf("out[%d]=%lf,jac[%d][%d]=%lf,in[%d]=%lf\n",i,aa_out[i],i,j,bb_jac[i][j],j,cc_in[j]);
+      //      TRACE(("out[%d]=%lf,jac[%d][%d]=%lf,in[%d]=%lf\n",i,aa_out[i],i,j,bb_jac[i][j],j,cc_in[j]));
     }
   }
   return;
@@ -142,7 +142,7 @@ void VectorRotation(double out[3], double in[3], double rotAx[3], double rotStd[
   double B=sin(degree);
   double C=1.0-A;
   int k, j;
-  //  printf("in=(%lf, %lf, %lf)\n",in[0],in[1],in[2]);
+  //  TRACE(("in=(%lf, %lf, %lf)\n",in[0],in[1],in[2]));
   for (k=0; k<3; k++) {
     for (j=0; j<3; j++) {
       if (k==j) {jac[k][j]=A+C*rotAx[k]*rotAx[k];}
@@ -153,11 +153,11 @@ void VectorRotation(double out[3], double in[3], double rotAx[3], double rotStd[
 	  jac[k][j]=C*rotAx[k]*rotAx[j]-B*rotAx[3-k-j];
 	}
       }
-      //      printf("jac[%d][%d]=%lf\n",k,j,jac[k][j]);
+      //      TRACE(("jac[%d][%d]=%lf\n",k,j,jac[k][j]));
     }
   }
   ProductJacVec(out, jac, in);
-  //  printf("temp out=(%lf, %lf, %lf)\n",out[0],out[1],out[2]);
+  //  TRACE(("temp out=(%lf, %lf, %lf)\n",out[0],out[1],out[2]));
   for (k=0; k<3; k++) {
     for (j=0; j<3; j++) {
       jac[k][j] = -jac[k][j];
@@ -167,7 +167,7 @@ void VectorRotation(double out[3], double in[3], double rotAx[3], double rotStd[
   double temp[3];
   ProductJacVec(temp, jac, rotStd);
   AddVector(out, temp, out);
-  //  printf("final out=(%lf, %lf, %lf)\n",out[0],out[1],out[2]);
+  //  TRACE(("final out=(%lf, %lf, %lf)\n",out[0],out[1],out[2]));
   return;
 }
 

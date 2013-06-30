@@ -2,6 +2,9 @@
 color_setting.c,65
 void color_setting(mtGraphics *mtg, int p) {color_setting9,293
 
+dbg_printf.c,56
+void dbg_printf(const char *fmt, ...)dbg_printf17,748
+
 display_setting.c,62
 void display_setting(mtGraphics *mtg) {display_setting8,162
 
@@ -14,9 +17,9 @@ void free_return(double *fvec, double **fjac, int n, double *p, int *indx) {fre
 lubksb_double.c,67
 void lubksb(double **a, int n, int *indx, double b[])lubksb6,123
 
-ludcmp_double.c,92
-#define TINY TINY8,179
-void ludcmp(double **a, int n, int *indx, double *d)ludcmp10,202
+ludcmp_double.c,91
+#define TINY TINY6,141
+void ludcmp(double **a, int n, int *indx, double *d)ludcmp8,164
 
 main.c,2018
 static double Buckling_forward_sum;Buckling_forward_sum14,373
@@ -53,10 +56,10 @@ static int mt_end;mt_end44,1276
 FILE *f_out8;f_out845,1295
 void FV_solution(double xx, double *f_v, double *fp_v) {FV_solution47,1310
 void function_FV3D(double *x, int n, double *fvec, double **fjac) {function_FV3D52,1543
-void function_MotorFV (double *x, int n, double *fvec, double **fjac) {function_MotorFV97,2719
-void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {function_laserMotorFV135,3894
-void mnewt(int ntrial, double x[], int n, double tolx, double tolf) {mnewt172,5064
-int main(int argc, char* argv[]) {main218,6258
+void function_MotorFV (double *x, int n, double *fvec, double **fjac) {function_MotorFV97,2720
+void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {function_laserMotorFV135,3896
+void mnewt(int ntrial, double x[], int n, double tolx, double tolf) {mnewt172,5066
+int main(int argc, char* argv[]) {main218,6260
 
 math_func.c,968
 #define PI PI11,219
@@ -69,8 +72,8 @@ double InnProdVector(double vector1[3], double vector2[3]) {InnProdVector84,23
 void OutProdVector(double vector1[3], double vector2[3], double result[3]) {OutProdVector92,2560
 void QuadEqu2(double a[3], double b[2]) {QuadEqu2100,2876
 void ProductJacVec(double aa_out[3], double bb_jac[3][3], double cc_in[3]) {ProductJacVec123,3403
-void VectorRotation(double out[3], double in[3], double rotAx[3], double rotStd[3], double degree) {VectorRotation139,4071
-double Poisson(double np, int motornumber) {Poisson174,5059
+void VectorRotation(double out[3], double in[3], double rotAx[3], double rotStd[3], double degree) {VectorRotation139,4076
+double Poisson(double np, int motornumber) {Poisson174,5068
 
 nrutil.c,3170
 #define NR_END NR_END11,252
@@ -139,13 +142,13 @@ double ran1(long *idum)ran119,473
 save_logs.c,197
 void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FILE* f_out4, FILE* f_out10, FILE* data_for_3D, double Nuc[3], double PVecCen[2][3], double MT[][3]) {save_logs8,198
 
-solve_1D_double.c,427
-#define MAXIT MAXIT6,94
-#define PI PI7,112
-double Stokes_function(double ff, double gr, double fb)Stokes_function11,207
-double FV_function(double ff, double vg, double ko, double fd)FV_function18,325
-double rtsafe(void (*funcd)(double,double *, double *), double x1, double x2, double xacc)rtsafe25,463
-double rtsafe_mod(void (*funcd)(double,double *, double *), double x1, double x2, double xacc)rtsafe_mod73,1532
+solve_1D_double.c,426
+#define MAXIT MAXIT5,76
+#define PI PI6,94
+double Stokes_function(double ff, double gr, double fb)Stokes_function10,189
+double FV_function(double ff, double vg, double ko, double fd)FV_function17,307
+double rtsafe(void (*funcd)(double,double *, double *), double x1, double x2, double xacc)rtsafe24,445
+double rtsafe_mod(void (*funcd)(double,double *, double *), double x1, double x2, double xacc)rtsafe_mod72,1514
 
 store_graphs.c,45
 void store_graphs(void) {store_graphs8,136
@@ -185,33 +188,35 @@ typedef struct _mtGraphics {_mtGraphics10,150
   XColor c1,c2,c3,c4,c5,cc;cc18,362
 } mtGraphics;mtGraphics19,390
 
-mtsim.h,756
+mtsim.h,858
 #define __mtsim____mtsim__6,76
 #define false false15,215
 #define true true16,231
-#define DEBUG DEBUG18,247
-#define RED RED20,264
-#define GREEN GREEN21,291
-#define YELLOW YELLOW22,318
-#define BLUE BLUE23,345
-#define MAGENTA MAGENTA24,372
-#define CYAN CYAN25,399
-#define DEFAULT DEFAULT26,426
-#define UNDER_LINE UNDER_LINE27,453
-#define BOLD BOLD28,484
-#define FONT_DEFAULT FONT_DEFAULT29,515
-#define PI PI32,590
-#define WIN_WIDTH WIN_WIDTH33,628
-#define WIN_HEIGHT WIN_HEIGHT34,682
-#define SC3 SC335,737
-#define UNITTIME UNITTIME36,791
-#define ST ST37,856
-#define laserST laserST38,924
-#define metaST metaST39,1000
-#define dT dT40,1109
-#define LL LL41,1175
-#define Rad Rad42,1235
-#define RadS RadS43,1291
+#define DEBUG_PRINT_FLAG DEBUG_PRINT_FLAG20,284
+#define DEBUG_PRINT_FLAG DEBUG_PRINT_FLAG22,317
+#define TRACE(TRACE25,352
+#define RED RED27,423
+#define GREEN GREEN28,450
+#define YELLOW YELLOW29,477
+#define BLUE BLUE30,504
+#define MAGENTA MAGENTA31,531
+#define CYAN CYAN32,558
+#define DEFAULT DEFAULT33,585
+#define UNDER_LINE UNDER_LINE34,612
+#define BOLD BOLD35,643
+#define FONT_DEFAULT FONT_DEFAULT36,674
+#define PI PI39,749
+#define WIN_WIDTH WIN_WIDTH40,787
+#define WIN_HEIGHT WIN_HEIGHT41,841
+#define SC3 SC342,896
+#define UNITTIME UNITTIME43,950
+#define ST ST44,1015
+#define laserST laserST45,1083
+#define metaST metaST46,1159
+#define dT dT47,1268
+#define LL LL48,1334
+#define Rad Rad49,1394
+#define RadS RadS50,1450
 
 nrutil.h,40
 #define _NR_UTILS_H__NR_UTILS_H_7,144

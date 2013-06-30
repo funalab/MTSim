@@ -5,7 +5,7 @@
  * This program simulates centrosome positioning in one-cell embryo
  * Unit meter, kilo-gram, sec
  * to compile: make (see Makefile for detail)
- * Last modified: Sun, 30 Jun 2013 02:53:31 +0900
+ * Last modified: Mon, 01 Jul 2013 02:49:22 +0900
  */
 
 #include "mtsim.h"
@@ -69,7 +69,7 @@ void function_FV3D(double *x, int n, double *fvec, double **fjac) {
       if (A<=0.0){
         pushing_phase[mt]=1;
         phase_transition_count++;
-        printf("A<0 at function_FV3D\n");
+        TRACE(("A<0 at function_FV3D\n"));
         for (i=1; i<=n; i++) {
           fvec[i] -= u[mt][i-1]*F_dependency*BucklingConst/(L[mt]*L[mt]);
         }
@@ -104,7 +104,7 @@ void function_MotorFV (double *x, int n, double *fvec, double **fjac) {
     }
   }
   //  for (j=1; j<=6; j++) {
-  //    printf("fjac[%d] %lf %lf %lf %lf %lf %lf\n",j,fjac[j][1],fjac[j][2],fjac[j][3],fjac[j][4],fjac[j][5],fjac[j][6]);
+  //    TRACE(("fjac[%d] %lf %lf %lf %lf %lf %lf\n",j,fjac[j][1],fjac[j][2],fjac[j][3],fjac[j][4],fjac[j][5],fjac[j][6]));
   //  }
 
   int mt;
@@ -765,7 +765,7 @@ int main(int argc, char* argv[]) {
                 cumpoisson += Poisson(np,motornumber);
               } while (random > cumpoisson);
               NumberOfMotor[k] += motornumber;
-              //printf("%4d %4d N=%3.1lf MT=(%3.2lf %3.2lf %3.2lf %3.2lf %3.2lf %3.2lf)\n",i,k,NumberOfMotor[k],u[k][0],u[k][1],u[k][2],u[k][3],u[k][4],u[k][5]);
+              //TRACE(("%4d %4d N=%3.1lf MT=(%3.2lf %3.2lf %3.2lf %3.2lf %3.2lf %3.2lf)\n",i,k,NumberOfMotor[k],u[k][0],u[k][1],u[k][2],u[k][3],u[k][4],u[k][5]));
               for (j=0;j<6;j++){
                 ForceC[qq][j] += NumberOfMotor[k] * u[k][j] * MotorStallF;} /* an initial guess */
             }
@@ -980,7 +980,7 @@ int main(int argc, char* argv[]) {
         if ((mode == 1)||(mode == 5)) {
           if (i<laserST){  /*************** before ablation *******************/
             for (j=1;j<=6;j++){ /* initial value of tempNucVel[j] */
-              printf("%4d Force[%d]: %10lf %10lf\n",i, j, ForceC[0][j-1]*1.0e+12, ForceC[1][j-1]*1.0e+12);
+              TRACE(("%4d Force[%d]: %10lf %10lf\n",i, j, ForceC[0][j-1]*1.0e+12, ForceC[1][j-1]*1.0e+12));
               if (j<=3) {
                 tempNucVel[j]=(ForceC[0][j-1]+ForceC[1][j-1])/Stokes_translation; 
               } else {
@@ -989,15 +989,15 @@ int main(int argc, char* argv[]) {
             }
             usrfun = function_MotorFV;
             cycle_count=0;
-            printf("%4d init ",i);
+            TRACE(("%4d init ",i));
             for (j=1; j<=6; j++) {
               if (j<=3) {
-                printf("%4.3lf ",tempNucVel[j]*1.0e+6);
+                TRACE(("%4.3lf ",tempNucVel[j]*1.0e+6));
               } else {
-                printf("%4.3lf ",tempNucVel[j]*100);
+                TRACE(("%4.3lf ",tempNucVel[j]*100));
               }
             }
-            printf("\n");
+            TRACE(("\n"));
             for (k=0; k<N; k++) {eachMT_PTC[k]=0;}
             do {
               phase_transition_count=0;
@@ -1057,15 +1057,15 @@ int main(int argc, char* argv[]) {
               cycle_count++;
             } while ((cycle_count<=1)||((phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
 
-            printf("%4d %4d ",i,cycle_count);
+            TRACE(("%4d %4d ",i,cycle_count));
             for (j=1; j<=6; j++) {
               if (j<=3) {
-                printf("%4.3lf ",tempNucVel[j]*1.0e+6);
+                TRACE(("%4.3lf ",tempNucVel[j]*1.0e+6));
               } else {
-                printf("%4.3lf ",tempNucVel[j]*100);
+                TRACE(("%4.3lf ",tempNucVel[j]*100));
               }
             }
-            printf("\n");
+            TRACE(("\n"));
 
             if (phase_transition_count!=0){ /* when the solution is not obtained within 1000 cycles*/
               printf("exit without convergence at t=%d PTC=%d\n",i,phase_transition_count);
@@ -1218,7 +1218,7 @@ int main(int argc, char* argv[]) {
         // the pronucleus does not cross over the cell cortex 
         NuclearDistanceRatio = sqrt(pow((Nuc[0]/(Rad-LL)),2)+pow((Nuc[1]/(RadS-LL)),2)+pow((Nuc[2]/(RadS-LL)),2));
         if (NuclearDistanceRatio > 1) { /* when the pronucleus contacts the cell cortex */
-          if (mode==0) {printf("nucleus crosses over the cortex!!\n");}
+          if (mode==0) {TRACE(("nucleus crosses over the cortex!!\n"));}
           else {
             AAA[0]=0.0;
             AAA[1]=0.0;
@@ -1236,7 +1236,7 @@ int main(int argc, char* argv[]) {
               AAA[2] += pow(Nuc[j]/(RadS-LL),2);
             }
             AAA[2]-=1;
-            printf("QuadEqu2 at L1276\n");
+            TRACE(("QuadEqu2 at L1276\n"));
             QuadEqu2(AAA,BBB);
             for (j=0; j<3; j++){
               Nuc[j] += BBB[0]*tempNucVel[j+1]*dT;
@@ -1269,12 +1269,12 @@ int main(int argc, char* argv[]) {
           Rotation[1]=tempNucVel[5];
           Rotation[2]=tempNucVel[6];
           MakeRotationMatrix(RotationMatrix, Rotation, dT);
-          printf("RotationMatrix\n");
+          TRACE(("RotationMatrix\n"));
           for (j=0; j<3; j++) {
             for (jj=0; jj<3; jj++) {
-              printf("%4.3lf ",RotationMatrix[j][jj]);
+              TRACE(("%4.3lf ",RotationMatrix[j][jj]));
             }
-            printf("\n");
+            TRACE(("\n"));
           }
           ProductJacVec(VECVEC, RotationMatrix, DVecNucCen[0]);
           for (j=0; j<3; j++) {DVecNucCen[0][j]=VECVEC[j];}
@@ -1317,7 +1317,7 @@ int main(int argc, char* argv[]) {
             }	    
           } else {
             if (t == 0) {
-              printf("L1373 no rotation!\n");
+              TRACE(("L1373 no rotation!\n"));
             }
             for (j=0; j<3; j++) {
               PVecCen[0][j] = Nuc[j]+DVecNucCen[0][j];

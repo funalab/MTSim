@@ -1,10 +1,8 @@
 /*
  * LU decomposition (ref) Press et al., "Numerical Recipes in C"
- * Last modified: Wed, 17 Apr 2013 04:08:08 +0900
+ * Last modified: Mon, 01 Jul 2013 02:42:43 +0900
  */
-#include <stdio.h>
-#include <math.h>
-#include "nrutil.h"
+#include "mtsim.h"
 #define TINY 1.0e-20;
 
 void ludcmp(double **a, int n, int *indx, double *d)
@@ -13,26 +11,26 @@ void ludcmp(double **a, int n, int *indx, double *d)
   double big,dum,sum,temp;
   double *vv;
 
-  //    printf("enter ludcmp\n");
+  //    TRACE(("enter ludcmp\n"));
   vv=dvector(1,n);
   *d=1.0;
   /*
 	for(iii=1;iii<=n;iii++){
-	printf("%d (",indx[iii]);
+	TRACE(("%d (",indx[iii]));
 	for (jjj=1;jjj<=n;jjj++){
-	printf("%4.3f ",a[iii][jjj]*1000);}
-	printf(")\n");
+	TRACE(("%4.3f ",a[iii][jjj]*1000));}
+	TRACE((")\n"));
     
 	}
-	printf("\n");
+	TRACE(("\n"));
   */
  for (i=1;i<=n;i++){
     big=0.0;
     for (j=1; j<=n;j++){
-      //      printf("ludcmp: a[%d][%d]=%f\n",i,j,a[i][j]);
-      //      printf("ludcmp: fabs(a[%d][%d])=%f\n",i,j,fabs(a[i][j]));
+      //      TRACE(("ludcmp: a[%d][%d]=%f\n",i,j,a[i][j]));
+      //      TRACE(("ludcmp: fabs(a[%d][%d])=%f\n",i,j,fabs(a[i][j])));
       if ((temp=fabs(a[i][j])) > big) {big=temp;}}
-    if (big == 0.0) {printf("Singular matrix in routine ludcmp");}
+    if (big == 0.0) {TRACE(("Singular matrix in routine ludcmp"));}
     vv[i]=1.0/big;
   }
   for (j=1;j<=n;j++) {
@@ -54,7 +52,7 @@ void ludcmp(double **a, int n, int *indx, double *d)
     }
     if (j != imax) {
       for (k=1;k<=n;k++){
-	//		printf("%d %d\n",imax,k);
+	//		TRACE(("%d %d\n",imax,k));
 	dum=a[imax][k];
 	a[imax][k]=a[j][k];
 	a[j][k]=dum;   /******* missing line ****/
@@ -72,5 +70,5 @@ void ludcmp(double **a, int n, int *indx, double *d)
     
   }
   free_dvector(vv,1,n);
-  //    printf("end ludcmp\n");
+  //    TRACE(("end ludcmp\n"));
 }

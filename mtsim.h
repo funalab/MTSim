@@ -1,5 +1,5 @@
 /*
- * Last modified: Sun, 30 Jun 2013 02:53:44 +0900
+ * Last modified: Mon, 01 Jul 2013 02:54:37 +0900
  */
 
 #ifndef __mtsim__
@@ -15,7 +15,14 @@
 #define false 0
 #define true 1
 
-#define DEBUG 0
+/* debug print */
+#ifdef DEBUG_PRINT
+#define DEBUG_PRINT_FLAG 1
+#else
+#define DEBUG_PRINT_FLAG 0
+#endif
+
+#define TRACE(x) do { if (DEBUG_PRINT_FLAG) dbg_printf x; } while (0)
 
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
@@ -86,5 +93,8 @@ void display_setting(mtGraphics *mtg);
 
 /* color_setting.c */
 void color_setting(mtGraphics *mtg, int p);
+
+/* dbg_printf.c */
+void dbg_printf(const char *fmt, ...);
 
 #endif

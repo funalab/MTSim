@@ -1,8 +1,7 @@
 /*
- * Last modified: Wed, 17 Apr 2013 04:09:55 +0900
+ * Last modified: Mon, 01 Jul 2013 02:51:53 +0900
  */
-#include <stdio.h>
-#include <math.h>
+#include "mtsim.h"
 #define MAXIT 100
 #define PI (3.141592653590) /* Pi */
 
@@ -81,17 +80,17 @@ double rtsafe_mod(void (*funcd)(double,double *, double *), double x1, double x2
   (*funcd)(x2,&fh,&df);
   // modification starts
   if (fl > 0.0 && fh > 0.0){
-    //   printf("dv is slower than Vbuckle\n");
+    TRACE(("dv is slower than Vbuckle\n"));
     return x2;
   }
   if (fl < 0.0 && fh < 0.0){ 
-    printf("dv is faster than Vg\n");
+    TRACE(("dv is faster than Vg\n"));
     return x1;
   }
 // modification ends
   if (fl == 0.0) return x1;
   if (fh == 0.0) return x2;
-  //     printf("Root is bracketed in rtsafe_mod\n");
+  //     TRACE(("Root is bracketed in rtsafe_mod\n"));
 
   if (fl <0.0) {
     xl=x1;
