@@ -5,10 +5,15 @@
  * This program simulates centrosome positioning in one-cell embryo
  * Unit meter, kilo-gram, sec
  * to compile: make (see Makefile for detail)
- * Last modified: Mon, 01 Jul 2013 02:49:22 +0900
+ * Last modified: Mon, 01 Jul 2013 03:05:59 +0900
  */
 
 #include "mtsim.h"
+#if defined(_MSC_VER) || defined(__STRICT_ANSI__)
+#include "my_getopt.h"
+#else
+#include <unistd.h>
+#endif
 
 // parameters used in functions in this file
 static double Buckling_forward_sum;

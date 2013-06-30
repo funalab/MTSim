@@ -21,45 +21,45 @@ ludcmp_double.c,91
 #define TINY TINY6,141
 void ludcmp(double **a, int n, int *indx, double *d)ludcmp8,164
 
-main.c,2018
-static double Buckling_forward_sum;Buckling_forward_sum14,373
-static double Buckling_backward_sum;Buckling_backward_sum15,409
-static double Stokes_rad;Stokes_rad16,446
-static double Visco;Visco17,472
-static double Stokes_rotation;Stokes_rotation18,493
-static double Stokes_translation;Stokes_translation19,524
-static double **DVecNucCen;DVecNucCen20,558
-static double Vg;Vg21,586
-static double k_on;k_on22,604
-static double F_dependency;F_dependency23,624
-int N; /* the (maximum) number of MTs per two centrosomes */N24,652
-int NN;NN25,713
-static double **u;u26,721
-static unsigned char *pushing_phase;pushing_phase27,740
-static unsigned char *pulling_phase;pulling_phase28,777
-static unsigned char *phase;phase29,814
-static double Fbuckle[3];Fbuckle30,843
-static double Fbackward[6];Fbackward31,869
-static double fjac_pull[6][6];fjac_pull32,897
-static int step_counter;step_counter33,928
-static double BucklingConst;BucklingConst34,953
-double *L;L35,982
-static double *NumberOfMotor;NumberOfMotor36,993
-static unsigned int phase_transition_count;phase_transition_count37,1023
-static void (*usrfun)(double *x, int n, double *fvec, double **fjac);usrfun38,1067
-static double MotorDensity;MotorDensity39,1137
-static double MotorMaxVel;MotorMaxVel40,1165
-static double MotorStallF;MotorStallF41,1192
-static unsigned char mnewtconverge;mnewtconverge42,1219
-static int mt_start;mt_start43,1255
-static int mt_end;mt_end44,1276
-FILE *f_out8;f_out845,1295
-void FV_solution(double xx, double *f_v, double *fp_v) {FV_solution47,1310
-void function_FV3D(double *x, int n, double *fvec, double **fjac) {function_FV3D52,1543
-void function_MotorFV (double *x, int n, double *fvec, double **fjac) {function_MotorFV97,2720
-void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {function_laserMotorFV135,3896
-void mnewt(int ntrial, double x[], int n, double tolx, double tolf) {mnewt172,5066
-int main(int argc, char* argv[]) {main218,6260
+main.c,2024
+static double Buckling_forward_sum;Buckling_forward_sum19,479
+static double Buckling_backward_sum;Buckling_backward_sum20,515
+static double Stokes_rad;Stokes_rad21,552
+static double Visco;Visco22,578
+static double Stokes_rotation;Stokes_rotation23,599
+static double Stokes_translation;Stokes_translation24,630
+static double **DVecNucCen;DVecNucCen25,664
+static double Vg;Vg26,692
+static double k_on;k_on27,710
+static double F_dependency;F_dependency28,730
+int N; /* the (maximum) number of MTs per two centrosomes */N29,758
+int NN;NN30,819
+static double **u;u31,827
+static unsigned char *pushing_phase;pushing_phase32,846
+static unsigned char *pulling_phase;pulling_phase33,883
+static unsigned char *phase;phase34,920
+static double Fbuckle[3];Fbuckle35,949
+static double Fbackward[6];Fbackward36,975
+static double fjac_pull[6][6];fjac_pull37,1003
+static int step_counter;step_counter38,1034
+static double BucklingConst;BucklingConst39,1059
+double *L;L40,1088
+static double *NumberOfMotor;NumberOfMotor41,1099
+static unsigned int phase_transition_count;phase_transition_count42,1129
+static void (*usrfun)(double *x, int n, double *fvec, double **fjac);usrfun43,1173
+static double MotorDensity;MotorDensity44,1243
+static double MotorMaxVel;MotorMaxVel45,1271
+static double MotorStallF;MotorStallF46,1298
+static unsigned char mnewtconverge;mnewtconverge47,1325
+static int mt_start;mt_start48,1361
+static int mt_end;mt_end49,1382
+FILE *f_out8;f_out850,1401
+void FV_solution(double xx, double *f_v, double *fp_v) {FV_solution52,1416
+void function_FV3D(double *x, int n, double *fvec, double **fjac) {function_FV3D57,1649
+void function_MotorFV (double *x, int n, double *fvec, double **fjac) {function_MotorFV102,2826
+void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {function_laserMotorFV140,4002
+void mnewt(int ntrial, double x[], int n, double tolx, double tolf) {mnewt177,5172
+int main(int argc, char* argv[]) {main223,6366
 
 math_func.c,968
 #define PI PI11,219
@@ -190,33 +190,41 @@ typedef struct _mtGraphics {_mtGraphics10,150
 
 mtsim.h,858
 #define __mtsim____mtsim__6,76
-#define false false15,215
-#define true true16,231
-#define DEBUG_PRINT_FLAG DEBUG_PRINT_FLAG20,284
-#define DEBUG_PRINT_FLAG DEBUG_PRINT_FLAG22,317
-#define TRACE(TRACE25,352
-#define RED RED27,423
-#define GREEN GREEN28,450
-#define YELLOW YELLOW29,477
-#define BLUE BLUE30,504
-#define MAGENTA MAGENTA31,531
-#define CYAN CYAN32,558
-#define DEFAULT DEFAULT33,585
-#define UNDER_LINE UNDER_LINE34,612
-#define BOLD BOLD35,643
-#define FONT_DEFAULT FONT_DEFAULT36,674
-#define PI PI39,749
-#define WIN_WIDTH WIN_WIDTH40,787
-#define WIN_HEIGHT WIN_HEIGHT41,841
-#define SC3 SC342,896
-#define UNITTIME UNITTIME43,950
-#define ST ST44,1015
-#define laserST laserST45,1083
-#define metaST metaST46,1159
-#define dT dT47,1268
-#define LL LL48,1334
-#define Rad Rad49,1394
-#define RadS RadS50,1450
+#define false false16,235
+#define true true17,251
+#define DEBUG_PRINT_FLAG DEBUG_PRINT_FLAG21,304
+#define DEBUG_PRINT_FLAG DEBUG_PRINT_FLAG23,337
+#define TRACE(TRACE26,372
+#define RED RED28,443
+#define GREEN GREEN29,470
+#define YELLOW YELLOW30,497
+#define BLUE BLUE31,524
+#define MAGENTA MAGENTA32,551
+#define CYAN CYAN33,578
+#define DEFAULT DEFAULT34,605
+#define UNDER_LINE UNDER_LINE35,632
+#define BOLD BOLD36,663
+#define FONT_DEFAULT FONT_DEFAULT37,694
+#define PI PI40,769
+#define WIN_WIDTH WIN_WIDTH41,807
+#define WIN_HEIGHT WIN_HEIGHT42,861
+#define SC3 SC343,916
+#define UNITTIME UNITTIME44,970
+#define ST ST45,1035
+#define laserST laserST46,1103
+#define metaST metaST47,1179
+#define dT dT48,1288
+#define LL LL49,1354
+#define Rad Rad50,1414
+#define RadS RadS51,1470
+
+my_getopt.h,204
+#define ERR(ERR27,1050
+int	opterr = 1;opterr29,1133
+int	optind = 1;optind30,1149
+int	optopt;optopt31,1165
+char	*optarg;optarg32,1177
+int getopt(int argc, char **argv, char *opts)getopt34,1192
 
 nrutil.h,40
 #define _NR_UTILS_H__NR_UTILS_H_7,144

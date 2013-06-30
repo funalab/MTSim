@@ -1,5 +1,5 @@
 /*
- * Last modified: Mon, 01 Jul 2013 02:54:37 +0900
+ * Last modified: Mon, 01 Jul 2013 03:05:49 +0900
  */
 
 #ifndef __mtsim__
@@ -7,6 +7,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include "mtgraphics.h"
