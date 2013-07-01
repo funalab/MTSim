@@ -1,13 +1,17 @@
 /*
  * filename: display_setting.c
  * this code is to draw graphs in the X window system
- * Last modified: Wed, 17 Apr 2013 04:07:13 +0900
+ * Last modified: Mon, 01 Jul 2013 16:52:15 +0900
  */
 #include "mtsim.h"
 
 void display_setting(mtGraphics *mtg) {
   // display settings
   mtg->d = XOpenDisplay(NULL);
+  if (mtg->d == NULL) {
+    printf("XOpenDisplay failed.\n");
+    exit(1);
+  }
   Display *d = mtg->d;
   mtg->cm = DefaultColormap(d,0);
   Colormap cm = mtg->cm;
