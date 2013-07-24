@@ -5,7 +5,7 @@
  * This program simulates centrosome positioning in one-cell embryo
  * Unit meter, kilo-gram, sec
  * to compile: make (see Makefile for detail)
- * Last modified: Thu, 25 Jul 2013 00:36:03 +0900
+ * Last modified: Thu, 25 Jul 2013 01:28:42 +0900
  */
 
 #include "mtsim.h"
@@ -35,7 +35,6 @@ static unsigned char *g_phase;
 static double g_Fbuckle[3];
 static double g_Fbackward[6];
 static double g_fjac_pull[6][6];
-static int g_step_counter;
 static double g_BucklingConst;
 double *g_L;
 static double *g_NumberOfMotor;
@@ -190,7 +189,7 @@ void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {
 }
 
 // Newton-Raphson Method for Nonlinear Systems of Equations (ref) Press et al. "Numerical Recipes in C"*/
-void mnewt(int ntrial, double x[], int n, double tolx, double tolf, FILE* f_out8) {
+boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf, int step_counter, FILE* f_out8) {
   int k,i,*indx;
   double errx,errf,d,*fvec,**fjac,*p;
 
@@ -198,7 +197,7 @@ void mnewt(int ntrial, double x[], int n, double tolx, double tolf, FILE* f_out8
   p = dvector(1,n);
   fvec = dvector(1,n);
   fjac = dmatrix(1,n,1,n);
-  g_mnewtconverge = 0;
+//  g_mnewtconverge = 0;
   for (k=1;k<=ntrial;k++) {
     usrfun(x,n,fvec,fjac); /*** specific function ****/
     errf=0.0;
@@ -206,11 +205,11 @@ void mnewt(int ntrial, double x[], int n, double tolx, double tolf, FILE* f_out8
       errf += fabs(fvec[i]);
     }
     if (errf <=tolf) {
-      if (g_step_counter%100 == 0){
+      if (step_counter%100 == 0){
         fprintf(f_out8,"%d tolf errx=%5.4f\n",k,errx*(1.0e+6));
       }
       free_return(fvec, fjac, n, p, indx);
-      return;
+      return true;
     }
     for (i=1; i<=n; i++) {
       p[i] = -fvec[i];
@@ -223,17 +222,17 @@ void mnewt(int ntrial, double x[], int n, double tolx, double tolf, FILE* f_out8
       x[i] += p[i];
     }
     if (errx <=tolx) {
-      if (g_step_counter%100 == 0){
+      if (step_counter%100 == 0){
         fprintf(f_out8,"%d tolx errf=%5.4f\n",k,errf*(1.0e+12));
       }
       free_return(fvec, fjac, n, p, indx);
-      return;
+      return true;
     }
   }
   printf("mnewt: did not converge at %d",k);
-  g_mnewtconverge++;
+//  g_mnewtconverge++;
   free_return(fvec, fjac, n, p, indx);
-  return;
+  return false;
 }
 
 int main(int argc, char* argv[]) {
@@ -400,6 +399,7 @@ int main(int argc, char* argv[]) {
   unsigned int eachMT_PTC[g_N];
   unsigned int pushing_phase_count[5];
   double dv; /* increase of distance between contact point and nucleus devided by time */
+  int step_counter;
   ////////////////////////ROTATION
   double Rotation[3]; /* rotational vector */
   double rotationAx[3]; /* rotational axis */
@@ -428,6 +428,7 @@ int main(int argc, char* argv[]) {
   double xacc = 1.0e-17; /* 1e-5 pN */
   double tolx = 1.0e-12; /* 1e-6 um/sec */
   double tolf = 1.0e-17; /* 1e-5 pN */
+  boolean did_converge = false;
 
   //// DECLARATION of Constants and Variables - FINISHED //
 
@@ -606,9 +607,9 @@ int main(int argc, char* argv[]) {
     ///// Repetition for each time step ////
     ////////////////////////////////////////
 
-    g_step_counter = -1;
+    step_counter = -1;
     for (i=0; i<ST; i++) {
-      g_step_counter++;
+      step_counter++;
       ////////////////////  INITIALIZATION ////////////////////////////
       for (j=0;j<6;j++) {
         for (qq=0; qq<2; qq++){
@@ -921,7 +922,7 @@ int main(int argc, char* argv[]) {
             }
           }
           usrfun = function_FV3D;
-          mnewt(10,tempNucVel,3,tolx,tolf, f_out8); /* Newton-Raphson method to revise the initial guess of the velocity of the pronucleus */
+          did_converge = mnewt(10,tempNucVel,3,tolx,tolf, step_counter, f_out8); /* Newton-Raphson method to revise the initial guess of the velocity of the pronucleus */
 
           // THE PUSHING MODEL-2: solve the set of equation using Newton-Raphson method with the revised initial guess
           cycle_count = 0;
@@ -981,11 +982,13 @@ int main(int argc, char* argv[]) {
               }		
             }	      
             if ((g_phase_transition_count!=0)||(cycle_count==0)) {
-              mnewt(10, tempNucVel, 3, tolx,tolf, f_out8);  /* Newton-Raphson method */
+              did_converge = mnewt(10, tempNucVel, 3, tolx,tolf, step_counter, f_out8);  /* Newton-Raphson method */
             }
-            if (i%100==0) fprintf(f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);
+            if (i%100==0) {
+              fprintf(f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);
+            }
             cycle_count++;
-          } while ((g_mnewtconverge!=0)||(cycle_count<=1)||((g_phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
+          } while ((!did_converge)||(cycle_count<=1)||((g_phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
 
           if (g_phase_transition_count!=0){ /* in case the solution is not obtained within 1000 cycles*/
             printf("exit without convergence at t=%d PTC=%d\n", i, g_phase_transition_count);
@@ -1118,7 +1121,7 @@ int main(int argc, char* argv[]) {
               for (j=0; j<3; j++) {g_fjac_pull[j][j] -= g_Stokes_translation;}
               for (j=3; j<6; j++) {g_fjac_pull[j][j] -= g_Stokes_rotation;}
               if ((g_phase_transition_count!=0)||(cycle_count==0)) {
-                mnewt(10, tempNucVel, 6, tolx, tolf, f_out8);
+                did_converge = mnewt(10, tempNucVel, 6, tolx, tolf, step_counter, f_out8);
               }
               if (i%100==0) fprintf(f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);
               cycle_count++;
@@ -1190,7 +1193,7 @@ int main(int argc, char* argv[]) {
                   }
                 }
                 if ((g_phase_transition_count!=0)||(cycle_count==0)) {
-                  mnewt(10, tempNucVel, 3, tolx, tolf, f_out8);
+                  did_converge = mnewt(10, tempNucVel, 3, tolx, tolf, step_counter, f_out8);
                 }
                 if (i%100==0) {fprintf(f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);}
                 cycle_count++;

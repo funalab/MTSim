@@ -21,7 +21,7 @@ ludcmp_double.c,91
 #define TINY TINY6,141
 void ludcmp(double **a, int n, int *indx, double *d)ludcmp8,164
 
-main.c,2170
+main.c,2141
 static double g_Buckling_forward_sum;g_Buckling_forward_sum19,479
 static double g_Buckling_backward_sum;g_Buckling_backward_sum20,517
 static double g_Stokes_rad;g_Stokes_rad21,556
@@ -41,25 +41,24 @@ static unsigned char *g_phase;g_phase34,950
 static double g_Fbuckle[3];g_Fbuckle35,981
 static double g_Fbackward[6];g_Fbackward36,1009
 static double g_fjac_pull[6][6];g_fjac_pull37,1039
-static int g_step_counter;g_step_counter38,1072
-static double g_BucklingConst;g_BucklingConst39,1099
-double *g_L;g_L40,1130
-static double *g_NumberOfMotor;g_NumberOfMotor41,1143
-static unsigned int g_phase_transition_count;g_phase_transition_count42,1175
-static void (*usrfun)(double *x, int n, double *fvec, double **fjac);usrfun43,1221
-static double g_MotorDensity;g_MotorDensity44,1291
-static double g_MotorMaxVel;g_MotorMaxVel45,1321
-static double g_MotorStallF;g_MotorStallF46,1350
-static unsigned char g_mnewtconverge;g_mnewtconverge47,1379
-static int g_mt_start;g_mt_start48,1417
-static int g_mt_end;g_mt_end49,1440
-void usage(char* myname) {usage51,1462
-void FV_solution(double xx, double *f_v, double *fp_v) {FV_solution68,2204
-void function_FV3D(double *x, int n, double *fvec, double **fjac) {function_FV3D73,2461
-void function_MotorFV(double *x, int n, double *fvec, double **fjac) {function_MotorFV118,3706
-void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {function_laserMotorFV156,4915
-void mnewt(int ntrial, double x[], int n, double tolx, double tolf, FILE* f_out8) {mnewt193,6129
-int main(int argc, char* argv[]) {main239,7255
+static double g_BucklingConst;g_BucklingConst38,1072
+double *g_L;g_L39,1103
+static double *g_NumberOfMotor;g_NumberOfMotor40,1116
+static unsigned int g_phase_transition_count;g_phase_transition_count41,1148
+static void (*usrfun)(double *x, int n, double *fvec, double **fjac);usrfun42,1194
+static double g_MotorDensity;g_MotorDensity43,1264
+static double g_MotorMaxVel;g_MotorMaxVel44,1294
+static double g_MotorStallF;g_MotorStallF45,1323
+static unsigned char g_mnewtconverge;g_mnewtconverge46,1352
+static int g_mt_start;g_mt_start47,1390
+static int g_mt_end;g_mt_end48,1413
+void usage(char* myname) {usage50,1435
+void FV_solution(double xx, double *f_v, double *fp_v) {FV_solution67,2177
+void function_FV3D(double *x, int n, double *fvec, double **fjac) {function_FV3D72,2434
+void function_MotorFV(double *x, int n, double *fvec, double **fjac) {function_MotorFV117,3679
+void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {function_laserMotorFV155,4888
+boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf, int step_counter, FILE* f_out8) {mnewt192,6102
+int main(int argc, char* argv[]) {main238,7265
 
 math_func.c,968
 #define PI PI11,219
