@@ -7,7 +7,7 @@
  * to compile: make (see Makefile for detail)
  * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
  *         Akira Funahashi <funa@bio.keio.ac.jp>
- * Last modified: Thu, 25 Jul 2013 02:47:41 +0900
+ * Last modified: Thu, 25 Jul 2013 03:10:42 +0900
  */
 
 #include "mtsim.h"
@@ -29,6 +29,47 @@ int main(int argc, char* argv[]) {
   char* myname;
   boolean is_check = false;
   boolean is_verbose = false;
+  unsigned int mode = 0; /* pulling or pushing */
+
+  /* Parse options */
+  myname = argv[0];
+  while ((ch = getopt(argc, argv, "t:s:d:m:cvh")) != -1){
+    switch (ch) {
+      /*
+         case 't':
+         sim_time = atof(optarg);
+         break;
+         case 's':
+         step = atoi(optarg);
+         break;
+         case 'd':
+         delta = atof(optarg);
+         break;
+         */
+      case 'c':
+        is_check = true;
+        break;
+      case 'v':
+        is_verbose = true;
+        break;
+      case 'm':
+        mode = atoi(optarg);
+        break;
+      case 'h':
+        usage(myname);
+        exit(1);
+      default:
+        usage(myname);
+        exit(1);
+    }
+  }
+  argc -= optind;
+  argv += optind;
+
+  if(mode > 5 || mode < 0){
+    usage(myname);
+    exit(1);
+  }
 
   //random number (ref) Press et al., "Numerical Recipes in C"
   double random;
@@ -146,7 +187,6 @@ int main(int argc, char* argv[]) {
   int p; /* different parameter sets */
   int j,jj; /* x,y,z axes */
   int qq; /* centrosome 0 or 1 */
-  unsigned int mode; /* pulling or pushing */
   double VECVEC[3], VECVECVEC[3];
   // microtubules //
   double previousL[g.N];
@@ -215,45 +255,6 @@ int main(int argc, char* argv[]) {
   void (*usr_func)(double*, int, double*, double**, mtGlobal*); /* for callback function */
 
   //// DECLARATION of Constants and Variables - FINISHED //
-
-  /* Parse options */
-  myname = argv[0];
-  while ((ch = getopt(argc, argv, "t:s:d:m:cv")) != -1){
-    switch (ch) {
-      /*
-         case 't':
-         sim_time = atof(optarg);
-         break;
-         case 's':
-         step = atoi(optarg);
-         break;
-         case 'd':
-         delta = atof(optarg);
-         break;
-         */
-      case 'c':
-        is_check = true;
-        break;
-      case 'v':
-        is_verbose = true;
-        break;
-      case 'm':
-        mode = atoi(optarg);
-        break;
-      case 'h':
-        usage(myname);
-        exit(1);
-      default:
-        usage(myname);
-        exit(1);
-    }
-  }
-  argc -= optind;
-  argv += optind;
-
-  if(argc > 1){
-    usage(myname);
-  }
 
   /*
      printf("Choose a model: pushing(0), pulling(1), cortical-anchoring(2), pulling_sup1(3), pushing_sup2(4) or length-dependent+cortical-anchoring(5)?:");
