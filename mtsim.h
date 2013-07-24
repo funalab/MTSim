@@ -1,5 +1,7 @@
 /*
- * Last modified: Thu, 25 Jul 2013 01:24:27 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 01:43:43 +0900
  */
 
 #ifndef __mtsim__
@@ -68,7 +70,6 @@ double FV_function(double ff, double vg, double ko, double fd);
 double rtsafe(void (*funcd)(double, double *, double *),double x1, double x2, double xacc);
 double rtsafe_mod(void (*funcd)(double, double *, double *),double x1, double x2, double xacc);
 
-
 /* main.c */
 void usage(char* myname);
 
@@ -90,7 +91,10 @@ void FV_solution(double xx, double *f_v, double *fp_v);
 void function_FV3D(double *x, int n, double *fvec, double **fjac);
 void function_MotorFV (double *x, int n, double *fvec, double **fjac);
 void function_laserMotorFV (double *x, int n, double *fvec, double **fjac);
-boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf, int step_counter, FILE* f_out8);
+
+/* mnewt.c */
+boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf,
+    int step_counter, FILE* f_out8, void (*usrfun)(double *, int , double*, double**) );
 
 /* store_graphs.c */
 void store_graphs(void);

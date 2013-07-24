@@ -5,7 +5,7 @@
  * This program simulates centrosome positioning in one-cell embryo
  * Unit meter, kilo-gram, sec
  * to compile: make (see Makefile for detail)
- * Last modified: Thu, 25 Jul 2013 01:31:42 +0900
+ * Last modified: Thu, 25 Jul 2013 01:48:41 +0900
  */
 
 #include "mtsim.h"
@@ -39,7 +39,6 @@ static double g_BucklingConst;
 double *g_L;
 static double *g_NumberOfMotor;
 static unsigned int g_phase_transition_count;
-static void (*usrfun)(double *x, int n, double *fvec, double **fjac);
 static double g_MotorDensity;
 static double g_MotorMaxVel;
 static double g_MotorStallF;
@@ -185,51 +184,6 @@ void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {
   for (i=(n/2)+1;i<=n;i++){
     fvec[i] = fvec[i] + g_Stokes_rotation*x[i];
   }
-}
-
-// Newton-Raphson Method for Nonlinear Systems of Equations (ref) Press et al. "Numerical Recipes in C"*/
-boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf, int step_counter, FILE* f_out8) {
-  int k,i,*indx;
-  double errx,errf,d,*fvec,**fjac,*p;
-
-  indx = ivector(1,n);
-  p = dvector(1,n);
-  fvec = dvector(1,n);
-  fjac = dmatrix(1,n,1,n);
-  for (k=1;k<=ntrial;k++) {
-    usrfun(x,n,fvec,fjac); /*** specific function ****/
-    errf=0.0;
-    for (i=1;i<=n;i++) {
-      errf += fabs(fvec[i]);
-    }
-    if (errf <=tolf) {
-      if (step_counter%100 == 0){
-        fprintf(f_out8,"%d tolf errx=%5.4f\n",k,errx*(1.0e+6));
-      }
-      free_return(fvec, fjac, n, p, indx);
-      return true;
-    }
-    for (i=1; i<=n; i++) {
-      p[i] = -fvec[i];
-    }
-    ludcmp(fjac,n,indx,&d);
-    lubksb(fjac,n,indx,p);
-    errx=0.0;
-    for (i=1;i<=n;i++){
-      errx += fabs(p[i]);
-      x[i] += p[i];
-    }
-    if (errx <=tolx) {
-      if (step_counter%100 == 0){
-        fprintf(f_out8,"%d tolx errf=%5.4f\n",k,errf*(1.0e+12));
-      }
-      free_return(fvec, fjac, n, p, indx);
-      return true;
-    }
-  }
-  printf("mnewt: did not converge at %d",k);
-  free_return(fvec, fjac, n, p, indx);
-  return false;
 }
 
 int main(int argc, char* argv[]) {
@@ -426,6 +380,7 @@ int main(int argc, char* argv[]) {
   double tolx = 1.0e-12; /* 1e-6 um/sec */
   double tolf = 1.0e-17; /* 1e-5 pN */
   boolean did_converge = false;
+  void (*usr_func)(double *x, int n, double *fvec, double **fjac); /* for callback function */
 
   //// DECLARATION of Constants and Variables - FINISHED //
 
@@ -859,7 +814,7 @@ int main(int argc, char* argv[]) {
 
         // THE PUSHING MODEL-1: estimation of an initial guess to be used in Newton-Raphson method 
         if ((mode==0)&&(Length(DirectionDetermination)!=0.0)) {
-          usrfun = function_FV3D;
+          usr_func = function_FV3D;
           if (i%100==0) {fprintf(f_out7,"%d ",i);}
           UnitVector(DirectionDetermination,UnitDirection); /* unit vector of an initial guess of pronuclear migration */
           g_Buckling_forward_sum = 0.0;
@@ -918,8 +873,9 @@ int main(int argc, char* argv[]) {
               }
             }
           }
-          usrfun = function_FV3D;
-          did_converge = mnewt(10,tempNucVel,3,tolx,tolf, step_counter, f_out8); /* Newton-Raphson method to revise the initial guess of the velocity of the pronucleus */
+          usr_func = function_FV3D;
+          /* Newton-Raphson method to revise the initial guess of the velocity of the pronucleus */
+          did_converge = mnewt(10,tempNucVel,3,tolx,tolf, step_counter, f_out8, usr_func);
 
           // THE PUSHING MODEL-2: solve the set of equation using Newton-Raphson method with the revised initial guess
           cycle_count = 0;
@@ -979,7 +935,8 @@ int main(int argc, char* argv[]) {
               }		
             }	      
             if ((g_phase_transition_count!=0)||(cycle_count==0)) {
-              did_converge = mnewt(10, tempNucVel, 3, tolx,tolf, step_counter, f_out8);  /* Newton-Raphson method */
+              /* Newton-Raphson method */
+              did_converge = mnewt(10, tempNucVel, 3, tolx,tolf, step_counter, f_out8, usr_func);
             }
             if (i%100==0) {
               fprintf(f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);
@@ -1054,7 +1011,7 @@ int main(int argc, char* argv[]) {
                 tempNucVel[j] = (ForceC[0][j-1]+ForceC[1][j-1])/g_Stokes_rotation;
               }
             }
-            usrfun = function_MotorFV;
+            usr_func = function_MotorFV;
             cycle_count = 0;
             TRACE(("%4d init ",i));
             for (j=1; j<=6; j++) {
@@ -1118,7 +1075,7 @@ int main(int argc, char* argv[]) {
               for (j=0; j<3; j++) {g_fjac_pull[j][j] -= g_Stokes_translation;}
               for (j=3; j<6; j++) {g_fjac_pull[j][j] -= g_Stokes_rotation;}
               if ((g_phase_transition_count!=0)||(cycle_count==0)) {
-                did_converge = mnewt(10, tempNucVel, 6, tolx, tolf, step_counter, f_out8);
+                did_converge = mnewt(10, tempNucVel, 6, tolx, tolf, step_counter, f_out8, usr_func);
               }
               if (i%100==0) fprintf(f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);
               cycle_count++;
@@ -1141,7 +1098,7 @@ int main(int argc, char* argv[]) {
               break;
             }
           } else {  /******** laser ablation *****************/
-            usrfun = function_laserMotorFV;
+            usr_func = function_laserMotorFV;
             for (laser_centrosome = 0; laser_centrosome<2; laser_centrosome++){
               if (laser_centrosome==0) {
                 g_mt_start = 0;
@@ -1190,7 +1147,7 @@ int main(int argc, char* argv[]) {
                   }
                 }
                 if ((g_phase_transition_count!=0)||(cycle_count==0)) {
-                  did_converge = mnewt(10, tempNucVel, 3, tolx, tolf, step_counter, f_out8);
+                  did_converge = mnewt(10, tempNucVel, 3, tolx, tolf, step_counter, f_out8, usr_func);
                 }
                 if (i%100==0) {fprintf(f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);}
                 cycle_count++;

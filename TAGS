@@ -21,7 +21,7 @@ ludcmp_double.c,91
 #define TINY TINY6,141
 void ludcmp(double **a, int n, int *indx, double *d)ludcmp8,164
 
-main.c,2079
+main.c,1874
 static double g_Buckling_forward_sum;g_Buckling_forward_sum19,479
 static double g_Buckling_backward_sum;g_Buckling_backward_sum20,517
 static double g_Stokes_rad;g_Stokes_rad21,556
@@ -45,19 +45,17 @@ static double g_BucklingConst;g_BucklingConst38,1072
 double *g_L;g_L39,1103
 static double *g_NumberOfMotor;g_NumberOfMotor40,1116
 static unsigned int g_phase_transition_count;g_phase_transition_count41,1148
-static void (*usrfun)(double *x, int n, double *fvec, double **fjac);usrfun42,1194
-static double g_MotorDensity;g_MotorDensity43,1264
-static double g_MotorMaxVel;g_MotorMaxVel44,1294
-static double g_MotorStallF;g_MotorStallF45,1323
-static int g_mt_start;g_mt_start46,1352
-static int g_mt_end;g_mt_end47,1375
-void usage(char* myname) {usage49,1397
-void FV_solution(double xx, double *f_v, double *fp_v) {FV_solution66,2139
-void function_FV3D(double *x, int n, double *fvec, double **fjac) {function_FV3D71,2396
-void function_MotorFV(double *x, int n, double *fvec, double **fjac) {function_MotorFV116,3641
-void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {function_laserMotorFV154,4850
-boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf, int step_counter, FILE* f_out8) {mnewt191,6064
-int main(int argc, char* argv[]) {main235,7179
+static double g_MotorDensity;g_MotorDensity42,1194
+static double g_MotorMaxVel;g_MotorMaxVel43,1224
+static double g_MotorStallF;g_MotorStallF44,1253
+static int g_mt_start;g_mt_start45,1282
+static int g_mt_end;g_mt_end46,1305
+void usage(char* myname) {usage48,1327
+void FV_solution(double xx, double *f_v, double *fp_v) {FV_solution65,2069
+void function_FV3D(double *x, int n, double *fvec, double **fjac) {function_FV3D70,2326
+void function_MotorFV(double *x, int n, double *fvec, double **fjac) {function_MotorFV115,3571
+void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {function_laserMotorFV153,4780
+int main(int argc, char* argv[]) {main189,5888
 
 math_func.c,968
 #define PI PI11,219
@@ -72,6 +70,9 @@ void QuadEqu2(double a[3], double b[2]) {QuadEqu2100,2876
 void ProductJacVec(double aa_out[3], double bb_jac[3][3], double cc_in[3]) {ProductJacVec123,3403
 void VectorRotation(double out[3], double in[3], double rotAx[3], double rotStd[3], double degree) {VectorRotation139,4076
 double Poisson(double np, int motornumber) {Poisson174,5068
+
+mnewt.c,84
+boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf,mnewt12,321
 
 nrutil.c,3170
 #define NR_END NR_END11,252
@@ -186,39 +187,39 @@ typedef struct _mtGraphics {_mtGraphics10,150
   XColor c1,c2,c3,c4,c5,cc;cc18,362
 } mtGraphics;mtGraphics19,390
 
-mtsim.h,976
-#define __mtsim____mtsim__6,76
-#define false false16,235
-#define true true17,251
-#define DEBUG_PRINT_FLAG DEBUG_PRINT_FLAG21,304
-#define DEBUG_PRINT_FLAG DEBUG_PRINT_FLAG23,337
-#define TRACE(TRACE26,372
-#define true true29,457
-#define false false30,472
-#undef booleanboolean32,503
-#define boolean boolean34,525
-#define RED RED37,558
-#define GREEN GREEN38,585
-#define YELLOW YELLOW39,612
-#define BLUE BLUE40,639
-#define MAGENTA MAGENTA41,666
-#define CYAN CYAN42,693
-#define DEFAULT DEFAULT43,720
-#define UNDER_LINE UNDER_LINE44,747
-#define BOLD BOLD45,778
-#define FONT_DEFAULT FONT_DEFAULT46,809
-#define PI PI49,884
-#define WIN_WIDTH WIN_WIDTH50,922
-#define WIN_HEIGHT WIN_HEIGHT51,976
-#define SC3 SC352,1031
-#define UNITTIME UNITTIME53,1085
-#define ST ST54,1150
-#define laserST laserST55,1218
-#define metaST metaST56,1294
-#define dT dT57,1403
-#define LL LL58,1469
-#define Rad Rad59,1529
-#define RadS RadS60,1585
+mtsim.h,979
+#define __mtsim____mtsim__8,173
+#define false false18,332
+#define true true19,348
+#define DEBUG_PRINT_FLAG DEBUG_PRINT_FLAG23,401
+#define DEBUG_PRINT_FLAG DEBUG_PRINT_FLAG25,434
+#define TRACE(TRACE28,469
+#define true true31,554
+#define false false32,569
+#undef booleanboolean34,600
+#define boolean boolean36,622
+#define RED RED39,655
+#define GREEN GREEN40,682
+#define YELLOW YELLOW41,709
+#define BLUE BLUE42,736
+#define MAGENTA MAGENTA43,763
+#define CYAN CYAN44,790
+#define DEFAULT DEFAULT45,817
+#define UNDER_LINE UNDER_LINE46,844
+#define BOLD BOLD47,875
+#define FONT_DEFAULT FONT_DEFAULT48,906
+#define PI PI51,981
+#define WIN_WIDTH WIN_WIDTH52,1019
+#define WIN_HEIGHT WIN_HEIGHT53,1073
+#define SC3 SC354,1128
+#define UNITTIME UNITTIME55,1182
+#define ST ST56,1247
+#define laserST laserST57,1315
+#define metaST metaST58,1391
+#define dT dT59,1500
+#define LL LL60,1566
+#define Rad Rad61,1626
+#define RadS RadS62,1682
 
 my_getopt.h,204
 #define ERR(ERR27,1050
