@@ -9,7 +9,7 @@ display_setting.c,62
 void display_setting(mtGraphics *mtg) {display_setting8,162
 
 draw_graphs.c,218
-void draw_graphs(int i, mtGraphics *mtg, double PVecCen[2][3], double MT[][3], double Nuc[3], double DistanceFromPP, double min, double max, double sum, int currentN, double OldVel, double NewVel) {draw_graphs12,244
+void draw_graphs(int i, mtGraphics *mtg, double PVecCen[2][3], double MT[][3], double Nuc[3], double DistanceFromPP, double min, double max, double sum, int currentN, double OldVel, double NewVel) {draw_graphs12,250
 
 free.c,94
 void free_return(double *fvec, double **fjac, int n, double *p, int *indx) {free_return6,77
@@ -21,46 +21,46 @@ ludcmp_double.c,91
 #define TINY TINY6,141
 void ludcmp(double **a, int n, int *indx, double *d)ludcmp8,164
 
-main.c,2065
-static double Buckling_forward_sum;Buckling_forward_sum19,479
-static double Buckling_backward_sum;Buckling_backward_sum20,515
-static double Stokes_rad;Stokes_rad21,552
-static double Visco;Visco22,578
-static double Stokes_rotation;Stokes_rotation23,599
-static double Stokes_translation;Stokes_translation24,630
-static double **DVecNucCen;DVecNucCen25,664
-static double Vg;Vg26,692
-static double k_on;k_on27,710
-static double F_dependency;F_dependency28,730
-int N; /* the (maximum) number of MTs per two centrosomes */N29,758
-int NN;NN30,819
-static double **u;u31,827
-static unsigned char *pushing_phase;pushing_phase32,846
-static unsigned char *pulling_phase;pulling_phase33,883
-static unsigned char *phase;phase34,920
-static double Fbuckle[3];Fbuckle35,949
-static double Fbackward[6];Fbackward36,975
-static double fjac_pull[6][6];fjac_pull37,1003
-static int step_counter;step_counter38,1034
-static double BucklingConst;BucklingConst39,1059
-double *L;L40,1088
-static double *NumberOfMotor;NumberOfMotor41,1099
-static unsigned int phase_transition_count;phase_transition_count42,1129
-static void (*usrfun)(double *x, int n, double *fvec, double **fjac);usrfun43,1173
-static double MotorDensity;MotorDensity44,1243
-static double MotorMaxVel;MotorMaxVel45,1271
-static double MotorStallF;MotorStallF46,1298
-static unsigned char mnewtconverge;mnewtconverge47,1325
-static int mt_start;mt_start48,1361
-static int mt_end;mt_end49,1382
-FILE *f_out8;f_out850,1401
-void usage(char* myname) {usage52,1416
-void FV_solution(double xx, double *f_v, double *fp_v) {FV_solution69,2158
-void function_FV3D(double *x, int n, double *fvec, double **fjac) {function_FV3D74,2391
-void function_MotorFV (double *x, int n, double *fvec, double **fjac) {function_MotorFV119,3568
-void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {function_laserMotorFV157,4744
-void mnewt(int ntrial, double x[], int n, double tolx, double tolf) {mnewt194,5914
-int main(int argc, char* argv[]) {main240,7108
+main.c,2189
+static double g_Buckling_forward_sum;g_Buckling_forward_sum19,479
+static double g_Buckling_backward_sum;g_Buckling_backward_sum20,517
+static double g_Stokes_rad;g_Stokes_rad21,556
+static double g_Visco;g_Visco22,584
+static double g_Stokes_rotation;g_Stokes_rotation23,607
+static double g_Stokes_translation;g_Stokes_translation24,640
+static double **g_DVecNucCen;g_DVecNucCen25,676
+static double g_Vg;g_Vg26,706
+static double g_k_on;g_k_on27,726
+static double g_F_dependency;g_F_dependency28,748
+int g_N; /* the (maximum) number of MTs per two centrosomes */g_N29,778
+int g_NN;g_NN30,841
+static double **g_u;g_u31,851
+static unsigned char *g_pushing_phase;g_pushing_phase32,872
+static unsigned char *g_pulling_phase;g_pulling_phase33,911
+static unsigned char *g_phase;g_phase34,950
+static double g_Fbuckle[3];g_Fbuckle35,981
+static double g_Fbackward[6];g_Fbackward36,1009
+static double g_fjac_pull[6][6];g_fjac_pull37,1039
+static int g_step_counter;g_step_counter38,1072
+static double g_BucklingConst;g_BucklingConst39,1099
+double *g_L;g_L40,1130
+static double *g_NumberOfMotor;g_NumberOfMotor41,1143
+static unsigned int g_phase_transition_count;g_phase_transition_count42,1175
+static void (*usrfun)(double *x, int n, double *fvec, double **fjac);usrfun43,1221
+static double g_MotorDensity;g_MotorDensity44,1291
+static double g_MotorMaxVel;g_MotorMaxVel45,1321
+static double g_MotorStallF;g_MotorStallF46,1350
+static unsigned char g_mnewtconverge;g_mnewtconverge47,1379
+static int g_mt_start;g_mt_start48,1417
+static int g_mt_end;g_mt_end49,1440
+FILE *g_f_out8;g_f_out850,1461
+void usage(char* myname) {usage52,1478
+void FV_solution(double xx, double *f_v, double *fp_v) {FV_solution69,2220
+void function_FV3D(double *x, int n, double *fvec, double **fjac) {function_FV3D74,2477
+void function_MotorFV(double *x, int n, double *fvec, double **fjac) {function_MotorFV119,3722
+void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {function_laserMotorFV157,4931
+void mnewt(int ntrial, double x[], int n, double tolx, double tolf) {mnewt194,6145
+int main(int argc, char* argv[]) {main238,7247
 
 math_func.c,968
 #define PI PI11,219
@@ -143,13 +143,13 @@ double ran1(long *idum)ran119,473
 save_logs.c,197
 void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FILE* f_out4, FILE* f_out10, FILE* data_for_3D, double Nuc[3], double PVecCen[2][3], double MT[][3]) {save_logs8,198
 
-solve_1D_double.c,426
+solve_1D_double.c,424
 #define MAXIT MAXIT5,76
 #define PI PI6,94
-double Stokes_function(double ff, double gr, double fb)Stokes_function10,189
-double FV_function(double ff, double vg, double ko, double fd)FV_function17,307
-double rtsafe(void (*funcd)(double,double *, double *), double x1, double x2, double xacc)rtsafe24,445
-double rtsafe_mod(void (*funcd)(double,double *, double *), double x1, double x2, double xacc)rtsafe_mod72,1514
+double Stokes_function(double ff, double gr, double fb)Stokes_function8,132
+double FV_function(double ff, double vg, double ko, double fd)FV_function15,250
+double rtsafe(void (*funcd)(double, double*, double*), double x1, double x2, double xacc)rtsafe22,388
+double rtsafe_mod(void (*funcd)(double,double *, double *), double x1, double x2, double xacc)rtsafe_mod70,1456
 
 store_graphs.c,45
 void store_graphs(void) {store_graphs8,136

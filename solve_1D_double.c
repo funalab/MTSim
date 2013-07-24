@@ -1,11 +1,9 @@
 /*
- * Last modified: Mon, 01 Jul 2013 02:51:53 +0900
+ * Last modified: Wed, 24 Jul 2013 22:21:23 +0900
  */
 #include "mtsim.h"
 #define MAXIT 100
 #define PI (3.141592653590) /* Pi */
-
-void FV_solution(double xx, double *f_v, double *fp_v);
 
 double Stokes_function(double ff, double gr, double fb)
 {
@@ -21,7 +19,7 @@ double FV_function(double ff, double vg, double ko, double fd)
   return result;
 }
 
-double rtsafe(void (*funcd)(double,double *, double *), double x1, double x2, double xacc)
+double rtsafe(void (*funcd)(double, double*, double*), double x1, double x2, double xacc)
 {
   void nrerror(char error_text[]);
   int j;

@@ -1,5 +1,5 @@
 /*
- * Last modified: Wed, 24 Jul 2013 21:37:47 +0900
+ * Last modified: Wed, 24 Jul 2013 22:32:52 +0900
  */
 
 #ifndef __mtsim__
@@ -68,6 +68,10 @@ double FV_function(double ff, double vg, double ko, double fd);
 double rtsafe(void (*funcd)(double, double *, double *),double x1, double x2, double xacc);
 double rtsafe_mod(void (*funcd)(double, double *, double *),double x1, double x2, double xacc);
 
+
+/* main.c */
+void usage(char* myname);
+
 /* math_func.c */
 void UnitVector(double vector1[3], double vector2[3]);
 void AddVector(double vector1[3], double vector2[3], double result[3]);
@@ -80,6 +84,8 @@ void MakeRotationMatrix(double RotationMatrix[3][3], double RotationVector[3], d
 double Length(double a[3]);
 double InnProdVector(double vector1[3], double vector2[3]);
 double Poisson(double np, int motornumber);
+
+/* math_FV.c */
 void FV_solution(double xx, double *f_v, double *fp_v);
 void function_FV3D(double *x, int n, double *fvec, double **fjac);
 void function_MotorFV (double *x, int n, double *fvec, double **fjac);
