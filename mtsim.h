@@ -1,5 +1,5 @@
 /*
- * Last modified: Wed, 24 Jul 2013 22:32:52 +0900
+ * Last modified: Thu, 25 Jul 2013 00:31:52 +0900
  */
 
 #ifndef __mtsim__
@@ -90,7 +90,7 @@ void FV_solution(double xx, double *f_v, double *fp_v);
 void function_FV3D(double *x, int n, double *fvec, double **fjac);
 void function_MotorFV (double *x, int n, double *fvec, double **fjac);
 void function_laserMotorFV (double *x, int n, double *fvec, double **fjac);
-void mnewt(int ntrial, double x[], int n, double tolx, double tolf);
+void mnewt(int ntrial, double x[], int n, double tolx, double tolf, FILE* f_out8);
 
 /* store_graphs.c */
 void store_graphs(void);

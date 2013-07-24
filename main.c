@@ -5,7 +5,7 @@
  * This program simulates centrosome positioning in one-cell embryo
  * Unit meter, kilo-gram, sec
  * to compile: make (see Makefile for detail)
- * Last modified: Thu, 25 Jul 2013 00:24:29 +0900
+ * Last modified: Thu, 25 Jul 2013 00:36:03 +0900
  */
 
 #include "mtsim.h"
@@ -47,7 +47,6 @@ static double g_MotorStallF;
 static unsigned char g_mnewtconverge;
 static int g_mt_start;
 static int g_mt_end;
-FILE *g_f_out8;
 
 void usage(char* myname) {
   printf("Usage : %s [option]\n", myname);
@@ -191,7 +190,7 @@ void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {
 }
 
 // Newton-Raphson Method for Nonlinear Systems of Equations (ref) Press et al. "Numerical Recipes in C"*/
-void mnewt(int ntrial, double x[], int n, double tolx, double tolf) {
+void mnewt(int ntrial, double x[], int n, double tolx, double tolf, FILE* f_out8) {
   int k,i,*indx;
   double errx,errf,d,*fvec,**fjac,*p;
 
@@ -208,12 +207,14 @@ void mnewt(int ntrial, double x[], int n, double tolx, double tolf) {
     }
     if (errf <=tolf) {
       if (g_step_counter%100 == 0){
-        fprintf(g_f_out8,"%d tolf errx=%5.4f\n",k,errx*(1.0e+6));
+        fprintf(f_out8,"%d tolf errx=%5.4f\n",k,errx*(1.0e+6));
       }
       free_return(fvec, fjac, n, p, indx);
       return;
     }
-    for (i=1; i<=n; i++) p[i] = -fvec[i];
+    for (i=1; i<=n; i++) {
+      p[i] = -fvec[i];
+    }
     ludcmp(fjac,n,indx,&d);
     lubksb(fjac,n,indx,p);
     errx=0.0;
@@ -223,7 +224,7 @@ void mnewt(int ntrial, double x[], int n, double tolx, double tolf) {
     }
     if (errx <=tolx) {
       if (g_step_counter%100 == 0){
-        fprintf(g_f_out8,"%d tolx errf=%5.4f\n",k,errf*(1.0e+12));
+        fprintf(f_out8,"%d tolx errf=%5.4f\n",k,errf*(1.0e+12));
       }
       free_return(fvec, fjac, n, p, indx);
       return;
@@ -259,25 +260,16 @@ int main(int argc, char* argv[]) {
   *idum = tt*(-1);
 
   //file handling
-  FILE *f_out1;
-  f_out1 = fopen ("out1.dat","w");
-  FILE *f_out2;
-  f_out2 = fopen ("out2.dat","w");
-  FILE *f_out3;
-  f_out3 = fopen ("out3.dat","w");
-  FILE *f_out4;
-  f_out4 = fopen ("out4.dat","w");
-  FILE *f_out10;
-  f_out10 = fopen ("out5.dat","w");
-  FILE *f_out5;
-  f_out5 = fopen ("out_parameter.dat","w");
-  FILE *data_for_3D;
-  data_for_3D = fopen ("out_for_3D.dat","w");
-  FILE *f_out6;
-  f_out6 = fopen ("out_MTnumber.dat","w");
-  FILE *f_out7;
-  f_out7 = fopen ("out_FVcheck.dat","w");
-  g_f_out8 = fopen ("out_3Dcheck.dat","w");
+  FILE *f_out1 = fopen ("out1.dat","w");
+  FILE *f_out2 = fopen ("out2.dat","w");
+  FILE *f_out3 = fopen ("out3.dat","w");
+  FILE *f_out4 = fopen ("out4.dat","w");
+  FILE *f_out10 = fopen("out5.dat","w");
+  FILE *f_out5 = fopen ("out_parameter.dat","w");
+  FILE *f_out6 = fopen ("out_MTnumber.dat","w");
+  FILE *f_out7 = fopen ("out_FVcheck.dat","w");
+  FILE *f_out8 = fopen ("out_3Dcheck.dat","w");
+  FILE *data_for_3D = fopen ("out_for_3D.dat","w");
 
   ////////////////////////////////////////////
   // DECLEARATION of Constants and Variables//
@@ -929,7 +921,7 @@ int main(int argc, char* argv[]) {
             }
           }
           usrfun = function_FV3D;
-          mnewt(10,tempNucVel,3,tolx,tolf); /* Newton-Raphson method to revise the initial guess of the velocity of the pronucleus */
+          mnewt(10,tempNucVel,3,tolx,tolf, f_out8); /* Newton-Raphson method to revise the initial guess of the velocity of the pronucleus */
 
           // THE PUSHING MODEL-2: solve the set of equation using Newton-Raphson method with the revised initial guess
           cycle_count = 0;
@@ -989,9 +981,9 @@ int main(int argc, char* argv[]) {
               }		
             }	      
             if ((g_phase_transition_count!=0)||(cycle_count==0)) {
-              mnewt(10,tempNucVel,3,tolx,tolf);  /* Newton-Raphson method */
+              mnewt(10, tempNucVel, 3, tolx,tolf, f_out8);  /* Newton-Raphson method */
             }
-            if (i%100==0) fprintf(g_f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);
+            if (i%100==0) fprintf(f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);
             cycle_count++;
           } while ((g_mnewtconverge!=0)||(cycle_count<=1)||((g_phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
 
@@ -1126,9 +1118,9 @@ int main(int argc, char* argv[]) {
               for (j=0; j<3; j++) {g_fjac_pull[j][j] -= g_Stokes_translation;}
               for (j=3; j<6; j++) {g_fjac_pull[j][j] -= g_Stokes_rotation;}
               if ((g_phase_transition_count!=0)||(cycle_count==0)) {
-                mnewt(10,tempNucVel,6,tolx,tolf);
+                mnewt(10, tempNucVel, 6, tolx, tolf, f_out8);
               }
-              if (i%100==0) fprintf(g_f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);
+              if (i%100==0) fprintf(f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);
               cycle_count++;
             } while ((cycle_count<=1)||((g_phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
 
@@ -1198,9 +1190,9 @@ int main(int argc, char* argv[]) {
                   }
                 }
                 if ((g_phase_transition_count!=0)||(cycle_count==0)) {
-                  mnewt(10,tempNucVel,3,tolx,tolf);
+                  mnewt(10, tempNucVel, 3, tolx, tolf, f_out8);
                 }
-                if (i%100==0) {fprintf(g_f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);}
+                if (i%100==0) {fprintf(f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);}
                 cycle_count++;
               } while ((cycle_count<=1)||((g_phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
 
@@ -1431,7 +1423,7 @@ int main(int argc, char* argv[]) {
       fclose(data_for_3D);
       fclose(f_out6);
       fclose(f_out7);
-      fclose(g_f_out8);
+      fclose(f_out8);
       XStoreName(mtg.d,mtg.w1,"fin");
       XStoreName(mtg.d,mtg.w2,"path");
       XStoreName(mtg.d,mtg.w3,"distance");
