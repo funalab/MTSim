@@ -7,7 +7,7 @@
  * to compile: make (see Makefile for detail)
  * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
  *         Akira Funahashi <funa@bio.keio.ac.jp>
- * Last modified: Thu, 25 Jul 2013 02:37:45 +0900
+ * Last modified: Thu, 25 Jul 2013 02:47:41 +0900
  */
 
 #include "mtsim.h"
@@ -1384,10 +1384,7 @@ int main(int argc, char* argv[]) {
       free_cvector(g.phase,0,g.N-1);
       free_dvector(g.L,0,g.N-1);
 
-      printf("to end, press 0:");
-      scanf("%d",&mode);
-      if (mode == 0){
-        getchar();
-      }
+      printf("to end, hit [return] key:");
+      getchar();
       return 0;
     }
