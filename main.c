@@ -5,7 +5,7 @@
  * This program simulates centrosome positioning in one-cell embryo
  * Unit meter, kilo-gram, sec
  * to compile: make (see Makefile for detail)
- * Last modified: Thu, 25 Jul 2013 01:28:42 +0900
+ * Last modified: Thu, 25 Jul 2013 01:31:42 +0900
  */
 
 #include "mtsim.h"
@@ -43,7 +43,6 @@ static void (*usrfun)(double *x, int n, double *fvec, double **fjac);
 static double g_MotorDensity;
 static double g_MotorMaxVel;
 static double g_MotorStallF;
-static unsigned char g_mnewtconverge;
 static int g_mt_start;
 static int g_mt_end;
 
@@ -197,7 +196,6 @@ boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf, int step_
   p = dvector(1,n);
   fvec = dvector(1,n);
   fjac = dmatrix(1,n,1,n);
-//  g_mnewtconverge = 0;
   for (k=1;k<=ntrial;k++) {
     usrfun(x,n,fvec,fjac); /*** specific function ****/
     errf=0.0;
@@ -230,7 +228,6 @@ boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf, int step_
     }
   }
   printf("mnewt: did not converge at %d",k);
-//  g_mnewtconverge++;
   free_return(fvec, fjac, n, p, indx);
   return false;
 }

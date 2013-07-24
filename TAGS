@@ -21,7 +21,7 @@ ludcmp_double.c,91
 #define TINY TINY6,141
 void ludcmp(double **a, int n, int *indx, double *d)ludcmp8,164
 
-main.c,2141
+main.c,2079
 static double g_Buckling_forward_sum;g_Buckling_forward_sum19,479
 static double g_Buckling_backward_sum;g_Buckling_backward_sum20,517
 static double g_Stokes_rad;g_Stokes_rad21,556
@@ -49,16 +49,15 @@ static void (*usrfun)(double *x, int n, double *fvec, double **fjac);usrfun42,
 static double g_MotorDensity;g_MotorDensity43,1264
 static double g_MotorMaxVel;g_MotorMaxVel44,1294
 static double g_MotorStallF;g_MotorStallF45,1323
-static unsigned char g_mnewtconverge;g_mnewtconverge46,1352
-static int g_mt_start;g_mt_start47,1390
-static int g_mt_end;g_mt_end48,1413
-void usage(char* myname) {usage50,1435
-void FV_solution(double xx, double *f_v, double *fp_v) {FV_solution67,2177
-void function_FV3D(double *x, int n, double *fvec, double **fjac) {function_FV3D72,2434
-void function_MotorFV(double *x, int n, double *fvec, double **fjac) {function_MotorFV117,3679
-void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {function_laserMotorFV155,4888
-boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf, int step_counter, FILE* f_out8) {mnewt192,6102
-int main(int argc, char* argv[]) {main238,7265
+static int g_mt_start;g_mt_start46,1352
+static int g_mt_end;g_mt_end47,1375
+void usage(char* myname) {usage49,1397
+void FV_solution(double xx, double *f_v, double *fp_v) {FV_solution66,2139
+void function_FV3D(double *x, int n, double *fvec, double **fjac) {function_FV3D71,2396
+void function_MotorFV(double *x, int n, double *fvec, double **fjac) {function_MotorFV116,3641
+void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {function_laserMotorFV154,4850
+boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf, int step_counter, FILE* f_out8) {mnewt191,6064
+int main(int argc, char* argv[]) {main235,7179
 
 math_func.c,968
 #define PI PI11,219
