@@ -5,7 +5,9 @@
  * This program simulates centrosome positioning in one-cell embryo
  * Unit meter, kilo-gram, sec
  * to compile: make (see Makefile for detail)
- * Last modified: Thu, 25 Jul 2013 01:48:41 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 02:37:45 +0900
  */
 
 #include "mtsim.h"
@@ -14,36 +16,6 @@
 #else
 #include <unistd.h>
 #endif
-
-// parameters used in functions in this file
-static double g_Buckling_forward_sum;
-static double g_Buckling_backward_sum;
-static double g_Stokes_rad;
-static double g_Visco;
-static double g_Stokes_rotation;
-static double g_Stokes_translation;
-static double **g_DVecNucCen;
-static double g_Vg;
-static double g_k_on;
-static double g_F_dependency;
-int g_N; /* the (maximum) number of MTs per two centrosomes */
-int g_NN;
-static double **g_u;
-static unsigned char *g_pushing_phase;
-static unsigned char *g_pulling_phase;
-static unsigned char *g_phase;
-static double g_Fbuckle[3];
-static double g_Fbackward[6];
-static double g_fjac_pull[6][6];
-static double g_BucklingConst;
-double *g_L;
-static double *g_NumberOfMotor;
-static unsigned int g_phase_transition_count;
-static double g_MotorDensity;
-static double g_MotorMaxVel;
-static double g_MotorStallF;
-static int g_mt_start;
-static int g_mt_end;
 
 void usage(char* myname) {
   printf("Usage : %s [option]\n", myname);
@@ -62,12 +34,12 @@ void usage(char* myname) {
   printf("        5: Length-Dependent + Cortical-Anchoring\n");
 }
 
-void FV_solution(double xx, double *f_v, double *fp_v) {
-  *f_v = (g_k_on*(exp(-1*g_F_dependency*xx)-1) + g_Vg) - ((xx - g_Buckling_backward_sum)/g_Stokes_translation);
-  *fp_v = -1*g_k_on*g_F_dependency*exp(-1*g_F_dependency*xx)-1/g_Stokes_translation;
+void FV_solution(double xx, double *f_v, double *fp_v, mtGlobal* g) {
+  *f_v = (g->k_on*(exp(-1*g->F_dependency*xx)-1) + g->Vg) - ((xx - g->Buckling_backward_sum)/g->Stokes_translation);
+  *fp_v = -1*g->k_on*g->F_dependency*exp(-1*g->F_dependency*xx)-1/g->Stokes_translation;
 }
 
-void function_FV3D(double *x, int n, double *fvec, double **fjac) {
+void function_FV3D(double *x, int n, double *fvec, double **fjac, mtGlobal* g) {
   /* x[1],x[2],x[3] are velocity of Nuc for x,y,z axes, respectively */
   int i,j;
   for (i=1;i<=n;i++) {
@@ -78,47 +50,48 @@ void function_FV3D(double *x, int n, double *fvec, double **fjac) {
   }
   int mt;
   double A,B,C,D,E;
-  for (mt=0; mt<g_N; mt++) {
-    if (g_pushing_phase[mt]==2) {
-      C = g_u[mt][0]*x[1]+g_u[mt][1]*x[2]+g_u[mt][2]*x[3];
-      D = C + g_Vg;
-      E = D/g_k_on;
+  for (mt=0; mt<g->N; mt++) {
+    if (g->pushing_phase[mt]==2) {
+      C = g->u[mt][0]*x[1]+g->u[mt][1]*x[2]+g->u[mt][2]*x[3];
+      D = C + g->Vg;
+      E = D/g->k_on;
       A = 1-E;
       if (A<=0.0){
-        g_pushing_phase[mt] = 1;
-        g_phase_transition_count++;
+        g->pushing_phase[mt] = 1;
+        g->phase_transition_count++;
         TRACE(("A<0 at function_FV3D\n"));
         for (i=1; i<=n; i++) {
-          fvec[i] -= g_u[mt][i-1]*g_F_dependency*g_BucklingConst/(g_L[mt]*g_L[mt]);
+          fvec[i] -= g->u[mt][i-1]*g->F_dependency*g->BucklingConst/(g->L[mt]*g->L[mt]);
         }
       } else {
         B=log(A);
         for (i=1; i<=n; i++) {
-          fvec[i] += g_u[mt][i-1]*B;
+          fvec[i] += g->u[mt][i-1]*B;
           for (j=1; j<=n; j++) {
-            fjac[i][j] += (g_u[mt][i-1]*g_u[mt][j-1])/A;
+            fjac[i][j] += (g->u[mt][i-1]*g->u[mt][j-1])/A;
           }
         }
       }
     }
   }
   for (i=1;i<=n;i++){
-    fvec[i] = fvec[i]/g_F_dependency + g_Fbuckle[i-1] - g_Stokes_translation*x[i];   /* Fbuckle[0,1,2] */
+    fvec[i] = fvec[i]/g->F_dependency + g->Fbuckle[i-1] - g->Stokes_translation*x[i];   /* Fbuckle[0,1,2] */
     for (j=1;j<=n;j++){
-      fjac[i][j] = fjac[i][j]/(-1.0*g_F_dependency*g_k_on);
+      fjac[i][j] = fjac[i][j]/(-1.0*g->F_dependency*g->k_on);
       if (j==i) {
-        fjac[i][j] = fjac[i][j] - g_Stokes_translation;}
+        fjac[i][j] = fjac[i][j] - g->Stokes_translation;
+      }
     }
   }
 }
 
-void function_MotorFV(double *x, int n, double *fvec, double **fjac) {
+void function_MotorFV(double *x, int n, double *fvec, double **fjac, mtGlobal* g) {
   /* x[1],x[2],x[3] are velocity of Nuc for x,y,z axes, respectively */ 
   int i,j;
   for (i=1;i<=n;i++) {
-    fvec[i] = g_Fbackward[i-1];
+    fvec[i] = g->Fbackward[i-1];
     for (j=1;j<=n;j++){
-      fjac[i][j] = g_fjac_pull[i-1][j-1];
+      fjac[i][j] = g->fjac_pull[i-1][j-1];
     }
   }
   //  for (j=1; j<=6; j++) {
@@ -128,65 +101,66 @@ void function_MotorFV(double *x, int n, double *fvec, double **fjac) {
   int mt;
   int qq;
   double dv, PullingF;
-  for (mt=0; mt<g_N; mt++) {
-    if (g_pulling_phase[mt]==1) {
-      if (mt<g_NN) {qq=0;} else {qq=1;}
+  for (mt=0; mt<g->N; mt++) {
+    if (g->pulling_phase[mt]==1) {
+      if (mt<g->NN) {qq=0;} else {qq=1;}
       dv = 0.0;
       for (j=0; j<3; j++) {
-        dv += (x[(j+2)%3+4]*g_DVecNucCen[qq][(j+1)%3]-x[(j+1)%3+4]*g_DVecNucCen[qq][(j+2)%3]+x[j+1])*g_u[mt][j];
+        dv += (x[(j+2)%3+4]*g->DVecNucCen[qq][(j+1)%3]-x[(j+1)%3+4]*g->DVecNucCen[qq][(j+2)%3]+x[j+1])*g->u[mt][j];
       }
-      PullingF = g_MotorStallF*(1-dv/g_MotorMaxVel);
+      PullingF = g->MotorStallF*(1-dv/g->MotorMaxVel);
       for (i=1; i<=n; i++) {
-        fvec[i] += g_NumberOfMotor[mt]*g_u[mt][i-1]*PullingF;
+        fvec[i] += g->NumberOfMotor[mt]*g->u[mt][i-1]*PullingF;
       }
     }
   }
   for (i=1;i<=(n/2);i++){
-    fvec[i] -= g_Stokes_translation*x[i];   /* Fbackward[0,1,2] */
+    fvec[i] -= g->Stokes_translation*x[i];   /* Fbackward[0,1,2] */
   }
   for (i=(n/2)+1;i<=n;i++){
-    fvec[i] -= g_Stokes_rotation*x[i];
+    fvec[i] -= g->Stokes_rotation*x[i];
   }
 }
 
 /////////////////// the below function is identical to function_motorFV and needs to be modified ////////////////////
-void function_laserMotorFV (double *x, int n, double *fvec, double **fjac) {
+void function_laserMotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal* g) {
   /* x[1],x[2],x[3] are velocity of Nuc for x,y,z axes, respectively */
   int i,j;
   for (i=1;i<=n;i++) {
     fvec[i]=0.0;
     for (j=1;j<=n;j++){
-      fjac[i][j] = g_fjac_pull[i-1][j-1];
+      fjac[i][j] = g->fjac_pull[i-1][j-1];
     }
   }
   int mt;
   int qq;
   double dv, PullingF;
   /* double dv, PullingF, dFdv; */
-  /* double gradient = g_Stokes_translation; */
-  for (mt=g_mt_start; mt<g_mt_end; mt++) {
-    if (g_pulling_phase[mt]==1) {
-      dv = g_u[mt][0]*x[1]+g_u[mt][1]*x[2]+g_u[mt][2]*x[3];
-      if (mt<g_NN) {qq=0;} else {qq=1;}
+  /* double gradient = g->Stokes_translation; */
+  for (mt=g->mt_start; mt<g->mt_end; mt++) {
+    if (g->pulling_phase[mt]==1) {
+      dv = g->u[mt][0]*x[1]+g->u[mt][1]*x[2]+g->u[mt][2]*x[3];
+      if (mt<g->NN) {qq=0;} else {qq=1;}
       dv=0;
       for (j=0; j<3; j++) {
-        dv += (x[(j+2)%3+4]*g_DVecNucCen[qq][(j+1)%3]-x[(j+1)%3+4]*g_DVecNucCen[qq][(j+2)%3]+x[j+1])*g_u[mt][j];
+        dv += (x[(j+2)%3+4]*g->DVecNucCen[qq][(j+1)%3]-x[(j+1)%3+4]*g->DVecNucCen[qq][(j+2)%3]+x[j+1])*g->u[mt][j];
       }
-      PullingF = g_MotorStallF*(1-dv/g_MotorMaxVel);
+      PullingF = g->MotorStallF*(1-dv/g->MotorMaxVel);
       for (i=1; i<=n; i++) {
-        fvec[i] += g_NumberOfMotor[mt]*g_u[mt][i-1]*PullingF;
+        fvec[i] += g->NumberOfMotor[mt]*g->u[mt][i-1]*PullingF;
       }
     }
   }
   for (i=1;i<=(n/2);i++){
-    fvec[i] = fvec[i]+g_Fbackward[i-1] - g_Stokes_translation*x[i];   /* Fbackward[0,1,2] */
+    fvec[i] = fvec[i]+g->Fbackward[i-1] - g->Stokes_translation*x[i];   /* Fbackward[0,1,2] */
   }
   for (i=(n/2)+1;i<=n;i++){
-    fvec[i] = fvec[i] + g_Stokes_rotation*x[i];
+    fvec[i] = fvec[i] + g->Stokes_rotation*x[i];
   }
 }
 
 int main(int argc, char* argv[]) {
+  mtGlobal g;      /* parameters which was global variable in previous code */
   mtGraphics mtg;
   display_setting(&mtg);
 
@@ -229,24 +203,24 @@ int main(int argc, char* argv[]) {
   //PARAMETERS
   unsigned char strain=8; // 0:WT, 1:par-2 w/o LET-99, 2:par-2 with LET-99, 3:par-3 w/o LET-99, 4:par-3 with LET-99, 5: let-99, 6:ric-8, 7:let-99;ric-8, 8:gpr-1/2, 9:PosteriorCortexPullingOnly
   // dynamic instability of MT
-  g_Vg = 0.328e-6; /* g_Vg: growth velocity of MT [m/sec], standard:0.12 micron/sec */
+  g.Vg = 0.328e-6; /* g.Vg: growth velocity of MT [m/sec], standard:0.12 micron/sec */
   double Vs = 0.537e-6; /* Vs: shrinkage velocity of MT [m/sec], standard:0.288 micron/sec*/
   double CatFreq = 0.046; /* fcat: catastrophe frequency of MT [/sec], standard:0.014 */
   double ResFreq = 0.133; /* fres: rescue frequency of MT [/sec], standard:0.044 */
   // drag force of pronucleus
-  g_Visco = 1.0; /* viscosity of cytosol [kg/m sec], standard 0.1->1.0 */
-  g_Stokes_rad = 10.0e-6;
+  g.Visco = 1.0; /* viscosity of cytosol [kg/m sec], standard 0.1->1.0 */
+  g.Stokes_rad = 10.0e-6;
   // pushing forces
   double EI = 10.0e-24; /* rigidity of MT [Nmm]: 4.6 to 41 (Standard 10) */
   double ConstantA = PI*PI;
-  g_BucklingConst = ConstantA * EI;
-  g_k_on = g_Vg; /* or g_k_on = g_Vg/0.8 */
+  g.BucklingConst = ConstantA * EI;
+  g.k_on = g.Vg; /* or g.k_on = g.Vg/0.8 */
   double F_dependency_single = 3.2e+10; /* 0.034e+12 when velocity decreases to 60% with 15pN (condition resembles in yeast). theoretical value 17.7 (for C. elegans)*/
   // pulling forces
-  g_MotorStallF = 1.1e-12;
-  g_MotorMaxVel = 2.0e-6;
+  g.MotorStallF = 1.1e-12;
+  g.MotorMaxVel = 2.0e-6;
   // length-dependent pulling force
-  g_MotorDensity = 0.050e+6; /* D: density of motor on MT [/m]: 50,000 to 400,000 (standard 100,000)*/
+  g.MotorDensity = 0.050e+6; /* D: density of motor on MT [/m]: 50,000 to 400,000 (standard 100,000)*/
   // corical pulling force
   int CortexPullingDuration = 1; /* [timepoint] */
   double CortexPullingFreq_PAR3 = 0.8; /* [/sec] */
@@ -277,34 +251,34 @@ int main(int argc, char* argv[]) {
     MTTotal[MTDivision+kk]=MTTotal[MTDivision+kk-1]+MTPerPlane[MTDivision+kk];
     printf("%d %d %d\n",MTDivision,MTPerPlane[MTDivision+kk],MTTotal[MTDivision+kk]);
   }
-  g_NN = MTTotal[MTDivision+MTDivisionPlus];
-  g_N = 2*g_NN;
-  printf("NN=%d N=%d\n", g_NN, g_N);
+  g.NN = MTTotal[MTDivision+MTDivisionPlus];
+  g.N = 2*g.NN;
+  printf("NN=%d N=%d\n", g.NN, g.N);
   // allocate memory
-  g_u = dmatrix(0,g_N-1,0,5); ///////////////////////////////
-  g_pushing_phase = cvector(0,g_N-1);
-  g_pulling_phase = cvector(0,g_N-1);
-  g_phase = cvector(0,g_N-1);
-  g_L = dvector(0,g_N-1);
-  g_NumberOfMotor = dvector(0,g_N-1);
-  int CortexPullingMode[g_N];
-  int CortexMotorNumber[g_N];
-  for (k=0;k<g_N;k++) {CortexPullingMode[k]=0;}
+  g.u = dmatrix(0,g.N-1,0,5); ///////////////////////////////
+  g.pushing_phase = cvector(0,g.N-1);
+  g.pulling_phase = cvector(0,g.N-1);
+  g.phase = cvector(0,g.N-1);
+  g.L = dvector(0,g.N-1);
+  g.NumberOfMotor = dvector(0,g.N-1);
+  int CortexPullingMode[g.N];
+  int CortexMotorNumber[g.N];
+  for (k=0;k<g.N;k++) {CortexPullingMode[k]=0;}
   // arrangement of microtubules: direction of each MT
-  double Sdelta[g_N], Ssita[g_N];
+  double Sdelta[g.N], Ssita[g.N];
   Sdelta[0]=0.5*PI; Ssita[0]=0.0;
   kk=0;
-  for (k=1;k<g_NN; k++) {
+  for (k=1;k<g.NN; k++) {
     if (k > MTTotal[kk]-1){kk++;}
     Sdelta[k]=(PI/2.0)*(1.0-(double)kk/MTDivision);
     Ssita[k]=2.0*PI*k/(MTPerPlane[kk]);
   }
-  Sdelta[g_NN] = -0.5*PI; Ssita[0]=0.0;
+  Sdelta[g.NN] = -0.5*PI; Ssita[0]=0.0;
   kk=0;
-  for (k=g_NN+1;k<g_N; k++) {
-    if ((k-g_NN) > MTTotal[kk]-1){kk++;}
+  for (k=g.NN+1;k<g.N; k++) {
+    if ((k-g.NN) > MTTotal[kk]-1){kk++;}
     Sdelta[k]=-(PI/2.0)*(1.0-(double)kk/MTDivision);
-    Ssita[k]=2.0*PI*(k-g_NN)/(MTPerPlane[kk]);
+    Ssita[k]=2.0*PI*(k-g.NN)/(MTPerPlane[kk]);
   }
   // int MTcoefficient = 100; /* a constant used in simulations with increasing number of MTs (Sup Fig S5) */
 
@@ -317,25 +291,25 @@ int main(int argc, char* argv[]) {
   unsigned int mode; /* pulling or pushing */
   double VECVEC[3], VECVECVEC[3];
   // microtubules //
-  double previousL[g_N];
-  double MT[g_N][3]; /* rectangular coordinates of n-th MT */
-  double tempMT[g_N][3];
+  double previousL[g.N];
+  double MT[g.N][3]; /* rectangular coordinates of n-th MT */
+  double tempMT[g.N][3];
   double MTC[3]; /* for calculation of length to cortex used around L448 */
   double min, max, sum; /* to monitor max, mean, min of MT length */
   int currentN; /* current number of active MTs */
   // first and second centrosome//
-  g_DVecNucCen = dmatrix(0,1,0,2);
+  g.DVecNucCen = dmatrix(0,1,0,2);
   double PVecCen[2][3];
   double Nuc[3];  /* position vector of center of the nucleus */
   // forces //
   double ForceC[2][6]; /* force vector on 1st and 2nd centrosome */
   //double PushingForceC[2][3];
   double Bucklingforce_single;
-  double pushingF[g_N];
+  double pushingF[g.N];
   // translational and rotational movement of the pronucleus //
   double DirectionDetermination[3];
   double UnitDirection[3];
-  double DirectCos[g_N];
+  double DirectCos[g.N];
   double StallSum;
   double Vnuc_buckle;
   double Vmt_buckle;
@@ -347,7 +321,7 @@ int main(int argc, char* argv[]) {
   double CalculateVel;
   unsigned int cycle_count;
   unsigned char final_cycle_check;
-  unsigned int eachMT_PTC[g_N];
+  unsigned int eachMT_PTC[g.N];
   unsigned int pushing_phase_count[5];
   double dv; /* increase of distance between contact point and nucleus devided by time */
   int step_counter;
@@ -380,7 +354,7 @@ int main(int argc, char* argv[]) {
   double tolx = 1.0e-12; /* 1e-6 um/sec */
   double tolf = 1.0e-17; /* 1e-5 pN */
   boolean did_converge = false;
-  void (*usr_func)(double *x, int n, double *fvec, double **fjac); /* for callback function */
+  void (*usr_func)(double*, int, double*, double**, mtGlobal*); /* for callback function */
 
   //// DECLARATION of Constants and Variables - FINISHED //
 
@@ -494,12 +468,12 @@ int main(int argc, char* argv[]) {
         //	  NumberOfMotorOnCortex_PAR3=1.5;
         break;
     }
-    g_Stokes_translation = 6.0*PI*g_Stokes_rad*g_Visco;
-    g_Stokes_rotation = -8.0*PI*pow(g_Stokes_rad, 3)*g_Visco/1.0; /* the formula may be adjusted for easy rotation */
-    g_BucklingConst = ConstantA * EI;
+    g.Stokes_translation = 6.0*PI*g.Stokes_rad*g.Visco;
+    g.Stokes_rotation = -8.0*PI*pow(g.Stokes_rad, 3)*g.Visco/1.0; /* the formula may be adjusted for easy rotation */
+    g.BucklingConst = ConstantA * EI;
 
     // OUTPUT parameter LOGs
-    fprintf(f_out5,"p=%d\nmode=%d\nMTDivision=%d MT=%d\nVg_um=%5.3lf Vs_um=%5.3lf\nCatFreq=%5.3lf ResFreq=%5.3lf\nFstall_pN=%5.3lf Vmax_um=%5.3f M_mm=%5.3lf\nEI_pNumum=%5.3lf A_um=%5.3lf B_pN=%5.3lf\nH=%5.3lf Stokes_rad=%5.3lf\n\n", p, mode, MTDivision, g_N, g_Vg*pow(10,6), Vs*pow(10,6), CatFreq, ResFreq, g_MotorStallF*pow(10,12), g_MotorMaxVel*1.0e+6, g_MotorDensity*pow(10,-3), EI*pow(10,24), g_k_on*1.0e+6, F_dependency_single*1.0e-12, g_Visco, g_Stokes_rad*1.0e+6);
+    fprintf(f_out5,"p=%d\nmode=%d\nMTDivision=%d MT=%d\nVg_um=%5.3lf Vs_um=%5.3lf\nCatFreq=%5.3lf ResFreq=%5.3lf\nFstall_pN=%5.3lf Vmax_um=%5.3f M_mm=%5.3lf\nEI_pNumum=%5.3lf A_um=%5.3lf B_pN=%5.3lf\nH=%5.3lf Stokes_rad=%5.3lf\n\n", p, mode, MTDivision, g.N, g.Vg*pow(10,6), Vs*pow(10,6), CatFreq, ResFreq, g.MotorStallF*pow(10,12), g.MotorMaxVel*1.0e+6, g.MotorDensity*pow(10,-3), EI*pow(10,24), g.k_on*1.0e+6, F_dependency_single*1.0e-12, g.Visco, g.Stokes_rad*1.0e+6);
 
     // color settings
     /* #include "color_setting.c" */
@@ -509,8 +483,8 @@ int main(int argc, char* argv[]) {
     // center of the nucleus //
     Nuc[0]=Rad-LL,Nuc[1]=0.0,Nuc[2]=0.0; /**************** start point ********************/
     //Nuc[0]=0.0,Nuc[1]=0.0,Nuc[2]=0.0; /**************** start point ********************/
-    g_DVecNucCen[0][0]=0.0; g_DVecNucCen[0][1]=0.0; g_DVecNucCen[0][2]=LL;      
-    g_DVecNucCen[1][0]=0.0; g_DVecNucCen[1][1]=0.0; g_DVecNucCen[1][2]=(-1.0)*LL;
+    g.DVecNucCen[0][0]=0.0; g.DVecNucCen[0][1]=0.0; g.DVecNucCen[0][2]=LL;      
+    g.DVecNucCen[1][0]=0.0; g.DVecNucCen[1][1]=0.0; g.DVecNucCen[1][2]=(-1.0)*LL;
 
     // 1st rotation
     rotationAx[0]=0.0;
@@ -518,41 +492,45 @@ int main(int argc, char* argv[]) {
     rotationAx[2]=0.0;
     MakeRotationMatrix(RotationMatrix, rotationAx, starting_degree);
 
-    ProductJacVec(VECVEC, RotationMatrix, g_DVecNucCen[0]);
-    for (j=0; j<3; j++) {g_DVecNucCen[0][j]=VECVEC[j];}
-    ProductJacVec(VECVEC, RotationMatrix, g_DVecNucCen[1]);
-    for (j=0; j<3; j++) {g_DVecNucCen[1][j]=VECVEC[j];}
+    ProductJacVec(VECVEC, RotationMatrix, g.DVecNucCen[0]);
+    for (j=0; j<3; j++) {g.DVecNucCen[0][j]=VECVEC[j];}
+    ProductJacVec(VECVEC, RotationMatrix, g.DVecNucCen[1]);
+    for (j=0; j<3; j++) {g.DVecNucCen[1][j]=VECVEC[j];}
 
     for (j=0; j<3; j++) {
-      PVecCen[0][j] = Nuc[j]+g_DVecNucCen[0][j];
-      PVecCen[1][j] = Nuc[j]+g_DVecNucCen[1][j];
+      PVecCen[0][j] = Nuc[j]+g.DVecNucCen[0][j];
+      PVecCen[1][j] = Nuc[j]+g.DVecNucCen[1][j];
     }
 
     // phase and length of MTs
-    for (k=0; k<g_N; k++){
-      g_L[k] = Vs*dT;  
+    for (k=0; k<g.N; k++){
+      g.L[k] = Vs*dT;  
       random=ran1(idum);
       if (random<(ResFreq/(CatFreq+ResFreq)))
-        g_phase[k]=1;
+        g.phase[k]=1;
       else 
-        g_phase[k]=0;
+        g.phase[k]=0;
       // phase[k]=2; /*** add when simulation with increasing number of MTs (Sup Fig S3), start = inactive phase ***/
-      g_u[k][0] = cos(Sdelta[k])*cos(Ssita[k]);
-      g_u[k][1] = cos(Sdelta[k])*sin(Ssita[k]);
-      g_u[k][2] = sin(Sdelta[k]);
-      for (j=0;j<3;j++){VECVEC[j]=g_u[k][j];}
-      ProductJacVec(VECVECVEC, RotationMatrix, VECVEC);
-      for (j=0;j<3;j++){g_u[k][j]=VECVECVEC[j];}
-      // calculation of  g_u[k][3], g_u[k][4], g_u[k]5]
-      if (k<g_NN) {
-        OutProdVector(g_DVecNucCen[0], VECVECVEC, VECVEC);
-      } else {
-        OutProdVector(g_DVecNucCen[1], VECVECVEC, VECVEC);
+      g.u[k][0] = cos(Sdelta[k])*cos(Ssita[k]);
+      g.u[k][1] = cos(Sdelta[k])*sin(Ssita[k]);
+      g.u[k][2] = sin(Sdelta[k]);
+      for (j=0;j<3;j++){
+        VECVEC[j]=g.u[k][j];
       }
-      for (j=0;j<3;j++){g_u[k][3+j]=VECVEC[j];}
-      g_pushing_phase[k] = 0;
+      ProductJacVec(VECVECVEC, RotationMatrix, VECVEC);
+      for (j=0;j<3;j++){
+        g.u[k][j]=VECVECVEC[j];
+      }
+      // calculation of  g.u[k][3], g.u[k][4], g.u[k]5]
+      if (k<g.NN) {
+        OutProdVector(g.DVecNucCen[0], VECVECVEC, VECVEC);
+      } else {
+        OutProdVector(g.DVecNucCen[1], VECVECVEC, VECVEC);
+      }
+      for (j=0;j<3;j++){g.u[k][3+j]=VECVEC[j];}
+      g.pushing_phase[k] = 0;
     }
-    currentN = g_N;
+    currentN = g.N;
     // currentN = 0;  /*** add when simulation with increasing number of MTs (Sup Fig S3), start = 0 MT ***/
 
     ////////////////////////////////////////
@@ -595,22 +573,22 @@ int main(int argc, char* argv[]) {
 
 
       /////////////////////  growth/shrinkage for each microtubule ////////////////////
-      for (k=0; k<g_N; k++) {
-        g_NumberOfMotor[k] = 0.0; /* initialization */
-        if (k<g_NN){qq=0;}else{qq = 1;} /* acting on centrosome 1 or 2 */
-        g_pushing_phase[k] = 0; /* initial assumption = no pushing */
-        switch (g_phase[k]) { /* phase1=growing, phase0=shrinking */
+      for (k=0; k<g.N; k++) {
+        g.NumberOfMotor[k] = 0.0; /* initialization */
+        if (k<g.NN){qq=0;}else{qq = 1;} /* acting on centrosome 1 or 2 */
+        g.pushing_phase[k] = 0; /* initial assumption = no pushing */
+        switch (g.phase[k]) { /* phase1=growing, phase0=shrinking */
           case 2: /* inactive MTs */
-            g_pushing_phase[k] = 0;
-            g_pulling_phase[k] = 0;
+            g.pushing_phase[k] = 0;
+            g.pulling_phase[k] = 0;
             break;
           case 1: /* growing phase */
-            g_pulling_phase[k] = 1;
-            previousL[k] = g_L[k];
-            g_L[k] += g_Vg*dT;
-            // if (k > NN-1) {g_L[k]=Vs*dT;} /****** add when simulation with 1aster (Sup Fig S8) ******/
+            g.pulling_phase[k] = 1;
+            previousL[k] = g.L[k];
+            g.L[k] += g.Vg*dT;
+            // if (k > NN-1) {g.L[k]=Vs*dT;} /****** add when simulation with 1aster (Sup Fig S8) ******/
             for (j=0; j<3; j++) {
-              MTC[j] = g_L[k]*g_u[k][j];
+              MTC[j] = g.L[k]*g.u[k][j];
               tempMT[k][j] = PVecCen[qq][j] + MTC[j];}
             if (sqrt(pow((tempMT[k][0]/Rad),2)+pow((tempMT[k][1]/RadS),2)+pow((tempMT[k][2]/RadS),2)) > 1) { /* the MT reaches the cortex */
               // calculation of the distance from the centrosome to the cell cortex at the angle //
@@ -618,37 +596,37 @@ int main(int argc, char* argv[]) {
               AA[1]=2*(MTC[0]*PVecCen[qq][0]*RadS*RadS+MTC[1]*PVecCen[qq][1]*Rad*Rad+MTC[2]*PVecCen[qq][2]*Rad*Rad);
               AA[2]=pow(RadS*PVecCen[qq][0],2)+pow(Rad*PVecCen[qq][1],2)+pow(Rad*PVecCen[qq][2],2)-pow(Rad*RadS,2);
               QuadEqu2(AA,BB);
-              g_L[k] = BB[0]*g_L[k];
+              g.L[k] = BB[0]*g.L[k];
 
               // THE PUSHING MODEL: estimation of an initial guess to be used in Newton-Raphson method 
               if (mode == 0) {
                 //  if (qq=0) { /************add if 1aster ******/ 
-                g_pushing_phase[k]=1; /* temporary assume buckling */
+                g.pushing_phase[k]=1; /* temporary assume buckling */
                 for (j=0; j<3; j++) {
-                  tempMT[k][j] = PVecCen[qq][j] + g_L[k]*g_u[k][j]; /* coordinate of contact point */
-                  DirectionDetermination[j] -= g_u[k][j]/(g_L[k]*g_L[k]); /* to estimate the direction vector of an initial guess to be used in the Newton-Raphson method */
+                  tempMT[k][j] = PVecCen[qq][j] + g.L[k]*g.u[k][j]; /* coordinate of contact point */
+                  DirectionDetermination[j] -= g.u[k][j]/(g.L[k]*g.L[k]); /* to estimate the direction vector of an initial guess to be used in the Newton-Raphson method */
                 }
               } else {
-                g_pushing_phase[k]=0;
+                g.pushing_phase[k]=0;
               }
 
               // THE CORTICAL-ANCHORING MODEL (Sup Fig S6) 
               if (mode == 2) {
                 for (j=0; j<6; j++){
-                  ForceC[qq][j] += g_u[k][j] * Fc;} /* To examine the cortical-anchoring model with the additional assumptions (Sup Fig S6), conditions described in the figure legend are added here */
+                  ForceC[qq][j] += g.u[k][j] * Fc;} /* To examine the cortical-anchoring model with the additional assumptions (Sup Fig S6), conditions described in the figure legend are added here */
               }
 
               // PUSHING MODELS WITH DIFFERENT FORMULAS (Sup Fig S2)	
               if (mode == 4) {
                 for (j=0; j<6; j++){
-                  ForceC[qq][j] -= g_u[k][j] * 1.0e-22 * pow(g_L[k],-2);}  /* To examine the pushing forces expressed with different formulas (Sup Fig S2), the formulas shown here are modified as described in the figure legend */
+                  ForceC[qq][j] -= g.u[k][j] * 1.0e-22 * pow(g.L[k],-2);}  /* To examine the pushing forces expressed with different formulas (Sup Fig S2), the formulas shown here are modified as described in the figure legend */
               }
 
               // LENGTH-DEPENDENT PULLING + CORTEX-PULLING
               if (mode == 5) {
                 if (CortexPullingMode[k]==0) {
                   for (j=0; j<3; j++) {
-                    tempMT[k][j] = PVecCen[qq][j] + g_L[k]*g_u[k][j];
+                    tempMT[k][j] = PVecCen[qq][j] + g.L[k]*g.u[k][j];
                   }
                   switch (strain)
                   {
@@ -736,61 +714,61 @@ int main(int argc, char* argv[]) {
                   CortexPullingMode[k]=CortexPullingDuration; /********** no duration ***************/
                 }
                 if (CortexPullingMode[k]>0){
-                  g_NumberOfMotor[k] += CortexMotorNumber[k];
+                  g.NumberOfMotor[k] += CortexMotorNumber[k];
                   CortexPullingMode[k]--;
                 } 
               }
 
               // if (ran1(idum) < CatFreq*20*dT){phase[k] = 0;} /* if assuming CatFreq increases upon contact with the cortex */
               } else {
-                g_pushing_phase[k]=0; // To ensure that pushing_phase of the MT without contacting the cortex is 0 // 
+                g.pushing_phase[k]=0; // To ensure that pushing_phase of the MT without contacting the cortex is 0 // 
               }
               // switching from growth phase to shrinkage phase // 
               if (ran1(idum) < CatFreq*dT)
-                g_phase[k] = 0;
+                g.phase[k] = 0;
               break;
 
               case 0: /* shrinkage phase */
-              if (g_L[k] > Rad/25) {
-                g_L[k] -= Vs*dT;
-                g_pulling_phase[k]=1;
+              if (g.L[k] > Rad/25) {
+                g.L[k] -= Vs*dT;
+                g.pulling_phase[k]=1;
               }  /* the lengh of MT exceeds 1micron */
-              //  if (k > NN-1) {g_L[k]=Vs*dT;} /************* add if 1aster (Sup Fig. S8)********************/
+              //  if (k > NN-1) {g.L[k]=Vs*dT;} /************* add if 1aster (Sup Fig. S8)********************/
 
               // switching from shrinkage phase to growth phase // 
-              if (ran1(idum) < ResFreq*dT) g_phase[k] = 1;
-              g_pushing_phase[k]=0;
+              if (ran1(idum) < ResFreq*dT) g.phase[k] = 1;
+              g.pushing_phase[k]=0;
               break;
             }
 
             // PULLING MODELS WITH DIFFERENT FORMULAS (Sup Fig S1)
             if (mode == 3) { 
               for (j=0;j<6;j++){
-                ForceC[qq][j] += g_u[k][j] * 1.0e-7 * pow(g_L[k],1);} /* pulling models with different fomulas (Sup Fig S1), the formulas below are modified as described in the figure legend */  
+                ForceC[qq][j] += g.u[k][j] * 1.0e-7 * pow(g.L[k],1);} /* pulling models with different fomulas (Sup Fig S1), the formulas below are modified as described in the figure legend */  
             }
 
             ///////////////////////////////////////////
             // LENGTH-DEPENDENT PULLING + CORTEX PULLING
             if ((mode == 1)||(mode == 5)) {
               random = ran1(idum);
-              np = g_L[k]*g_MotorDensity;
+              np = g.L[k]*g.MotorDensity;
               cumpoisson = 0.0;
               motornumber = -1;
               do {
                 motornumber++;
                 cumpoisson += Poisson(np,motornumber);
               } while (random > cumpoisson);
-              g_NumberOfMotor[k] += motornumber;
+              g.NumberOfMotor[k] += motornumber;
               //TRACE(("%4d %4d N=%3.1lf MT=(%3.2lf %3.2lf %3.2lf %3.2lf %3.2lf %3.2lf)\n",i,k,NumberOfMotor[k],u[k][0],u[k][1],u[k][2],u[k][3],u[k][4],u[k][5]));
               for (j=0;j<6;j++){
-                ForceC[qq][j] += g_NumberOfMotor[k] * g_u[k][j] * g_MotorStallF;
+                ForceC[qq][j] += g.NumberOfMotor[k] * g.u[k][j] * g.MotorStallF;
               } /* an initial guess */
             }
 
             // to monitor microtubules profile
-            sum += g_L[k];
-            if (max < g_L[k]){max = g_L[k];}
-            if (min > g_L[k]){min = g_L[k];}
+            sum += g.L[k];
+            if (max < g.L[k]){max = g.L[k];}
+            if (min > g.L[k]){min = g.L[k];}
         }
 
         // for (j=0; j<6; j++) {ForceC[1][j] = 0.0;} /********* add if 1 aster (Sup Fig S8) ******/
@@ -817,43 +795,43 @@ int main(int argc, char* argv[]) {
           usr_func = function_FV3D;
           if (i%100==0) {fprintf(f_out7,"%d ",i);}
           UnitVector(DirectionDetermination,UnitDirection); /* unit vector of an initial guess of pronuclear migration */
-          g_Buckling_forward_sum = 0.0;
-          g_Buckling_backward_sum = 0.0;
+          g.Buckling_forward_sum = 0.0;
+          g.Buckling_backward_sum = 0.0;
           StallSum=0.0;
-          for (k=0; k<g_N; k++) {
-            if (g_pushing_phase[k]!=0) {
-              DirectCos[k]=InnProdVector(g_u[k],UnitDirection);
+          for (k=0; k<g.N; k++) {
+            if (g.pushing_phase[k]!=0) {
+              DirectCos[k]=InnProdVector(g.u[k],UnitDirection);
               if (DirectCos[k]<0) {
-                g_Buckling_forward_sum -= DirectCos[k]*g_BucklingConst/(g_L[k]*g_L[k]);
+                g.Buckling_forward_sum -= DirectCos[k]*g.BucklingConst/(g.L[k]*g.L[k]);
                 StallSum -= DirectCos[k];
-                g_pushing_phase[k]=2; /* temporal assumption that MTs directed toward the opposite direction of pronuclear migration and pushing the cortex do not buckle */
+                g.pushing_phase[k]=2; /* temporal assumption that MTs directed toward the opposite direction of pronuclear migration and pushing the cortex do not buckle */
               } else {
-                g_Buckling_backward_sum += DirectCos[k]*g_BucklingConst/(g_L[k]*g_L[k]);
-                g_pushing_phase[k]=1; /* temporal assumption that MTs directed toward the direction of pronuclear migration and pushing the cortex buckle  */
+                g.Buckling_backward_sum += DirectCos[k]*g.BucklingConst/(g.L[k]*g.L[k]);
+                g.pushing_phase[k]=1; /* temporal assumption that MTs directed toward the direction of pronuclear migration and pushing the cortex buckle  */
               }
             }
           }
-          if (g_Buckling_forward_sum < g_Buckling_backward_sum) {
+          if (g.Buckling_forward_sum < g.Buckling_backward_sum) {
             printf("something is wrong: cannot determine buckling direction!\n");
           } else {
-            g_F_dependency = F_dependency_single/StallSum;
-            Vnuc_buckle = Stokes_function(g_Buckling_forward_sum, g_Stokes_translation, g_Buckling_backward_sum);
-            Vmt_buckle = FV_function(g_Buckling_forward_sum, g_Vg, g_k_on, g_F_dependency);
+            g.F_dependency = F_dependency_single/StallSum;
+            Vnuc_buckle = Stokes_function(g.Buckling_forward_sum, g.Stokes_translation, g.Buckling_backward_sum);
+            Vmt_buckle = FV_function(g.Buckling_forward_sum, g.Vg, g.k_on, g.F_dependency);
             if (Vnuc_buckle<=Vmt_buckle){  /* buckling is dominant */
               if (i%100==0) {fprintf(f_out7,"BK ");}
-              F_soln = g_Buckling_forward_sum;
+              F_soln = g.Buckling_forward_sum;
               Vnuc_soln = Vnuc_buckle;
               Vmt_soln = Vmt_buckle;
-              for (k=0;k<g_N;k++) {
-                if (g_pushing_phase[k]!=0) g_pushing_phase[k]=1; /* temporal assumption that all MTs buckle */
+              for (k=0;k<g.N;k++) {
+                if (g.pushing_phase[k]!=0) g.pushing_phase[k]=1; /* temporal assumption that all MTs buckle */
               }
             } else {  /* FV is dominant */
               if (i%100==0) {
                 fprintf(f_out7,"FV ");
               }
-              F_soln = rtsafe(FV_solution, 0.0, g_Buckling_forward_sum, xacc);
-              Vnuc_soln = Stokes_function(F_soln, g_Stokes_translation, g_Buckling_backward_sum);
-              Vmt_soln = FV_function(F_soln, g_Vg, g_k_on, g_F_dependency);
+              F_soln = rtsafe(FV_solution, 0.0, g.Buckling_forward_sum, xacc, &g);
+              Vnuc_soln = Stokes_function(F_soln, g.Stokes_translation, g.Buckling_backward_sum);
+              Vmt_soln = FV_function(F_soln, g.Vg, g.k_on, g.F_dependency);
             }
           }
           for (j=1; j<=3; j++){
@@ -861,72 +839,72 @@ int main(int argc, char* argv[]) {
             if (i%100==0) {fprintf(f_out7,"%5.4f ",tempNucVel[j]*pow(10,6));}
           }
 
-          g_F_dependency = F_dependency_single;
+          g.F_dependency = F_dependency_single;
           for (j=0;j<3;j++){
-            g_Fbuckle[j] = 0.0;  /* Fbuckle[0,1,2]*/
+            g.Fbuckle[j] = 0.0;  /* Fbuckle[0,1,2]*/
           }
-          for (k=0; k<g_N; k++) {
-            if (g_pushing_phase[k]==1){
-              Bucklingforce_single = g_BucklingConst/(g_L[k]*g_L[k]);	  
+          for (k=0; k<g.N; k++) {
+            if (g.pushing_phase[k]==1){
+              Bucklingforce_single = g.BucklingConst/(g.L[k]*g.L[k]);	  
               for (j=0;j<3;j++){
-                g_Fbuckle[j] -= g_u[k][j]*Bucklingforce_single;
+                g.Fbuckle[j] -= g.u[k][j]*Bucklingforce_single;
               }
             }
           }
           usr_func = function_FV3D;
           /* Newton-Raphson method to revise the initial guess of the velocity of the pronucleus */
-          did_converge = mnewt(10,tempNucVel,3,tolx,tolf, step_counter, f_out8, usr_func);
+          did_converge = mnewt(10,tempNucVel,3,tolx,tolf, step_counter, f_out8, usr_func, &g);
 
           // THE PUSHING MODEL-2: solve the set of equation using Newton-Raphson method with the revised initial guess
           cycle_count = 0;
           final_cycle_check = 0;
-          for (k=0; k<g_N; k++) {eachMT_PTC[k] = 0;}
+          for (k=0; k<g.N; k++) {eachMT_PTC[k] = 0;}
           do {
-            g_phase_transition_count = 0;
+            g.phase_transition_count = 0;
             for (j=0;j<3;j++){
-              g_Fbuckle[j] = 0.0;  /* Fbuckle[0,1,2]*/
+              g.Fbuckle[j] = 0.0;  /* Fbuckle[0,1,2]*/
             }
-            for (k=0; k<g_N; k++) {
-              if (g_pushing_phase[k]!=0){
-                Bucklingforce_single = g_BucklingConst/(g_L[k]*g_L[k]);	  
-                Vmt_buckle = FV_function(Bucklingforce_single, g_Vg, g_k_on, F_dependency_single);
-                dv = -1.0 * (g_u[k][0]*tempNucVel[1]+g_u[k][1]*tempNucVel[2]+g_u[k][2]*tempNucVel[3]);
+            for (k=0; k<g.N; k++) {
+              if (g.pushing_phase[k]!=0){
+                Bucklingforce_single = g.BucklingConst/(g.L[k]*g.L[k]);	  
+                Vmt_buckle = FV_function(Bucklingforce_single, g.Vg, g.k_on, F_dependency_single);
+                dv = -1.0 * (g.u[k][0]*tempNucVel[1]+g.u[k][1]*tempNucVel[2]+g.u[k][2]*tempNucVel[3]);
                 if (eachMT_PTC[k]>10) {  /* to avoid examining same condition repeatedly */
-                  if ((dv > g_Vg) || (dv < Vmt_buckle)||(g_pushing_phase[k]!=2)) { /* check the length. If not appropriate, do not exit */
-                    g_phase_transition_count++;
+                  if ((dv > g.Vg) || (dv < Vmt_buckle)||(g.pushing_phase[k]!=2)) { /* check the length. If not appropriate, do not exit */
+                    g.phase_transition_count++;
                     eachMT_PTC[k]++;
                   }
-                  g_pushing_phase[k] = 2;
+                  g.pushing_phase[k] = 2;
                   if (eachMT_PTC[k]>25){ eachMT_PTC[k] = 0; } /* if phase 2 is not appropriate, go back to usual classification */
                 } else {
-                  if (dv > g_Vg){
-                    if (g_pushing_phase[k]!=3){
-                      g_phase_transition_count++;
+                  if (dv > g.Vg){
+                    if (g.pushing_phase[k]!=3){
+                      g.phase_transition_count++;
                       eachMT_PTC[k]++;
                     }
-                    if (g_pushing_phase[k]==1){
-                      g_pushing_phase[k] = 2;
+                    if (g.pushing_phase[k]==1){
+                      g.pushing_phase[k] = 2;
                     } else {
-                      g_pushing_phase[k] = 3;
+                      g.pushing_phase[k] = 3;
                     }
                   } else {
                     if (dv > Vmt_buckle) {  /* FV is dominant */		
-                      if (g_pushing_phase[k]!=2){
-                        g_phase_transition_count++;
+                      if (g.pushing_phase[k]!=2){
+                        g.phase_transition_count++;
                         eachMT_PTC[k]++;
                       }
-                      g_pushing_phase[k] = 2;
+                      g.pushing_phase[k] = 2;
                     } else {
-                      if (g_pushing_phase[k]!=1){
-                        g_phase_transition_count++;
+                      if (g.pushing_phase[k]!=1){
+                        g.phase_transition_count++;
                         eachMT_PTC[k]++;
                       }
-                      if (g_pushing_phase[k]==3) {
-                        g_pushing_phase[k] = 2;
+                      if (g.pushing_phase[k]==3) {
+                        g.pushing_phase[k] = 2;
                       } else {
-                        g_pushing_phase[k] = 1;
+                        g.pushing_phase[k] = 1;
                         for (j=0;j<3;j++){
-                          g_Fbuckle[j] -= g_u[k][j]*Bucklingforce_single;
+                          g.Fbuckle[j] -= g.u[k][j]*Bucklingforce_single;
                         }
                       }
                     }    
@@ -934,23 +912,23 @@ int main(int argc, char* argv[]) {
                 }
               }		
             }	      
-            if ((g_phase_transition_count!=0)||(cycle_count==0)) {
+            if ((g.phase_transition_count!=0)||(cycle_count==0)) {
               /* Newton-Raphson method */
-              did_converge = mnewt(10, tempNucVel, 3, tolx,tolf, step_counter, f_out8, usr_func);
+              did_converge = mnewt(10, tempNucVel, 3, tolx,tolf, step_counter, f_out8, usr_func, &g);
             }
             if (i%100==0) {
-              fprintf(f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);
+              fprintf(f_out8,"%d %d %d\n", i, cycle_count, g.phase_transition_count);
             }
             cycle_count++;
-          } while ((!did_converge)||(cycle_count<=1)||((g_phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
+          } while ((!did_converge)||(cycle_count<=1)||((g.phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
 
-          if (g_phase_transition_count!=0){ /* in case the solution is not obtained within 1000 cycles*/
-            printf("exit without convergence at t=%d PTC=%d\n", i, g_phase_transition_count);
-            fprintf(f_out7,"exit without convergence at t=%d PTC=%d\n", i, g_phase_transition_count);
+          if (g.phase_transition_count!=0){ /* in case the solution is not obtained within 1000 cycles*/
+            printf("exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
+            fprintf(f_out7,"exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
             printf("Cen1=(%3.1f,%3.1f,%3.1f) Cen2=(%3.1f,%3.1f,%3.1f)\n",PVecCen[0][0]*1.0e+6,PVecCen[0][1]*1.0e+6,PVecCen[0][2]*1.0e+6,PVecCen[1][0]*1.0e+6,PVecCen[1][1]*1.0e+6, PVecCen[1][2]*1.0e+6);
-            for (k=0; k<g_N; k++){
-              if (g_pushing_phase[k]!=0){
-                printf("%d %d L=%3.1f (%3.2f,%3.2f,%3.2f)\n",k,g_pushing_phase[k],g_L[k]*1000000,g_u[k][0],g_u[k][1],g_u[k][2]);
+            for (k=0; k<g.N; k++){
+              if (g.pushing_phase[k]!=0){
+                printf("%d %d L=%3.1f (%3.2f,%3.2f,%3.2f)\n",k,g.pushing_phase[k],g.L[k]*1000000,g.u[k][0],g.u[k][1],g.u[k][2]);
               }
             }
             break;
@@ -966,26 +944,30 @@ int main(int argc, char* argv[]) {
               ForceC[qq][j] = 0.0;}
             pushing_phase_count[j+1] = 0;
           }
-          for (k=0; k<g_N; k++) {
-            if (k<g_NN) {qq=0;} else {qq=1;}
-            if (g_pushing_phase[k]==3) {
-              // g_L[k] = previousL[k] + g_Vg*dT; /* this line can be omitted because of redundancy*/
+          for (k=0; k<g.N; k++) {
+            if (k<g.NN) {
+              qq=0;
+            } else {
+              qq=1;
+            }
+            if (g.pushing_phase[k]==3) {
+              // g.L[k] = previousL[k] + g.Vg*dT; /* this line can be omitted because of redundancy*/
               pushingF[k] = 0.0;
               pushing_phase_count[3]++;
             } 
-            if (g_pushing_phase[k]==2) {
-              dv = -1 * (g_u[k][0]*tempNucVel[1]+g_u[k][1]*tempNucVel[2]+g_u[k][2]*tempNucVel[3]);
-              // g_L[k] = g_L[k]+dv*dT; /* this line can be omitted because of redundancy*/
-              pushingF[k] = -1*log(1-(g_Vg - dv)/g_k_on)/F_dependency_single;
+            if (g.pushing_phase[k]==2) {
+              dv = -1 * (g.u[k][0]*tempNucVel[1]+g.u[k][1]*tempNucVel[2]+g.u[k][2]*tempNucVel[3]);
+              // g.L[k] = g.L[k]+dv*dT; /* this line can be omitted because of redundancy*/
+              pushingF[k] = -1*log(1-(g.Vg - dv)/g.k_on)/F_dependency_single;
               for (j=0;j<3;j++) {
-                ForceC[qq][j] -= pushingF[k]*g_u[k][j];}
+                ForceC[qq][j] -= pushingF[k]*g.u[k][j];}
               pushing_phase_count[2]++;
             }
-            if (g_pushing_phase[k]==1) {
-              pushingF[k] = g_BucklingConst/(g_L[k]*g_L[k]);
-              // g_L[k] = previousL[k]+dT*FV_function(pushingF[k], g_Vg, g_k_on, F_dependency_single); /* omit this line assuming buckling MTs do not elongate any more*/
+            if (g.pushing_phase[k]==1) {
+              pushingF[k] = g.BucklingConst/(g.L[k]*g.L[k]);
+              // g.L[k] = previousL[k]+dT*FV_function(pushingF[k], g.Vg, g.k_on, F_dependency_single); /* omit this line assuming buckling MTs do not elongate any more*/
               for (j=0;j<3;j++) {
-                ForceC[qq][j] -= pushingF[k]*g_u[k][j];}
+                ForceC[qq][j] -= pushingF[k]*g.u[k][j];}
               pushing_phase_count[1]++;
             }
           }
@@ -1006,9 +988,9 @@ int main(int argc, char* argv[]) {
             for (j=1;j<=6;j++){ /* initial value of tempNucVel[j] */
               TRACE(("%4d Force[%d]: %10lf %10lf\n",i, j, ForceC[0][j-1]*1.0e+12, ForceC[1][j-1]*1.0e+12));
               if (j<=3) {
-                tempNucVel[j] = (ForceC[0][j-1]+ForceC[1][j-1])/g_Stokes_translation; 
+                tempNucVel[j] = (ForceC[0][j-1]+ForceC[1][j-1])/g.Stokes_translation; 
               } else {
-                tempNucVel[j] = (ForceC[0][j-1]+ForceC[1][j-1])/g_Stokes_rotation;
+                tempNucVel[j] = (ForceC[0][j-1]+ForceC[1][j-1])/g.Stokes_rotation;
               }
             }
             usr_func = function_MotorFV;
@@ -1022,64 +1004,64 @@ int main(int argc, char* argv[]) {
               }
             }
             TRACE(("\n"));
-            for (k=0; k<g_N; k++) {eachMT_PTC[k]=0;}
+            for (k=0; k<g.N; k++) {eachMT_PTC[k]=0;}
             do {
-              g_phase_transition_count = 0;
+              g.phase_transition_count = 0;
               for (j=0;j<6;j++){
-                g_Fbackward[j] = 0.0;
+                g.Fbackward[j] = 0.0;
                 for (jj=0; jj<6; jj++) {
-                  g_fjac_pull[j][jj] = 0.0;
+                  g.fjac_pull[j][jj] = 0.0;
                 }}
-              for (k=0; k<g_N; k++) {
-                if (g_pulling_phase[k]!=0){
-                  if (k<g_NN) {qq = 0;} else {qq = 1;}
+              for (k=0; k<g.N; k++) {
+                if (g.pulling_phase[k]!=0){
+                  if (k<g.NN) {qq = 0;} else {qq = 1;}
                   dv = 0.0;
                   for (j=0; j<3; j++) {
-                    dv += (tempNucVel[(j+2)%3+4]*g_DVecNucCen[qq][(j+1)%3]-tempNucVel[(j+1)%3+4]*g_DVecNucCen[qq][(j+2)%3]+tempNucVel[j+1])*g_u[k][j];
+                    dv += (tempNucVel[(j+2)%3+4]*g.DVecNucCen[qq][(j+1)%3]-tempNucVel[(j+1)%3+4]*g.DVecNucCen[qq][(j+2)%3]+tempNucVel[j+1])*g.u[k][j];
                   }
-                  if (dv > g_MotorMaxVel){ /* the motors on this MT do not exert forces: pulling_phase[k]=3 */
-                    if (g_pulling_phase[k]!=3) {
-                      g_phase_transition_count++;
+                  if (dv > g.MotorMaxVel){ /* the motors on this MT do not exert forces: pulling_phase[k]=3 */
+                    if (g.pulling_phase[k]!=3) {
+                      g.phase_transition_count++;
                       eachMT_PTC[k]++;
                     }
-                    g_pulling_phase[k] = 3;
+                    g.pulling_phase[k] = 3;
                   } else {
                     if (dv < 0) { /* the motors on this MT exert the maximum (stall) force: pulling_phase[k]=2 */
-                      if (g_pulling_phase[k]!=2) {
-                        g_phase_transition_count++;
+                      if (g.pulling_phase[k]!=2) {
+                        g.phase_transition_count++;
                         eachMT_PTC[k]++;
                       }
-                      g_pulling_phase[k] = 2;
+                      g.pulling_phase[k] = 2;
                       for (j=0;j<6;j++) {
-                        g_Fbackward[j] += g_u[k][j] * g_MotorStallF * g_NumberOfMotor[k];
+                        g.Fbackward[j] += g.u[k][j] * g.MotorStallF * g.NumberOfMotor[k];
                       }
                     } else {
-                      if (g_pulling_phase[k]!=1) { /* the motors on this MT exert force dependent on their velocity: pulling_phase[k]=1 */
-                        g_phase_transition_count++;
+                      if (g.pulling_phase[k]!=1) { /* the motors on this MT exert force dependent on their velocity: pulling_phase[k]=1 */
+                        g.phase_transition_count++;
                         eachMT_PTC[k]++;
                       }
-                      g_pulling_phase[k] = 1;
-                      for (j=0; j<3; j++) {dvid[j] = g_u[k][j];}
-                      dvid[3] = g_DVecNucCen[qq][2]*g_u[k][1] - g_DVecNucCen[qq][1]*g_u[k][2];
-                      dvid[4] = g_DVecNucCen[qq][0]*g_u[k][2] - g_DVecNucCen[qq][2]*g_u[k][0];
-                      dvid[5] = g_DVecNucCen[qq][1]*g_u[k][0] - g_DVecNucCen[qq][0]*g_u[k][1];
+                      g.pulling_phase[k] = 1;
+                      for (j=0; j<3; j++) {dvid[j] = g.u[k][j];}
+                      dvid[3] = g.DVecNucCen[qq][2]*g.u[k][1] - g.DVecNucCen[qq][1]*g.u[k][2];
+                      dvid[4] = g.DVecNucCen[qq][0]*g.u[k][2] - g.DVecNucCen[qq][2]*g.u[k][0];
+                      dvid[5] = g.DVecNucCen[qq][1]*g.u[k][0] - g.DVecNucCen[qq][0]*g.u[k][1];
                       for (j=0; j<6; j++) {
                         for (jj=0; jj<6; jj++) {
-                          g_fjac_pull[j][jj] -= (g_MotorStallF*g_NumberOfMotor[k]/g_MotorMaxVel)*dvid[jj]*g_u[k][j];
+                          g.fjac_pull[j][jj] -= (g.MotorStallF*g.NumberOfMotor[k]/g.MotorMaxVel)*dvid[jj]*g.u[k][j];
                         }
                       }
                     }
                   }
                 }
               }
-              for (j=0; j<3; j++) {g_fjac_pull[j][j] -= g_Stokes_translation;}
-              for (j=3; j<6; j++) {g_fjac_pull[j][j] -= g_Stokes_rotation;}
-              if ((g_phase_transition_count!=0)||(cycle_count==0)) {
-                did_converge = mnewt(10, tempNucVel, 6, tolx, tolf, step_counter, f_out8, usr_func);
+              for (j=0; j<3; j++) {g.fjac_pull[j][j] -= g.Stokes_translation;}
+              for (j=3; j<6; j++) {g.fjac_pull[j][j] -= g.Stokes_rotation;}
+              if ((g.phase_transition_count!=0)||(cycle_count==0)) {
+                did_converge = mnewt(10, tempNucVel, 6, tolx, tolf, step_counter, f_out8, usr_func, &g);
               }
-              if (i%100==0) fprintf(f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);
+              if (i%100==0) fprintf(f_out8,"%d %d %d\n", i, cycle_count, g.phase_transition_count);
               cycle_count++;
-            } while ((cycle_count<=1)||((g_phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
+            } while ((cycle_count<=1)||((g.phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
 
             TRACE(("%4d %4d ",i,cycle_count));
             for (j=1; j<=6; j++) {
@@ -1091,9 +1073,9 @@ int main(int argc, char* argv[]) {
             }
             TRACE(("\n"));
 
-            if (g_phase_transition_count!=0){ /* when the solution is not obtained within 1000 cycles*/
-              printf("exit without convergence at t=%d PTC=%d\n", i, g_phase_transition_count);
-              fprintf(f_out7,"exit without convergence at t=%d PTC=%d\n", i, g_phase_transition_count);
+            if (g.phase_transition_count!=0){ /* when the solution is not obtained within 1000 cycles*/
+              printf("exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
+              fprintf(f_out7,"exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
               printf("Cen1=(%3.1f,%3.1f,%3.1f) Cen2=(%3.1f,%3.1f,%3.1f)\n",PVecCen[0][0]*1.0e+6,PVecCen[0][1]*1.0e+6,PVecCen[0][2]*1.0e+6,PVecCen[1][0]*1.0e+6,PVecCen[1][1]*1.0e+6, PVecCen[1][2]*1.0e+6);
               break;
             }
@@ -1101,61 +1083,61 @@ int main(int argc, char* argv[]) {
             usr_func = function_laserMotorFV;
             for (laser_centrosome = 0; laser_centrosome<2; laser_centrosome++){
               if (laser_centrosome==0) {
-                g_mt_start = 0;
-                g_mt_end = g_NN;
+                g.mt_start = 0;
+                g.mt_end = g.NN;
               } else {
-                g_mt_start = g_NN;
-                g_mt_end = g_N;
+                g.mt_start = g.NN;
+                g.mt_end = g.N;
               }
               for (j=1;j<=3;j++){
-                tempNucVel[j] = (ForceC[laser_centrosome][j-1])/g_Stokes_translation; /* forces do not include dT **/
+                tempNucVel[j] = (ForceC[laser_centrosome][j-1])/g.Stokes_translation; /* forces do not include dT **/
               }
               cycle_count = 0;
-              for (k=g_mt_start; k<g_mt_end; k++) {eachMT_PTC[k] = 0;}
+              for (k=g.mt_start; k<g.mt_end; k++) {eachMT_PTC[k] = 0;}
               do {
-                g_phase_transition_count = 0;
+                g.phase_transition_count = 0;
                 for (j=0;j<3;j++){
-                  g_Fbackward[j] = 0.0;  /* Fbackward[0,1,2]*/
+                  g.Fbackward[j] = 0.0;  /* Fbackward[0,1,2]*/
                 }
-                for (k=g_mt_start; k<g_mt_end; k++) {
-                  if (g_pulling_phase[k]!=0){
-                    dv = (g_u[k][0]*tempNucVel[1]+g_u[k][1]*tempNucVel[2]+g_u[k][2]*tempNucVel[3]);
-                    if (dv > g_MotorMaxVel){ /* the motors on this MT do not exert forces */
-                      if (g_pulling_phase[k]!=3) {
-                        g_phase_transition_count++;
+                for (k=g.mt_start; k<g.mt_end; k++) {
+                  if (g.pulling_phase[k]!=0){
+                    dv = (g.u[k][0]*tempNucVel[1]+g.u[k][1]*tempNucVel[2]+g.u[k][2]*tempNucVel[3]);
+                    if (dv > g.MotorMaxVel){ /* the motors on this MT do not exert forces */
+                      if (g.pulling_phase[k]!=3) {
+                        g.phase_transition_count++;
                         eachMT_PTC[k]++;
                       }
-                      g_pulling_phase[k] = 3;
+                      g.pulling_phase[k] = 3;
                     } else {
                       if (dv < 0) { /* the motors on this MT exert the maximum (stall) force */
-                        if (g_pulling_phase[k]!=2) {
-                          g_phase_transition_count++;
+                        if (g.pulling_phase[k]!=2) {
+                          g.phase_transition_count++;
                           eachMT_PTC[k]++;
                         }
-                        g_pulling_phase[k] = 2;
+                        g.pulling_phase[k] = 2;
                         for (j=0;j<3;j++) {
-                          g_Fbackward[j] += g_u[k][j] * g_MotorStallF * g_NumberOfMotor[k];
+                          g.Fbackward[j] += g.u[k][j] * g.MotorStallF * g.NumberOfMotor[k];
                         }
                       } else {
-                        if (g_pulling_phase[k]!=1) { /* the motors on this MT exert force dependent on their velocity */
-                          g_phase_transition_count++;
+                        if (g.pulling_phase[k]!=1) { /* the motors on this MT exert force dependent on their velocity */
+                          g.phase_transition_count++;
                           eachMT_PTC[k]++;
                         }
-                        g_pulling_phase[k] = 1;
+                        g.pulling_phase[k] = 1;
                       }
                     }
                   }
                 }
-                if ((g_phase_transition_count!=0)||(cycle_count==0)) {
-                  did_converge = mnewt(10, tempNucVel, 3, tolx, tolf, step_counter, f_out8, usr_func);
+                if ((g.phase_transition_count!=0)||(cycle_count==0)) {
+                  did_converge = mnewt(10, tempNucVel, 3, tolx, tolf, step_counter, f_out8, usr_func, &g);
                 }
-                if (i%100==0) {fprintf(f_out8,"%d %d %d\n", i, cycle_count, g_phase_transition_count);}
+                if (i%100==0) {fprintf(f_out8,"%d %d %d\n", i, cycle_count, g.phase_transition_count);}
                 cycle_count++;
-              } while ((cycle_count<=1)||((g_phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
+              } while ((cycle_count<=1)||((g.phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
 
-              if (g_phase_transition_count!=0){ /* when the solution is not obtained within 1000 cycles*/
-                printf("exit without convergence at t=%d PTC=%d\n", i, g_phase_transition_count);
-                fprintf(f_out7,"exit without convergence at t=%d PTC=%d\n", i, g_phase_transition_count);
+              if (g.phase_transition_count!=0){ /* when the solution is not obtained within 1000 cycles*/
+                printf("exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
+                fprintf(f_out7,"exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
                 //  printf("Cen1=(%3.1f,%3.1f,%3.1f) Cen2=(%3.1f,%3.1f,%3.1f)\n",Cen[0][0]*1.0e+6,Cen[0][1]*1.0e+6,Cen[0][2]*1.0e+6,Cen[1][0]*1.0e+6,Cen[1][1]*1.0e+6, Cen[1][2]*1.0e+6);
                 break;
               }
@@ -1189,7 +1171,7 @@ int main(int argc, char* argv[]) {
           //	      }
           //	      if (pulling_phase[k]==1) {
           //		dv = (u[k][0]*tempNucVel[1]+u[k][1]*tempNucVel[2]+u[k][2]*tempNucVel[3]); ////////////////////CHANGE/////
-          //		pullingF[k]=g_MotorStallF*(1-dv/g_MotorMaxVel);
+          //		pullingF[k]=g.MotorStallF*(1-dv/g.MotorMaxVel);
           //		for (j=0;j<6;j++) {
           //		  ForceC[qq][j] += pullingF[k]*NumberOfMotor[k]*u[k][j];}
           //		pulling_phase_count[1]++;
@@ -1232,7 +1214,7 @@ int main(int argc, char* argv[]) {
             PVecCen[1][j-1] += CenVel[1][j]*dT;
           } else {
             if ((mode!=0)&&(mode!=1)&&(mode!=5)){ /* models other than THE PUSHING and PULLING MODELS */
-              tempNucVel[j] = (ForceC[0][j-1]+ForceC[1][j-1])/g_Stokes_translation;
+              tempNucVel[j] = (ForceC[0][j-1]+ForceC[1][j-1])/g.Stokes_translation;
             }
           }
           CalculateVel += tempNucVel[j]*tempNucVel[j];
@@ -1300,27 +1282,29 @@ int main(int argc, char* argv[]) {
             }
             TRACE(("\n"));
           }
-          ProductJacVec(VECVEC, RotationMatrix, g_DVecNucCen[0]);
-          for (j=0; j<3; j++) {g_DVecNucCen[0][j] = VECVEC[j];}
-          ProductJacVec(VECVEC, RotationMatrix, g_DVecNucCen[1]);
-          for (j=0; j<3; j++) {g_DVecNucCen[1][j] = VECVEC[j];}
+          ProductJacVec(VECVEC, RotationMatrix, g.DVecNucCen[0]);
+          for (j=0; j<3; j++) {g.DVecNucCen[0][j] = VECVEC[j];}
+          ProductJacVec(VECVEC, RotationMatrix, g.DVecNucCen[1]);
+          for (j=0; j<3; j++) {g.DVecNucCen[1][j] = VECVEC[j];}
           for (j=0; j<3; j++) {
-            PVecCen[0][j] = Nuc[j] + g_DVecNucCen[0][j];
-            PVecCen[1][j] = Nuc[j] + g_DVecNucCen[1][j];
+            PVecCen[0][j] = Nuc[j] + g.DVecNucCen[0][j];
+            PVecCen[1][j] = Nuc[j] + g.DVecNucCen[1][j];
           }
 
           // phase and length of MTs
-          for (k=0; k<g_N; k++){
-            if (k<g_NN) {qq = 0;} else {qq = 1;}
-            for (j=0;j<3;j++){VECVEC[j] = g_u[k][j];}
+          for (k=0; k<g.N; k++){
+            if (k<g.NN) {qq = 0;} else {qq = 1;}
+            for (j=0;j<3;j++){VECVEC[j] = g.u[k][j];}
             ProductJacVec(VECVECVEC, RotationMatrix, VECVEC);
             for (j=0;j<3;j++){
-              g_u[k][j] = VECVECVEC[j];
-              MT[k][j] = PVecCen[qq][j] + g_L[k]*g_u[k][j];
+              g.u[k][j] = VECVECVEC[j];
+              MT[k][j] = PVecCen[qq][j] + g.L[k]*g.u[k][j];
             }
-            // calculation of  g_u[k][3], g_u[k][4], g_u[k]5]
-            OutProdVector(g_DVecNucCen[qq], VECVECVEC, VECVEC);
-            for (j=0;j<3;j++){g_u[k][3+j] = VECVEC[j];}
+            // calculation of  g.u[k][3], g.u[k][4], g.u[k]5]
+            OutProdVector(g.DVecNucCen[qq], VECVECVEC, VECVEC);
+            for (j=0;j<3;j++){
+              g.u[k][3+j] = VECVEC[j];
+            }
           }
 
           if (i%100==0){
@@ -1333,10 +1317,10 @@ int main(int argc, char* argv[]) {
         } else {
           if (((mode==1)||(mode==5))&&(i>=laserST)) {
             //	      printf("laser!!\n");
-            for (k=0; k<g_N; k++){
-              if (k<g_NN) {qq = 0;} else {qq = 1;}
+            for (k=0; k<g.N; k++){
+              if (k<g.NN) {qq = 0;} else {qq = 1;}
               for (j=0; j<3; j++) {
-                MT[k][j] = PVecCen[qq][j] + g_L[k]*g_u[k][j];
+                MT[k][j] = PVecCen[qq][j] + g.L[k]*g.u[k][j];
               }	
             }	    
           } else {
@@ -1344,13 +1328,13 @@ int main(int argc, char* argv[]) {
               TRACE(("L1373 no rotation!\n"));
             }
             for (j=0; j<3; j++) {
-              PVecCen[0][j] = Nuc[j] + g_DVecNucCen[0][j];
-              PVecCen[1][j] = Nuc[j] + g_DVecNucCen[1][j];
+              PVecCen[0][j] = Nuc[j] + g.DVecNucCen[0][j];
+              PVecCen[1][j] = Nuc[j] + g.DVecNucCen[1][j];
             }
-            for (k=0; k<g_N; k++){
-              if (k<g_NN) {qq = 0;} else {qq = 1;}
+            for (k=0; k<g.N; k++){
+              if (k<g.NN) {qq = 0;} else {qq = 1;}
               for (j=0; j<3; j++) {
-                MT[k][j] = PVecCen[qq][j] + g_L[k]*g_u[k][j];
+                MT[k][j] = PVecCen[qq][j] + g.L[k]*g.u[k][j];
               }	
             }
           }
@@ -1359,9 +1343,9 @@ int main(int argc, char* argv[]) {
         t += dT;
         //OUTPUTS 
         /* draw graphs in X-window */
-        draw_graphs(i, &mtg, PVecCen, MT, Nuc, DistanceFromPP, min, max, sum, currentN, OldVel, NewVel);
+        draw_graphs(i, &mtg, &g, PVecCen, MT, Nuc, DistanceFromPP, min, max, sum, currentN, OldVel, NewVel);
         /* save logs in texts */
-        save_logs(i, p, g_N, f_out1, f_out2, f_out3, f_out4, f_out10, data_for_3D, Nuc, PVecCen, MT);
+        save_logs(i, p, g.N, f_out1, f_out2, f_out3, f_out4, f_out10, data_for_3D, Nuc, PVecCen, MT);
         }
         //////////////// examination with single parameter set FINISHED ///////////////////////////
         XStoreName(mtg.d,mtg.w1,"fin");
@@ -1394,11 +1378,11 @@ int main(int argc, char* argv[]) {
       /* save graphs */
       store_graphs();
 
-      free_dmatrix(g_u,0,g_N-1,0,2);
-      free_cvector(g_pushing_phase,0,g_N-1);
-      free_cvector(g_pulling_phase,0,g_N-1);
-      free_cvector(g_phase,0,g_N-1);
-      free_dvector(g_L,0,g_N-1);
+      free_dmatrix(g.u,0,g.N-1,0,2);
+      free_cvector(g.pushing_phase,0,g.N-1);
+      free_cvector(g.pulling_phase,0,g.N-1);
+      free_cvector(g.phase,0,g.N-1);
+      free_dvector(g.L,0,g.N-1);
 
       printf("to end, press 0:");
       scanf("%d",&mode);

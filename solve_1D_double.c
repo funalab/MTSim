@@ -1,5 +1,7 @@
 /*
- * Last modified: Wed, 24 Jul 2013 22:21:23 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 02:38:32 +0900
  */
 #include "mtsim.h"
 #define MAXIT 100
@@ -19,15 +21,15 @@ double FV_function(double ff, double vg, double ko, double fd)
   return result;
 }
 
-double rtsafe(void (*funcd)(double, double*, double*), double x1, double x2, double xacc)
+double rtsafe(void (*funcd)(double, double*, double*, mtGlobal*), double x1, double x2, double xacc, mtGlobal* g)
 {
   void nrerror(char error_text[]);
   int j;
   double df,dx,dxold,f,fh,fl;
   double temp,xh,xl,rts;
 
-  (*funcd)(x1,&fl,&df);
-  (*funcd)(x2,&fh,&df);
+  (*funcd)(x1, &fl, &df, g);
+  (*funcd)(x2, &fh, &df, g);
   if ((fl > 0.0 && fh > 0.0) || (fl < 0.0 && fh < 0.0))
     printf("Root must be bracketed in rtsafe\n");
   if (fl == 0.0) return x1;
@@ -42,7 +44,7 @@ double rtsafe(void (*funcd)(double, double*, double*), double x1, double x2, dou
   rts=0.5*(x1+x2);
   dxold=fabs(x2-x1);
   dx=dxold;
-  (*funcd)(rts,&f,&df);
+  (*funcd)(rts, &f, &df, g);
   for (j=1;j<=MAXIT;j++) {
     if ((((rts-xh)*df-f)*((rts-xl)*df-f) >= 0.0)|| (fabs(2.0*f) > fabs(dxold*df))) {
       dxold=dx;
@@ -57,7 +59,7 @@ double rtsafe(void (*funcd)(double, double*, double*), double x1, double x2, dou
       if (temp == rts) return rts;
     }
     if (fabs(dx) < xacc) return rts;
-    (*funcd)(rts,&f,&df);
+    (*funcd)(rts, &f, &df, g);
     if (f<0.0)
       xl=rts;
     else
@@ -67,15 +69,15 @@ double rtsafe(void (*funcd)(double, double*, double*), double x1, double x2, dou
   return 0.0;
 }
 
-double rtsafe_mod(void (*funcd)(double,double *, double *), double x1, double x2, double xacc)
+double rtsafe_mod(void (*funcd)(double, double *, double *, mtGlobal*), double x1, double x2, double xacc, mtGlobal* g)
 {
   void nrerror(char error_text[]);
   int j;
   double df,dx,dxold,f,fh,fl;
   double temp,xh,xl,rts;
 
-  (*funcd)(x1,&fl,&df);
-  (*funcd)(x2,&fh,&df);
+  (*funcd)(x1, &fl, &df, g);
+  (*funcd)(x2, &fh, &df, g);
   // modification starts
   if (fl > 0.0 && fh > 0.0){
     TRACE(("dv is slower than Vbuckle\n"));
@@ -100,7 +102,7 @@ double rtsafe_mod(void (*funcd)(double,double *, double *), double x1, double x2
   rts=0.5*(x1+x2);
   dxold=fabs(x2-x1);
   dx=dxold;
-  (*funcd)(rts,&f,&df);
+  (*funcd)(rts, &f, &df, g);
   for (j=1;j<=MAXIT;j++) {
     if ((((rts-xh)*df-f)*((rts-xl)*df-f) >= 0.0)|| (fabs(2.0*f) > fabs(dxold*df))) {
       dxold=dx;
@@ -115,7 +117,7 @@ double rtsafe_mod(void (*funcd)(double,double *, double *), double x1, double x2
       if (temp == rts) return rts;
     }
     if (fabs(dx) < xacc) return rts;
-    (*funcd)(rts,&f,&df);
+    (*funcd)(rts, &f, &df, g);
     if (f<0.0)
       xl=rts;
     else

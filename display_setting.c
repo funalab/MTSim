@@ -1,7 +1,9 @@
 /*
  * filename: display_setting.c
  * this code is to draw graphs in the X window system
- * Last modified: Mon, 01 Jul 2013 16:52:15 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 02:37:27 +0900
  */
 #include "mtsim.h"
 

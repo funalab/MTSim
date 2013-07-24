@@ -1,7 +1,7 @@
 /*
  * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
  *         Akira Funahashi <funa@bio.keio.ac.jp>
- * Last modified: Thu, 25 Jul 2013 01:43:43 +0900
+ * Last modified: Thu, 25 Jul 2013 02:31:05 +0900
  */
 
 #ifndef __mtsim__
@@ -14,6 +14,7 @@
 
 #include "mtgraphics.h"
 #include "nrutil.h"
+#include "mtglobal.h"
 
 #define false 0
 #define true 1
@@ -67,8 +68,8 @@ void lubksb(double **a, int n, int *indx, double b[]);
 double ran1(long *idum);
 double Stokes_function(double ff, double gr, double fb);
 double FV_function(double ff, double vg, double ko, double fd);
-double rtsafe(void (*funcd)(double, double *, double *),double x1, double x2, double xacc);
-double rtsafe_mod(void (*funcd)(double, double *, double *),double x1, double x2, double xacc);
+double rtsafe(void (*funcd)(double, double *, double *, mtGlobal*),double x1, double x2, double xacc, mtGlobal* g);
+double rtsafe_mod(void (*funcd)(double, double *, double *, mtGlobal*),double x1, double x2, double xacc, mtGlobal* g);
 
 /* main.c */
 void usage(char* myname);
@@ -87,14 +88,14 @@ double InnProdVector(double vector1[3], double vector2[3]);
 double Poisson(double np, int motornumber);
 
 /* math_FV.c */
-void FV_solution(double xx, double *f_v, double *fp_v);
-void function_FV3D(double *x, int n, double *fvec, double **fjac);
-void function_MotorFV (double *x, int n, double *fvec, double **fjac);
-void function_laserMotorFV (double *x, int n, double *fvec, double **fjac);
+void FV_solution(double xx, double *f_v, double *fp_v, mtGlobal *g);
+void function_FV3D(double *x, int n, double *fvec, double **fjac, mtGlobal *g);
+void function_MotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal *g);
+void function_laserMotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal *g);
 
 /* mnewt.c */
 boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf,
-    int step_counter, FILE* f_out8, void (*usrfun)(double *, int , double*, double**) );
+    int step_counter, FILE* f_out8, void (*usrfun)(double *, int , double*, double**, mtGlobal*), mtGlobal* g);
 
 /* store_graphs.c */
 void store_graphs(void);
@@ -106,7 +107,7 @@ void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FI
 void free_return(double *fvec, double **fjac, int n, double *p, int *indx);
 
 /* draw_graphs.c */
-void draw_graphs(int i, mtGraphics *mtg, double PVecCen[2][3], double MT[][3], double Nuc[3], double DistanceFromPP, double min, double max, double sum, int currentN, double OldVel, double NewVel);
+void draw_graphs(int i, mtGraphics *mtg, mtGlobal *g, double PVecCen[2][3], double MT[][3], double Nuc[3], double DistanceFromPP, double min, double max, double sum, int currentN, double OldVel, double NewVel);
 
 /* display_setting.c */
 void display_setting(mtGraphics *mtg);

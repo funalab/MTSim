@@ -1,7 +1,9 @@
 /*
  * filename: store_graphs.c
  * this code is to save graphs
- * Last modified: Wed, 17 Apr 2013 04:10:06 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 02:38:37 +0900
  */
 #include "mtsim.h"
 

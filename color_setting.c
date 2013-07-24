@@ -2,7 +2,9 @@
  * filename: color_setting.c
  * this code is to discriminate the results from distinct parameter sets with
  * different colors: case0=black, case1=violet(pink), case2=blue, case3=green, case4=orenge, and case5=red 
- * Last modified: Wed, 17 Apr 2013 04:10:45 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 02:37:07 +0900
  */
 #include "mtsim.h"
 

@@ -1,7 +1,9 @@
 /*
  * filename: save_logs.c
  * this code is to store simulation results of the position of MTs and pronucleus in text files
- * Last modified: Wed, 17 Apr 2013 04:09:42 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 02:38:27 +0900
  */
 #include "mtsim.h"
 

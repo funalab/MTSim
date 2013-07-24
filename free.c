@@ -1,5 +1,7 @@
 /*
- * Last modified: Wed, 17 Apr 2013 00:24:32 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 02:37:35 +0900
  */
 #include "mtsim.h"
 

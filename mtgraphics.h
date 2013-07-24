@@ -1,5 +1,7 @@
 /*
- * Last modified: Wed, 17 Apr 2013 04:10:16 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 02:38:53 +0900
  */
 #ifndef __mtgraphics__
 #define __mtgraphics__

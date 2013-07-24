@@ -3,9 +3,12 @@
  * this is "minimum" random number generator of Park and Miller with
  * Bays-Durham Shuffle and added safeguards
  * (Press et al. (1992) Numerical Recipes in C, 2nd Ed. (Cambridge, UK: Cambridge University Press))
- * Last modified: Wed, 17 Apr 2013 04:09:29 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 02:39:53 +0900
  */
 
+#include "mtsim.h"
 #define IA 16807
 #define IM 2147483647
 #define AM (1.0/IM)

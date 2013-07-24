@@ -1,6 +1,8 @@
 /*
  * Utility routines (ref) Press et al., "Numerical Recipes in C"
- * Last modified: Wed, 17 Apr 2013 04:10:33 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 02:39:06 +0900
  */
 
 #ifndef _NR_UTILS_H_

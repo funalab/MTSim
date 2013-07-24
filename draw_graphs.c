@@ -1,22 +1,20 @@
 /*
  * filename: draw_graphs.c
  * this code is to plot results of the simulation onto the graphs on the X window system
- * Last modified: Thu, 25 Jul 2013 00:21:09 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 02:37:32 +0900
  */
 #include "mtsim.h"
 
-extern  int g_N;
-extern  int g_NN;
-extern  double *g_L;
-
-void draw_graphs(int i, mtGraphics *mtg, double PVecCen[2][3], double MT[][3], double Nuc[3], double DistanceFromPP, double min, double max, double sum, int currentN, double OldVel, double NewVel) {
+void draw_graphs(int i, mtGraphics *mtg, mtGlobal *g, double PVecCen[2][3], double MT[][3], double Nuc[3], double DistanceFromPP, double min, double max, double sum, int currentN, double OldVel, double NewVel) {
   Display *d = mtg->d;
   int Scale1 = mtg->Scale1;
   // draw graph in window 1: distribution of MTs at the moment
   XFillRectangle(d,mtg->pixmap,mtg->gc_clr,0,0,WIN_WIDTH,WIN_HEIGHT);
   int m;
-  for (m=0; m<g_N; m++) {
-    if (m<g_NN){XDrawLine(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2+(int)(Scale1*PVecCen[0][0]*pow(10,6)),WIN_HEIGHT/2-(int)(Scale1*PVecCen[0][2]*pow(10,6)),WIN_WIDTH/2+(int)(Scale1*MT[m][0]*pow(10,6)),WIN_HEIGHT/2-(int)(Scale1*MT[m][2]*pow(10,6)));}
+  for (m=0; m<g->N; m++) {
+    if (m<g->NN){XDrawLine(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2+(int)(Scale1*PVecCen[0][0]*pow(10,6)),WIN_HEIGHT/2-(int)(Scale1*PVecCen[0][2]*pow(10,6)),WIN_WIDTH/2+(int)(Scale1*MT[m][0]*pow(10,6)),WIN_HEIGHT/2-(int)(Scale1*MT[m][2]*pow(10,6)));}
     else {XDrawLine(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2+(int)(Scale1*PVecCen[1][0]*pow(10,6)),WIN_HEIGHT/2-(int)(Scale1*PVecCen[1][2]*pow(10,6)),WIN_WIDTH/2+(int)(Scale1*MT[m][0]*pow(10,6)),WIN_HEIGHT/2-(int)(Scale1*MT[m][2]*pow(10,6)));}
   }
   if (i<laserST) {
@@ -53,12 +51,12 @@ void draw_graphs(int i, mtGraphics *mtg, double PVecCen[2][3], double MT[][3], d
 
 
   // draw graph in window 5: maximum, minimum, and mean lengths of the MTs were plotted against time
-  XDrawPoint(d,mtg->w5,mtg->gc5,(int)(SC3*i),WIN_HEIGHT-(int)(Scale1*pow(10,6)*sum/g_N));
+  XDrawPoint(d,mtg->w5,mtg->gc5,(int)(SC3*i),WIN_HEIGHT-(int)(Scale1*pow(10,6)*sum/g->N));
   XDrawPoint(d,mtg->w5,mtg->gc5,(int)(SC3*i),WIN_HEIGHT-(int)(Scale1*pow(10,6)*max));
   XDrawPoint(d,mtg->w5,mtg->gc5,(int)(SC3*i),WIN_HEIGHT-(int)(Scale1*pow(10,6)*min));
 
   // draw graph in window 6: length of a single MT was plotted against time
-  XDrawPoint(d,mtg->w6,mtg->gc6,(int)(SC3*i),WIN_HEIGHT-(int)(2*Scale1*pow(10,6)*g_L[0]));
+  XDrawPoint(d,mtg->w6,mtg->gc6,(int)(SC3*i),WIN_HEIGHT-(int)(2*Scale1*pow(10,6)*g->L[0]));
 
 
   //draw graph in window 7: the number of MTs was plotted against time

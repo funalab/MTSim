@@ -1,6 +1,8 @@
 /*
  * LU decomposition (ref) Press et al., "Numerical Recipes in C"
- * Last modified: Mon, 01 Jul 2013 02:42:43 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 02:37:42 +0900
  */
 #include "mtsim.h"
 #define TINY 1.0e-20;

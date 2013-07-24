@@ -1,7 +1,10 @@
 /*
  * LU decomposition (ref) Press et al., "Numerical Recipes in C"
- * Last modified: Wed, 17 Apr 2013 04:07:55 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 02:39:29 +0900
  */
+#include "mtsim.h"
 
 void lubksb(double **a, int n, int *indx, double b[])
 {

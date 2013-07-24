@@ -1,9 +1,12 @@
 /*
- * filename: function8.c
+ * filename: math_func.c
  * this code is a collection of mathematical functions used in the simulation
- * Last modified: Mon, 01 Jul 2013 02:50:07 +0900
+ * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
+ *         Akira Funahashi <funa@bio.keio.ac.jp>
+ * Last modified: Thu, 25 Jul 2013 02:39:38 +0900
  */
 
+#include "mtsim.h"
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>

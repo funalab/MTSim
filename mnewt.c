@@ -3,14 +3,14 @@
  * filename: mnewt.c
  * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
  *         Akira Funahashi <funa@bio.keio.ac.jp>
- * Last modified: Thu, 25 Jul 2013 01:43:28 +0900
+ * Last modified: Thu, 25 Jul 2013 02:28:32 +0900
  */
 
 #include "mtsim.h"
 
 // Newton-Raphson Method for Nonlinear Systems of Equations (ref) Press et al. "Numerical Recipes in C"*/
 boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf,
-    int step_counter, FILE* f_out8, void (*usrfun)(double *, int , double*, double**) ) {
+    int step_counter, FILE* f_out8, void (*usrfun)(double *, int , double*, double**, mtGlobal*), mtGlobal* g) {
   int k,i,*indx;
   double errx,errf,d,*fvec,**fjac,*p;
 
@@ -19,7 +19,7 @@ boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf,
   fvec = dvector(1,n);
   fjac = dmatrix(1,n,1,n);
   for (k=1;k<=ntrial;k++) {
-    usrfun(x,n,fvec,fjac); /*** specific function ****/
+    usrfun(x,n,fvec,fjac,g); /*** specific function ****/
     errf=0.0;
     for (i=1;i<=n;i++) {
       errf += fabs(fvec[i]);
