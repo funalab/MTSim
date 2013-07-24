@@ -7,7 +7,7 @@
  * to compile: make (see Makefile for detail)
  * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
  *         Akira Funahashi <funa@bio.keio.ac.jp>
- * Last modified: Thu, 25 Jul 2013 03:10:42 +0900
+ * Last modified: Thu, 25 Jul 2013 03:16:52 +0900
  */
 
 #include "mtsim.h"
@@ -83,16 +83,16 @@ int main(int argc, char* argv[]) {
   *idum = tt*(-1);
 
   //file handling
-  FILE *f_out1 = fopen ("out1.dat","w");
-  FILE *f_out2 = fopen ("out2.dat","w");
-  FILE *f_out3 = fopen ("out3.dat","w");
-  FILE *f_out4 = fopen ("out4.dat","w");
-  FILE *f_out10 = fopen("out5.dat","w");
-  FILE *f_out5 = fopen ("out_parameter.dat","w");
-  FILE *f_out6 = fopen ("out_MTnumber.dat","w");
-  FILE *f_out7 = fopen ("out_FVcheck.dat","w");
-  FILE *f_out8 = fopen ("out_3Dcheck.dat","w");
-  FILE *data_for_3D = fopen ("out_for_3D.dat","w");
+  FILE *f_out1 = fopen("out1.dat","w");
+  FILE *f_out2 = fopen("out2.dat","w");
+  FILE *f_out3 = fopen("out3.dat","w");
+  FILE *f_out4 = fopen("out4.dat","w");
+  FILE *f_out5 = fopen("out5.dat","w");
+  FILE *f_out_param = fopen("out_parameter.dat","w");
+  FILE *f_out_mtnum = fopen("out_MTnumber.dat","w");
+  FILE *f_out_fvcheck = fopen("out_FVcheck.dat","w");
+  FILE *f_out_3dcheck = fopen("out_3Dcheck.dat","w");
+  FILE *f_out_for3d = fopen("out_for_3D.dat","w");
 
   ////////////////////////////////////////////
   // DECLEARATION of Constants and Variables//
@@ -332,7 +332,7 @@ int main(int argc, char* argv[]) {
     g.BucklingConst = ConstantA * EI;
 
     // OUTPUT parameter LOGs
-    fprintf(f_out5,"p=%d\nmode=%d\nMTDivision=%d MT=%d\nVg_um=%5.3lf Vs_um=%5.3lf\nCatFreq=%5.3lf ResFreq=%5.3lf\nFstall_pN=%5.3lf Vmax_um=%5.3f M_mm=%5.3lf\nEI_pNumum=%5.3lf A_um=%5.3lf B_pN=%5.3lf\nH=%5.3lf Stokes_rad=%5.3lf\n\n", p, mode, MTDivision, g.N, g.Vg*pow(10,6), Vs*pow(10,6), CatFreq, ResFreq, g.MotorStallF*pow(10,12), g.MotorMaxVel*1.0e+6, g.MotorDensity*pow(10,-3), EI*pow(10,24), g.k_on*1.0e+6, F_dependency_single*1.0e-12, g.Visco, g.Stokes_rad*1.0e+6);
+    fprintf(f_out_param,"p=%d\nmode=%d\nMTDivision=%d MT=%d\nVg_um=%5.3lf Vs_um=%5.3lf\nCatFreq=%5.3lf ResFreq=%5.3lf\nFstall_pN=%5.3lf Vmax_um=%5.3f M_mm=%5.3lf\nEI_pNumum=%5.3lf A_um=%5.3lf B_pN=%5.3lf\nH=%5.3lf Stokes_rad=%5.3lf\n\n", p, mode, MTDivision, g.N, g.Vg*pow(10,6), Vs*pow(10,6), CatFreq, ResFreq, g.MotorStallF*pow(10,12), g.MotorMaxVel*1.0e+6, g.MotorDensity*pow(10,-3), EI*pow(10,24), g.k_on*1.0e+6, F_dependency_single*1.0e-12, g.Visco, g.Stokes_rad*1.0e+6);
 
     // color settings
     /* #include "color_setting.c" */
@@ -427,7 +427,7 @@ int main(int argc, char* argv[]) {
       //		  currentN++;
       //		}
       //	      if (i%20==0){
-      //		fprintf(f_out6,"%d, %d, %d\n",i,i/20,currentN);}
+      //		fprintf(f_out_mtnum,"%d, %d, %d\n",i,i/20,currentN);}
       //	    }
 
 
@@ -652,7 +652,7 @@ int main(int argc, char* argv[]) {
         // THE PUSHING MODEL-1: estimation of an initial guess to be used in Newton-Raphson method 
         if ((mode==0)&&(Length(DirectionDetermination)!=0.0)) {
           usr_func = function_FV3D;
-          if (i%100==0) {fprintf(f_out7,"%d ",i);}
+          if (i%100==0) {fprintf(f_out_fvcheck,"%d ",i);}
           UnitVector(DirectionDetermination,UnitDirection); /* unit vector of an initial guess of pronuclear migration */
           g.Buckling_forward_sum = 0.0;
           g.Buckling_backward_sum = 0.0;
@@ -677,7 +677,7 @@ int main(int argc, char* argv[]) {
             Vnuc_buckle = Stokes_function(g.Buckling_forward_sum, g.Stokes_translation, g.Buckling_backward_sum);
             Vmt_buckle = FV_function(g.Buckling_forward_sum, g.Vg, g.k_on, g.F_dependency);
             if (Vnuc_buckle<=Vmt_buckle){  /* buckling is dominant */
-              if (i%100==0) {fprintf(f_out7,"BK ");}
+              if (i%100==0) {fprintf(f_out_fvcheck,"BK ");}
               F_soln = g.Buckling_forward_sum;
               Vnuc_soln = Vnuc_buckle;
               Vmt_soln = Vmt_buckle;
@@ -686,7 +686,7 @@ int main(int argc, char* argv[]) {
               }
             } else {  /* FV is dominant */
               if (i%100==0) {
-                fprintf(f_out7,"FV ");
+                fprintf(f_out_fvcheck,"FV ");
               }
               F_soln = rtsafe(FV_solution, 0.0, g.Buckling_forward_sum, xacc, &g);
               Vnuc_soln = Stokes_function(F_soln, g.Stokes_translation, g.Buckling_backward_sum);
@@ -695,7 +695,7 @@ int main(int argc, char* argv[]) {
           }
           for (j=1; j<=3; j++){
             tempNucVel[j]=Vnuc_soln*UnitDirection[j-1]; /* an initial guess of the velocity of the pronucleus to be used in Newton-Raphson method*/
-            if (i%100==0) {fprintf(f_out7,"%5.4f ",tempNucVel[j]*pow(10,6));}
+            if (i%100==0) {fprintf(f_out_fvcheck,"%5.4f ",tempNucVel[j]*pow(10,6));}
           }
 
           g.F_dependency = F_dependency_single;
@@ -712,7 +712,7 @@ int main(int argc, char* argv[]) {
           }
           usr_func = function_FV3D;
           /* Newton-Raphson method to revise the initial guess of the velocity of the pronucleus */
-          did_converge = mnewt(10,tempNucVel,3,tolx,tolf, step_counter, f_out8, usr_func, &g);
+          did_converge = mnewt(10,tempNucVel,3,tolx,tolf, step_counter, f_out_3dcheck, usr_func, &g);
 
           // THE PUSHING MODEL-2: solve the set of equation using Newton-Raphson method with the revised initial guess
           cycle_count = 0;
@@ -773,17 +773,17 @@ int main(int argc, char* argv[]) {
             }	      
             if ((g.phase_transition_count!=0)||(cycle_count==0)) {
               /* Newton-Raphson method */
-              did_converge = mnewt(10, tempNucVel, 3, tolx,tolf, step_counter, f_out8, usr_func, &g);
+              did_converge = mnewt(10, tempNucVel, 3, tolx,tolf, step_counter, f_out_3dcheck, usr_func, &g);
             }
             if (i%100==0) {
-              fprintf(f_out8,"%d %d %d\n", i, cycle_count, g.phase_transition_count);
+              fprintf(f_out_3dcheck,"%d %d %d\n", i, cycle_count, g.phase_transition_count);
             }
             cycle_count++;
           } while ((!did_converge)||(cycle_count<=1)||((g.phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
 
           if (g.phase_transition_count!=0){ /* in case the solution is not obtained within 1000 cycles*/
             printf("exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
-            fprintf(f_out7,"exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
+            fprintf(f_out_fvcheck,"exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
             printf("Cen1=(%3.1f,%3.1f,%3.1f) Cen2=(%3.1f,%3.1f,%3.1f)\n",PVecCen[0][0]*1.0e+6,PVecCen[0][1]*1.0e+6,PVecCen[0][2]*1.0e+6,PVecCen[1][0]*1.0e+6,PVecCen[1][1]*1.0e+6, PVecCen[1][2]*1.0e+6);
             for (k=0; k<g.N; k++){
               if (g.pushing_phase[k]!=0){
@@ -794,9 +794,9 @@ int main(int argc, char* argv[]) {
           }
 
           // THE PUSHING MODEL-3: calculation of the force exerted by each MT 
-          if (i%100==0) {fprintf(f_out7,"%d ",cycle_count);}
+          if (i%100==0) {fprintf(f_out_fvcheck,"%d ",cycle_count);}
           for (j=1; j<=3; j++){
-            if (i%100==0){fprintf(f_out7,"%5.4f ",tempNucVel[j]*pow(10,6));}
+            if (i%100==0){fprintf(f_out_fvcheck,"%5.4f ",tempNucVel[j]*pow(10,6));}
           }
           for (j=0;j<3;j++) {
             for (qq=0; qq<2; qq++) {
@@ -832,11 +832,11 @@ int main(int argc, char* argv[]) {
           }
           for (j=1; j<=3; j++){
             if (i%100==0){
-              fprintf(f_out7,"%d ",pushing_phase_count[j]);
+              fprintf(f_out_fvcheck,"%d ",pushing_phase_count[j]);
             }
           }
           if (i%100==0){
-            fprintf(f_out7,"\n");
+            fprintf(f_out_fvcheck,"\n");
           }
         }
 
@@ -916,9 +916,9 @@ int main(int argc, char* argv[]) {
               for (j=0; j<3; j++) {g.fjac_pull[j][j] -= g.Stokes_translation;}
               for (j=3; j<6; j++) {g.fjac_pull[j][j] -= g.Stokes_rotation;}
               if ((g.phase_transition_count!=0)||(cycle_count==0)) {
-                did_converge = mnewt(10, tempNucVel, 6, tolx, tolf, step_counter, f_out8, usr_func, &g);
+                did_converge = mnewt(10, tempNucVel, 6, tolx, tolf, step_counter, f_out_3dcheck, usr_func, &g);
               }
-              if (i%100==0) fprintf(f_out8,"%d %d %d\n", i, cycle_count, g.phase_transition_count);
+              if (i%100==0) fprintf(f_out_3dcheck,"%d %d %d\n", i, cycle_count, g.phase_transition_count);
               cycle_count++;
             } while ((cycle_count<=1)||((g.phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
 
@@ -934,7 +934,7 @@ int main(int argc, char* argv[]) {
 
             if (g.phase_transition_count!=0){ /* when the solution is not obtained within 1000 cycles*/
               printf("exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
-              fprintf(f_out7,"exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
+              fprintf(f_out_fvcheck,"exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
               printf("Cen1=(%3.1f,%3.1f,%3.1f) Cen2=(%3.1f,%3.1f,%3.1f)\n",PVecCen[0][0]*1.0e+6,PVecCen[0][1]*1.0e+6,PVecCen[0][2]*1.0e+6,PVecCen[1][0]*1.0e+6,PVecCen[1][1]*1.0e+6, PVecCen[1][2]*1.0e+6);
               break;
             }
@@ -988,15 +988,15 @@ int main(int argc, char* argv[]) {
                   }
                 }
                 if ((g.phase_transition_count!=0)||(cycle_count==0)) {
-                  did_converge = mnewt(10, tempNucVel, 3, tolx, tolf, step_counter, f_out8, usr_func, &g);
+                  did_converge = mnewt(10, tempNucVel, 3, tolx, tolf, step_counter, f_out_3dcheck, usr_func, &g);
                 }
-                if (i%100==0) {fprintf(f_out8,"%d %d %d\n", i, cycle_count, g.phase_transition_count);}
+                if (i%100==0) {fprintf(f_out_3dcheck,"%d %d %d\n", i, cycle_count, g.phase_transition_count);}
                 cycle_count++;
               } while ((cycle_count<=1)||((g.phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
 
               if (g.phase_transition_count!=0){ /* when the solution is not obtained within 1000 cycles*/
                 printf("exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
-                fprintf(f_out7,"exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
+                fprintf(f_out_fvcheck,"exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
                 //  printf("Cen1=(%3.1f,%3.1f,%3.1f) Cen2=(%3.1f,%3.1f,%3.1f)\n",Cen[0][0]*1.0e+6,Cen[0][1]*1.0e+6,Cen[0][2]*1.0e+6,Cen[1][0]*1.0e+6,Cen[1][1]*1.0e+6, Cen[1][2]*1.0e+6);
                 break;
               }
@@ -1007,9 +1007,9 @@ int main(int argc, char* argv[]) {
           }
 
           // THE PULLING MODEL: calculation of the force exerted by each MT 
-          //	    if (i%100==0) {fprintf(f_out7,"%d ",cycle_count);}
+          //	    if (i%100==0) {fprintf(f_out_fvcheck,"%d ",cycle_count);}
           //	    for (j=1; j<=6; j++){
-          //	      if (i%100==0){fprintf(f_out7,"%5.4f ",tempNucVel[j]*pow(10,6));}
+          //	      if (i%100==0){fprintf(f_out_fvcheck,"%5.4f ",tempNucVel[j]*pow(10,6));}
           //	    }
           //	    for (j=0;j<6;j++) {
           //	      for (qq=0; qq<2; qq++) {
@@ -1037,9 +1037,9 @@ int main(int argc, char* argv[]) {
           //	      }
           //	    }
           //	    for (j=1; j<=3; j++){
-          //	      if (i%100==0){fprintf(f_out7,"%d ",pulling_phase_count[j]);}
+          //	      if (i%100==0){fprintf(f_out_fvcheck,"%d ",pulling_phase_count[j]);}
           //	    }
-          //	    if (i%100==0){fprintf(f_out7,"\n");
+          //	    if (i%100==0){fprintf(f_out_fvcheck,"\n");
         }
 
         // Monitoring local migration of pronucleus
@@ -1167,11 +1167,11 @@ int main(int argc, char* argv[]) {
           }
 
           if (i%100==0){
-            fprintf(f_out7,"\n");
+            fprintf(f_out_fvcheck,"\n");
             for (j=1; j<=6; j++){
-              fprintf(f_out7,"%4.3f ",tempNucVel[j]*(1.0e+6));
+              fprintf(f_out_fvcheck,"%4.3f ",tempNucVel[j]*(1.0e+6));
             }	      
-            fprintf(f_out7,"\n%d\n",i+1);
+            fprintf(f_out_fvcheck,"\n%d\n",i+1);
           }
         } else {
           if (((mode==1)||(mode==5))&&(i>=laserST)) {
@@ -1204,7 +1204,7 @@ int main(int argc, char* argv[]) {
         /* draw graphs in X-window */
         draw_graphs(i, &mtg, &g, PVecCen, MT, Nuc, DistanceFromPP, min, max, sum, currentN, OldVel, NewVel);
         /* save logs in texts */
-        save_logs(i, p, g.N, f_out1, f_out2, f_out3, f_out4, f_out10, data_for_3D, Nuc, PVecCen, MT);
+        save_logs(i, p, g.N, f_out1, f_out2, f_out3, f_out4, f_out5, f_out_for3d, Nuc, PVecCen, MT);
         }
         //////////////// examination with single parameter set FINISHED ///////////////////////////
         XStoreName(mtg.d,mtg.w1,"fin");
@@ -1218,12 +1218,12 @@ int main(int argc, char* argv[]) {
       fclose(f_out2);
       fclose(f_out3);
       fclose(f_out4);
-      fclose(f_out10);
       fclose(f_out5);
-      fclose(data_for_3D);
-      fclose(f_out6);
-      fclose(f_out7);
-      fclose(f_out8);
+      fclose(f_out_param);
+      fclose(f_out_for3d);
+      fclose(f_out_mtnum);
+      fclose(f_out_fvcheck);
+      fclose(f_out_3dcheck);
       XStoreName(mtg.d,mtg.w1,"fin");
       XStoreName(mtg.d,mtg.w2,"path");
       XStoreName(mtg.d,mtg.w3,"distance");

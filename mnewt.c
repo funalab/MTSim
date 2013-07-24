@@ -3,14 +3,14 @@
  * filename: mnewt.c
  * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
  *         Akira Funahashi <funa@bio.keio.ac.jp>
- * Last modified: Thu, 25 Jul 2013 02:28:32 +0900
+ * Last modified: Thu, 25 Jul 2013 03:17:37 +0900
  */
 
 #include "mtsim.h"
 
 // Newton-Raphson Method for Nonlinear Systems of Equations (ref) Press et al. "Numerical Recipes in C"*/
 boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf,
-    int step_counter, FILE* f_out8, void (*usrfun)(double *, int , double*, double**, mtGlobal*), mtGlobal* g) {
+    int step_counter, FILE* f_out_3dcheck, void (*usrfun)(double *, int , double*, double**, mtGlobal*), mtGlobal* g) {
   int k,i,*indx;
   double errx,errf,d,*fvec,**fjac,*p;
 
@@ -26,7 +26,7 @@ boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf,
     }
     if (errf <=tolf) {
       if (step_counter%100 == 0){
-        fprintf(f_out8,"%d tolf errx=%5.4f\n",k,errx*(1.0e+6));
+        fprintf(f_out_3dcheck,"%d tolf errx=%5.4f\n",k,errx*(1.0e+6));
       }
       free_return(fvec, fjac, n, p, indx);
       return true;
@@ -43,7 +43,7 @@ boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf,
     }
     if (errx <=tolx) {
       if (step_counter%100 == 0){
-        fprintf(f_out8,"%d tolx errf=%5.4f\n",k,errf*(1.0e+12));
+        fprintf(f_out_3dcheck,"%d tolx errf=%5.4f\n",k,errf*(1.0e+12));
       }
       free_return(fvec, fjac, n, p, indx);
       return true;
