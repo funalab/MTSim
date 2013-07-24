@@ -5,7 +5,7 @@
  * This program simulates centrosome positioning in one-cell embryo
  * Unit meter, kilo-gram, sec
  * to compile: make (see Makefile for detail)
- * Last modified: Mon, 01 Jul 2013 03:05:59 +0900
+ * Last modified: Wed, 24 Jul 2013 21:40:25 +0900
  */
 
 #include "mtsim.h"
@@ -48,6 +48,23 @@ static unsigned char mnewtconverge;
 static int mt_start;
 static int mt_end;
 FILE *f_out8;
+
+void usage(char* myname) {
+  printf("Usage : %s [option]\n", myname);
+  printf(" -h   : Show this message\n");
+  printf(" -c   : Check output with fixed random seed (0.0)\n");
+  printf(" -v   : Verbose output\n");
+  printf(" -t # : specify simulation time (ex. -t 100 )\n");
+  printf(" -s # : specify simulation step (ex. -s 100 )\n");
+  printf(" -d # : specify simulation delta (ex. -d 0.01 [default:1/4096])\n");
+  printf(" -m # : specify model (ex. -m 5 )\n");
+  printf("        0: Pushing\n");
+  printf("        1: Pulling\n");
+  printf("        2: Cortical-Anchoring\n");
+  printf("        3: Pulling Supplemental 1\n");
+  printf("        4: Pushing Supplemental 2\n");
+  printf("        5: Length-Dependent + Cortical-Anchoring\n");
+}
 
 void FV_solution(double xx, double *f_v, double *fp_v) {
   *f_v = (k_on*(exp(-1*F_dependency*xx)-1)+Vg)-((xx-Buckling_backward_sum)/Stokes_translation);
@@ -223,6 +240,14 @@ void mnewt(int ntrial, double x[], int n, double tolx, double tolf) {
 int main(int argc, char* argv[]) {
   mtGraphics mtg;
   display_setting(&mtg);
+
+  /*  Variables for getopt() */
+  int ch;
+  extern char *optarg;
+  extern int optind;
+  char* myname;
+  boolean is_check = false;
+  boolean is_verbose = false;
 
   //random number (ref) Press et al., "Numerical Recipes in C"
   double random;
@@ -416,8 +441,49 @@ int main(int argc, char* argv[]) {
 
   //// DECLARATION of Constants and Variables - FINISHED //
 
+  /* Parse options */
+  myname = argv[0];
+  while ((ch = getopt(argc, argv, "t:s:d:m:cv")) != -1){
+    switch (ch) {
+      /*
+      case 't':
+        sim_time = atof(optarg);
+        break;
+      case 's':
+        step = atoi(optarg);
+        break;
+      case 'd':
+        delta = atof(optarg);
+        break;
+        */
+      case 'c':
+        is_check = true;
+        break;
+      case 'v':
+        is_verbose = true;
+        break;
+      case 'm':
+        mode = atoi(optarg);
+        break;
+      case 'h':
+        usage(myname);
+        exit(1);
+      default:
+        usage(myname);
+        exit(1);
+    }
+  }
+  argc -= optind;
+  argv += optind;
+
+  if(argc > 1){
+    usage(myname);
+  }
+
+  /*
   printf("Choose a model: pushing(0), pulling(1), cortical-anchoring(2), pulling_sup1(3), pushing_sup2(4) or length-dependent+cortical-anchoring(5)?:");
   scanf("%d",&mode);
+  */
 
   //////////////////////////////////////////
   // Examination of different parameters ///
@@ -493,7 +559,7 @@ int main(int argc, char* argv[]) {
     fprintf(f_out5,"p=%d\nmode=%d\nMTDivision=%d MT=%d\nVg_um=%5.3lf Vs_um=%5.3lf\nCatFreq=%5.3lf ResFreq=%5.3lf\nFstall_pN=%5.3lf Vmax_um=%5.3f M_mm=%5.3lf\nEI_pNumum=%5.3lf A_um=%5.3lf B_pN=%5.3lf\nH=%5.3lf Stokes_rad=%5.3lf\n\n",p,mode,MTDivision,N,Vg*pow(10,6),Vs*pow(10,6),CatFreq,ResFreq,MotorStallF*pow(10,12),MotorMaxVel*1.0e+6,MotorDensity*pow(10,-3),EI*pow(10,24),k_on*1.0e+6, F_dependency_single*1.0e-12,Visco,Stokes_rad*1.0e+6);
 
     // color settings
-/* #include "color_setting.c" */
+    /* #include "color_setting.c" */
     color_setting(&mtg, p);
 
     /**************** INITIALIZATION *********************/

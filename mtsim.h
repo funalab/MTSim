@@ -1,5 +1,5 @@
 /*
- * Last modified: Mon, 01 Jul 2013 03:05:49 +0900
+ * Last modified: Wed, 24 Jul 2013 21:37:47 +0900
  */
 
 #ifndef __mtsim__
@@ -25,6 +25,15 @@
 
 #define TRACE(x) do { if (DEBUG_PRINT_FLAG) dbg_printf x; } while (0)
 
+/* boolean */
+#define true 1
+#define false 0
+#ifdef boolean
+#undef boolean
+#endif
+#define boolean int
+
+/* color */
 #define RED     "\x1b[31m"
 #define GREEN   "\x1b[32m"
 #define YELLOW  "\x1b[33m"
