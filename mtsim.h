@@ -1,7 +1,7 @@
 /*
  * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
  *         Akira Funahashi <funa@bio.keio.ac.jp>
- * Last modified: Thu, 25 Jul 2013 02:31:05 +0900
+ * Last modified: Thu, 25 Jul 2013 03:01:46 +0900
  */
 
 #ifndef __mtsim__
@@ -63,13 +63,32 @@
 #define RadS (15*pow(10,-6)) /* short axes of egg [m] */
 
 /* declaration of functions */
-void ludcmp(double **a, int n, int *indx, double *d);
-void lubksb(double **a, int n, int *indx, double b[]);
-double ran1(long *idum);
+/* callback.c */
+void function_FV3D(double *x, int n, double *fvec, double **fjac, mtGlobal *g);
+void function_MotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal *g);
+void function_laserMotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal *g);
+
+/* fv_solution.c */
+void FV_solution(double xx, double *f_v, double *fp_v, mtGlobal *g);
+
+/* mnewt.c */
+boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf,
+    int step_counter, FILE* f_out8, void (*usrfun)(double *, int , double*, double**, mtGlobal*), mtGlobal* g);
+
+/* solve_1D_double.c */
 double Stokes_function(double ff, double gr, double fb);
 double FV_function(double ff, double vg, double ko, double fd);
 double rtsafe(void (*funcd)(double, double *, double *, mtGlobal*),double x1, double x2, double xacc, mtGlobal* g);
 double rtsafe_mod(void (*funcd)(double, double *, double *, mtGlobal*),double x1, double x2, double xacc, mtGlobal* g);
+
+/* ludcmp_double.c */
+void ludcmp(double **a, int n, int *indx, double *d);
+
+/* lubksb_double.c */
+void lubksb(double **a, int n, int *indx, double b[]);
+
+/* ran1_double.c */
+double ran1(long *idum);
 
 /* main.c */
 void usage(char* myname);
@@ -86,16 +105,6 @@ void MakeRotationMatrix(double RotationMatrix[3][3], double RotationVector[3], d
 double Length(double a[3]);
 double InnProdVector(double vector1[3], double vector2[3]);
 double Poisson(double np, int motornumber);
-
-/* math_FV.c */
-void FV_solution(double xx, double *f_v, double *fp_v, mtGlobal *g);
-void function_FV3D(double *x, int n, double *fvec, double **fjac, mtGlobal *g);
-void function_MotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal *g);
-void function_laserMotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal *g);
-
-/* mnewt.c */
-boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf,
-    int step_counter, FILE* f_out8, void (*usrfun)(double *, int , double*, double**, mtGlobal*), mtGlobal* g);
 
 /* store_graphs.c */
 void store_graphs(void);
