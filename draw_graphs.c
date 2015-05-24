@@ -20,7 +20,7 @@ void draw_graphs(int i, mtGraphics *mtg, mtGlobal *g, double PVecCen[2][3], doub
   if (i<laserST) {
     XDrawLine(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2+(int)(Scale1*PVecCen[0][0]*pow(10,6)),WIN_HEIGHT/2-(int)(Scale1*PVecCen[0][2]*pow(10,6)),WIN_WIDTH/2+(int)(Scale1*PVecCen[1][0]*pow(10,6)),WIN_HEIGHT/2-(int)(Scale1*PVecCen[1][2]*pow(10,6)));
   }
-  XDrawArc(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2-(int)(Scale1*25), WIN_HEIGHT/2-(int)(Scale1*15), (int)(2*Scale1*25), (int)(2*Scale1*15), 0, 360*64); /* Rad=25[um], RadS=15[um] */
+  XDrawArc(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2-(int)(Scale1*Rad*pow(10,6)), WIN_HEIGHT/2-(int)(Scale1*RadS*pow(10,6)), (int)(2*Scale1*Rad*pow(10,6)), (int)(2*Scale1*RadS*pow(10,6)), 0, 360*64); /* Rad=25[um], RadS=15[um] */
   XDrawArc(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2+(int)((Scale1*(Nuc[0]-LL)*pow(10,6))),WIN_HEIGHT/2-(int)((Scale1*(Nuc[2]+LL)*pow(10,6))),(int)(Scale1*2*LL*pow(10,6)),(int)(Scale1*2*LL*pow(10,6)),0,360*64);
   XCopyArea(d,mtg->pixmap,mtg->w1,mtg->gc1,0,0,WIN_WIDTH,WIN_HEIGHT,0,0);
 

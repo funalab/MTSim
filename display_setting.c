@@ -67,7 +67,7 @@ void display_setting(mtGraphics *mtg) {
   mtg->Scale1 = Scale1;
 
   /******* window2 ********/
-  XDrawArc(d,mtg->w2,mtg->gc2,WIN_WIDTH/2-(int)(Scale1*25), WIN_HEIGHT/2-(int)(Scale1*15), (int)(2*Scale1*25), (int)(2*Scale1*15), 0, 360*64);
+  XDrawArc(d,mtg->w2,mtg->gc2,WIN_WIDTH/2-(int)(Scale1*Rad*pow(10,6)), WIN_HEIGHT/2-(int)(Scale1*RadS*pow(10,6)), (int)(2*Scale1*Rad*pow(10,6)), (int)(2*Scale1*RadS*pow(10,6)), 0, 360*64);
 
 
   /******* window3 ********/
