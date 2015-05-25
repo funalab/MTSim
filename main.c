@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
   argc -= optind;
   argv += optind;
 
-  if(mode > 5 || mode < 0){
+  if(mode > 5){
     usage(myname);
     exit(1);
   }
@@ -183,7 +183,7 @@ int main(int argc, char* argv[]) {
 
   /************VARIABLES**********************/
   int i; /* steps */
-  double t; /* time [sec] */
+  double t=0.0; /* time [sec] */
   int p; /* different parameter sets */
   int j,jj; /* x,y,z axes */
   int qq; /* centrosome 0 or 1 */
@@ -242,7 +242,7 @@ int main(int argc, char* argv[]) {
   int laser_centrosome;
   int ana_centrosome;
   double CenVel[2][4];
-  double dvid[3];
+  double dvid[6];
   double RotationMatrix[3][3];
 
   char filefin[40];
