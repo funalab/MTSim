@@ -240,6 +240,7 @@ int main(int argc, char* argv[]) {
   double np, cumpoisson;
   int motornumber;
   int laser_centrosome;
+  int ana_centrosome;
   double CenVel[2][4];
   double dvid[3];
   double RotationMatrix[3][3];
@@ -843,7 +844,7 @@ int main(int argc, char* argv[]) {
         ///////////////////////////////////////////////////////////////////////
         // THE PULLING MODEL: solve the set of equation using Newton-Raphson method with the initial guess
         if ((mode == 1)||(mode == 5)) {
-          if (i<laserST){  /*************** before ablation *******************/
+          if (i<laserST && i<anaST){  /*************** before ablation and anaphase *******************/
             for (j=1;j<=6;j++){ /* initial value of tempNucVel[j] */
               TRACE(("%4d Force[%d]: %10lf %10lf\n",i, j, ForceC[0][j-1]*1.0e+12, ForceC[1][j-1]*1.0e+12));
               if (j<=3) {
@@ -938,74 +939,143 @@ int main(int argc, char* argv[]) {
               printf("Cen1=(%3.1f,%3.1f,%3.1f) Cen2=(%3.1f,%3.1f,%3.1f)\n",PVecCen[0][0]*1.0e+6,PVecCen[0][1]*1.0e+6,PVecCen[0][2]*1.0e+6,PVecCen[1][0]*1.0e+6,PVecCen[1][1]*1.0e+6, PVecCen[1][2]*1.0e+6);
               break;
             }
-          } else {  /******** laser ablation *****************/
-            usr_func = function_laserMotorFV;
-            for (laser_centrosome = 0; laser_centrosome<2; laser_centrosome++){
-              if (laser_centrosome==0) {
-                g.mt_start = 0;
-                g.mt_end = g.NN;
-              } else {
-                g.mt_start = g.NN;
-                g.mt_end = g.N;
-              }
-              for (j=1;j<=3;j++){
-                tempNucVel[j] = (ForceC[laser_centrosome][j-1])/g.Stokes_translation; /* forces do not include dT **/
-              }
-              cycle_count = 0;
-              for (k=g.mt_start; k<g.mt_end; k++) {eachMT_PTC[k] = 0;}
-              do {
-                g.phase_transition_count = 0;
-                for (j=0;j<3;j++){
-                  g.Fbackward[j] = 0.0;  /* Fbackward[0,1,2]*/
+          } else {
+            if (i>=laserST) { /******** laser ablation *****************/
+              usr_func = function_laserMotorFV;
+              for (laser_centrosome = 0; laser_centrosome<2; laser_centrosome++){
+                if (laser_centrosome==0) {
+                  g.mt_start = 0;
+                  g.mt_end = g.NN;
+                } else {
+                  g.mt_start = g.NN;
+                  g.mt_end = g.N;
                 }
-                for (k=g.mt_start; k<g.mt_end; k++) {
-                  if (g.pulling_phase[k]!=0){
-                    dv = (g.u[k][0]*tempNucVel[1]+g.u[k][1]*tempNucVel[2]+g.u[k][2]*tempNucVel[3]);
-                    if (dv > g.MotorMaxVel){ /* the motors on this MT do not exert forces */
-                      if (g.pulling_phase[k]!=3) {
-                        g.phase_transition_count++;
-                        eachMT_PTC[k]++;
-                      }
-                      g.pulling_phase[k] = 3;
-                    } else {
-                      if (dv < 0) { /* the motors on this MT exert the maximum (stall) force */
-                        if (g.pulling_phase[k]!=2) {
+                for (j=1;j<=3;j++){
+                  tempNucVel[j] = (ForceC[laser_centrosome][j-1])/g.Stokes_translation; /* forces do not include dT **/
+                }
+                cycle_count = 0;
+                for (k=g.mt_start; k<g.mt_end; k++) {eachMT_PTC[k] = 0;}
+                do {
+                  g.phase_transition_count = 0;
+                  for (j=0;j<3;j++){
+                    g.Fbackward[j] = 0.0;  /* Fbackward[0,1,2]*/
+                  }
+                  for (k=g.mt_start; k<g.mt_end; k++) {
+                    if (g.pulling_phase[k]!=0){
+                      dv = (g.u[k][0]*tempNucVel[1]+g.u[k][1]*tempNucVel[2]+g.u[k][2]*tempNucVel[3]);
+                      if (dv > g.MotorMaxVel){ /* the motors on this MT do not exert forces */
+                        if (g.pulling_phase[k]!=3) {
                           g.phase_transition_count++;
                           eachMT_PTC[k]++;
                         }
-                        g.pulling_phase[k] = 2;
-                        for (j=0;j<3;j++) {
-                          g.Fbackward[j] += g.u[k][j] * g.MotorStallF * g.NumberOfMotor[k];
-                        }
+                        g.pulling_phase[k] = 3;
                       } else {
-                        if (g.pulling_phase[k]!=1) { /* the motors on this MT exert force dependent on their velocity */
-                          g.phase_transition_count++;
-                          eachMT_PTC[k]++;
+                        if (dv < 0) { /* the motors on this MT exert the maximum (stall) force */
+                          if (g.pulling_phase[k]!=2) {
+                            g.phase_transition_count++;
+                            eachMT_PTC[k]++;
+                          }
+                          g.pulling_phase[k] = 2;
+                          for (j=0;j<3;j++) {
+                            g.Fbackward[j] += g.u[k][j] * g.MotorStallF * g.NumberOfMotor[k];
+                          }
+                        } else {
+                          if (g.pulling_phase[k]!=1) { /* the motors on this MT exert force dependent on their velocity */
+                            g.phase_transition_count++;
+                            eachMT_PTC[k]++;
+                          }
+                          g.pulling_phase[k] = 1;
                         }
-                        g.pulling_phase[k] = 1;
                       }
                     }
                   }
+                  if ((g.phase_transition_count!=0)||(cycle_count==0)) {
+                    did_converge = mnewt(10, tempNucVel, 3, tolx, tolf, step_counter, f_out_3dcheck, usr_func, &g);
+                  }
+                  if (i%100==0) {fprintf(f_out_3dcheck,"%d %d %d\n", i, cycle_count, g.phase_transition_count);}
+                  cycle_count++;
+                } while ((cycle_count<=1)||((g.phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
+                
+                if (g.phase_transition_count!=0){ /* when the solution is not obtained within 1000 cycles*/
+                  printf("exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
+                  fprintf(f_out_fvcheck,"exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
+                  //  printf("Cen1=(%3.1f,%3.1f,%3.1f) Cen2=(%3.1f,%3.1f,%3.1f)\n",Cen[0][0]*1.0e+6,Cen[0][1]*1.0e+6,Cen[0][2]*1.0e+6,Cen[1][0]*1.0e+6,Cen[1][1]*1.0e+6, Cen[1][2]*1.0e+6);
+                  break;
                 }
-                if ((g.phase_transition_count!=0)||(cycle_count==0)) {
-                  did_converge = mnewt(10, tempNucVel, 3, tolx, tolf, step_counter, f_out_3dcheck, usr_func, &g);
+                for (j=1; j<=3; j++){
+                  CenVel[laser_centrosome][j] = tempNucVel[j];
                 }
-                if (i%100==0) {fprintf(f_out_3dcheck,"%d %d %d\n", i, cycle_count, g.phase_transition_count);}
-                cycle_count++;
-              } while ((cycle_count<=1)||((g.phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
-
-              if (g.phase_transition_count!=0){ /* when the solution is not obtained within 1000 cycles*/
-                printf("exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
-                fprintf(f_out_fvcheck,"exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
-                //  printf("Cen1=(%3.1f,%3.1f,%3.1f) Cen2=(%3.1f,%3.1f,%3.1f)\n",Cen[0][0]*1.0e+6,Cen[0][1]*1.0e+6,Cen[0][2]*1.0e+6,Cen[1][0]*1.0e+6,Cen[1][1]*1.0e+6, Cen[1][2]*1.0e+6);
-                break;
               }
-              for (j=1; j<=3; j++){
-                CenVel[laser_centrosome][j] = tempNucVel[j];
+            }
+            else { /******** anaphase *****************/
+              usr_func = function_anaMotorFV;
+              for (ana_centrosome = 0; ana_centrosome<2; ana_centrosome++){
+                if (ana_centrosome==0) {
+                  g.mt_start = 0;
+                  g.mt_end = g.NN;
+                } else {
+                  g.mt_start = g.NN;
+                  g.mt_end = g.N;
+                }
+                for (j=1;j<=3;j++){
+                  tempNucVel[j] = (ForceC[ana_centrosome][j-1])/g.Stokes_translation; /* forces do not include dT **/
+                }
+                cycle_count = 0;
+                for (k=g.mt_start; k<g.mt_end; k++) {eachMT_PTC[k] = 0;}
+                do {
+                  g.phase_transition_count = 0;
+                  for (j=0;j<3;j++){
+                    g.Fbackward[j] = 0.0;  /* Fbackward[0,1,2]*/
+                  }
+                  for (k=g.mt_start; k<g.mt_end; k++) {
+                    if (g.pulling_phase[k]!=0){
+                      dv = (g.u[k][0]*tempNucVel[1]+g.u[k][1]*tempNucVel[2]+g.u[k][2]*tempNucVel[3]);
+                      if (dv > g.MotorMaxVel){ /* the motors on this MT do not exert forces */
+                        if (g.pulling_phase[k]!=3) {
+                          g.phase_transition_count++;
+                          eachMT_PTC[k]++;
+                        }
+                        g.pulling_phase[k] = 3;
+                      } else {
+                        if (dv < 0) { /* the motors on this MT exert the maximum (stall) force */
+                          if (g.pulling_phase[k]!=2) {
+                            g.phase_transition_count++;
+                            eachMT_PTC[k]++;
+                          }
+                          g.pulling_phase[k] = 2;
+                          for (j=0;j<3;j++) {
+                            g.Fbackward[j] += g.u[k][j] * g.MotorStallF * g.NumberOfMotor[k];
+                          }
+                        } else {
+                          if (g.pulling_phase[k]!=1) { /* the motors on this MT exert force dependent on their velocity */
+                            g.phase_transition_count++;
+                            eachMT_PTC[k]++;
+                          }
+                          g.pulling_phase[k] = 1;
+                        }
+                      }
+                    }
+                  }
+                  if ((g.phase_transition_count!=0)||(cycle_count==0)) {
+                    did_converge = mnewt(10, tempNucVel, 3, tolx, tolf, step_counter, f_out_3dcheck, usr_func, &g);
+                  }
+                  if (i%100==0) {fprintf(f_out_3dcheck,"%d %d %d\n", i, cycle_count, g.phase_transition_count);}
+                  cycle_count++;
+                } while ((cycle_count<=1)||((g.phase_transition_count!=0)&&(cycle_count<1000))); /* repeat until the solution satisfies all equations and conditions */
+                
+                if (g.phase_transition_count!=0){ /* when the solution is not obtained within 1000 cycles*/
+                  printf("exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
+                  fprintf(f_out_fvcheck,"exit without convergence at t=%d PTC=%d\n", i, g.phase_transition_count);
+                  //  printf("Cen1=(%3.1f,%3.1f,%3.1f) Cen2=(%3.1f,%3.1f,%3.1f)\n",Cen[0][0]*1.0e+6,Cen[0][1]*1.0e+6,Cen[0][2]*1.0e+6,Cen[1][0]*1.0e+6,Cen[1][1]*1.0e+6, Cen[1][2]*1.0e+6);
+                  break;
+                }
+                for (j=1; j<=3; j++){
+                  CenVel[ana_centrosome][j] = tempNucVel[j];
+                }
               }
             }
           }
-
+          
           // THE PULLING MODEL: calculation of the force exerted by each MT 
           //	    if (i%100==0) {fprintf(f_out_fvcheck,"%d ",cycle_count);}
           //	    for (j=1; j<=6; j++){
@@ -1067,7 +1137,7 @@ int main(int argc, char* argv[]) {
         // TRANSLATIONAL MOVEMENT OF THE PRONUCLEUS
         CalculateVel = 0.0;
         for (j=1; j<=3; j++) {
-          if (((mode==1)||(mode==5))&&(i>=laserST)) {
+          if (((mode==1)||(mode==5))&&((i>=laserST)||(i>=anaST))) {
             tempNucVel[j] = (CenVel[0][j]+CenVel[1][j])/2;
             PVecCen[0][j-1] += CenVel[0][j]*dT;
             PVecCen[1][j-1] += CenVel[1][j]*dT;
@@ -1128,7 +1198,7 @@ int main(int argc, char* argv[]) {
         }
         DistanceFromPP = sqrt((Rad-Nuc[0])*(Rad-Nuc[0])+Nuc[1]*Nuc[1]+Nuc[2]*Nuc[2]);
 
-        if (((mode==1)||(mode==5))&&(i<laserST)) {
+        if (((mode==1)||(mode==5))&&((i<laserST)&&(i<anaST))) {
           // ROTATIONAL MOVEMENT OF THE PRONUCLEUS
           Rotation[0] = tempNucVel[4];
           Rotation[1] = tempNucVel[5];
@@ -1174,7 +1244,7 @@ int main(int argc, char* argv[]) {
             fprintf(f_out_fvcheck,"\n%d\n",i+1);
           }
         } else {
-          if (((mode==1)||(mode==5))&&(i>=laserST)) {
+          if (((mode==1)||(mode==5))&&((i>=laserST)||(i>=anaST))) {
             //	      printf("laser!!\n");
             for (k=0; k<g.N; k++){
               if (k<g.NN) {qq = 0;} else {qq = 1;}

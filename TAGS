@@ -1,8 +1,9 @@
 
-callback.c,330
+callback.c,447
 void function_FV3D(double *x, int n, double *fvec, double **fjac, mtGlobal* g) {function_FV3D9,198
 void function_MotorFV(double *x, int n, double *fvec, double **fjac, mtGlobal* g) {function_MotorFV55,1486
 void function_laserMotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal* g) {function_laserMotorFV93,2722
+void function_anaMotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal* g) {function_anaMotorFV129,3862
 
 color_setting.c,66
 void color_setting(mtGraphics *mtg, int p) {color_setting11,390
@@ -198,7 +199,7 @@ typedef struct _mtGraphics {_mtGraphics12,247
   XColor c1,c2,c3,c4,c5,cc;cc20,459
 } mtGraphics;mtGraphics21,487
 
-mtsim.h,980
+mtsim.h,1009
 #define __mtsim____mtsim__8,173
 #define false false19,354
 #define true true20,370
@@ -226,11 +227,12 @@ mtsim.h,980
 #define UNITTIME UNITTIME56,1204
 #define ST ST57,1269
 #define laserST laserST58,1337
-#define metaST metaST59,1413
-#define dT dT60,1522
-#define LL LL61,1588
-#define Rad Rad62,1648
-#define RadS RadS63,1704
+#define anaST anaST59,1413
+#define metaST metaST60,1486
+#define dT dT61,1595
+#define LL LL62,1661
+#define Rad Rad63,1721
+#define RadS RadS64,1777
 
 my_getopt.h,204
 #define ERR(ERR27,1050

@@ -54,8 +54,9 @@
 #define WIN_HEIGHT (256)     /*  graphical settings */
 #define SC3 (0.01)           /* graphical settings */
 #define UNITTIME (10)        /* for calculation of velocities */
-#define ST (24000)           /* total steps (20min/0.05sec=24000)*/
-#define laserST (24000)      /* when each centrosome moves independently */
+#define ST (30000)           /* total steps (25min/0.05sec=30000)*/
+#define laserST (30000)      /* when each centrosome moves independently */
+#define anaST (24000)      /* when mitotic spindle begins to elongate */
 #define metaST (18000)       /* when repression of cortical pulling force at "LET-99 band" is inactivated */
 #define dT (0.05)            /* time step [sec] default = 0.05 */
 #define LL (5*pow(10,-6))    /* radius of pronucleus [m] */
@@ -67,6 +68,7 @@
 void function_FV3D(double *x, int n, double *fvec, double **fjac, mtGlobal *g);
 void function_MotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal *g);
 void function_laserMotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal *g);
+void function_anaMotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal *g);
 
 /* fv_solution.c */
 void FV_solution(double xx, double *f_v, double *fp_v, mtGlobal *g);
