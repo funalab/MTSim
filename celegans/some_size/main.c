@@ -176,8 +176,9 @@ int main(int argc, char* argv[]) {
   double CenVel[2][4];
   double RotationMatrix[3][3];
 
-  char filefin[40];
-  char filefin2[40];
+	//unused variable
+  //char filefin[40];
+  //char filefin2[40];
 
   //// DECLARATION of Constants and Variables - FINISHED //
 
