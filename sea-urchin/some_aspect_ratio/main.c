@@ -377,7 +377,7 @@ int main(int argc, char* argv[]) {
   XStoreName(mtg.d,mtg.w9,"vector");
   XFlush (mtg.d);
   /* save graphs */
-  store_graphs();
+  // store_graphs();
 
   free_dmatrix(g.u,0,g.N-1,0,2);
   free_dvector(g.L,0,g.N-1);
