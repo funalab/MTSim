@@ -81,7 +81,6 @@ int main(int argc, char* argv[]) {
   //PARAMETERS
   // drag force of pronucleus
   g.Visco = 1.0; /* viscosity of cytosol [kg/m sec], standard 0.1->1.0 */
-  /* g.Stokes_rad = 10.0 * pow(10,-6); */
   g.Stokes_rad = 1.5 * pow(10,-6);
   // pulling force
   double ForceCoef3 = 0.0;
@@ -143,7 +142,7 @@ int main(int argc, char* argv[]) {
   }
   // int MTcoefficient = 100; /* a constant used in simulations with increasing number of MTs (Sup Fig S5) */
   
-  double MetaSpindle_L = 25*pow(10,-6);
+  double MetaSpindle_L; /* sea-urchin's MetaSpindle_L : 25 * 10^{-6}*/
   double Rad;  /* long axis of egg [m] */
   double RadS; /* short axes of egg [m] */
   double aspect_ratio = 1.0;
@@ -190,27 +189,27 @@ int main(int argc, char* argv[]) {
   fprintf (f_out_somesize,"#aspect_ratio,2Rad,2RadS,spindle_length,time[sec]\n");
   for (p=0; p<5; p++) {
     switch (p) {
-      case 0: /*orange*/
+      case 0: /*orange*/ /*P0*/
         Rad = 23 * pow(10,-6);
         RadS = 14 * pow(10,-6);
         MetaSpindle_L = 14 * pow(10,-6);
         break;
-      case 1: /*pink*/
+      case 1: /*pink*/ /*AB*/
         Rad = 18.5 * pow(10,-6);
         RadS = 11 * pow(10,-6);
         MetaSpindle_L = 12 * pow(10,-6);
         break;
-      case 2: /* black */
+      case 2: /* black */ /*P1*/
         Rad = 16 * pow(10,-6);
         RadS = 9 * pow(10,-6);
         MetaSpindle_L = 11 * pow(10,-6);
         break;
-      case 3: /* blue */
+      case 3: /* blue */ /*EMS*/
         Rad = 15 * pow(10,-6);
         RadS = 7 * pow(10,-6);
         MetaSpindle_L = 10 * pow(10,-6);
         break;
-      case 4: /* green */
+      case 4: /* green */ /*P2*/
         Rad = 12.5 * pow(10,-6);
         RadS = 7.5 * pow(10,-6);
         MetaSpindle_L = 8.5 * pow(10,-6);
