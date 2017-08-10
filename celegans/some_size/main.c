@@ -142,7 +142,7 @@ int main(int argc, char* argv[]) {
   }
   // int MTcoefficient = 100; /* a constant used in simulations with increasing number of MTs (Sup Fig S5) */
   
-  double MetaSpindle_L; /* sea-urchin's MetaSpindle_L : 25 * 10^{-6}*/
+  double MetaSpindle_L = 14 * pow(10, -6); /* sea-urchin's MetaSpindle_L : 25 * 10^{-6}*/
   double Rad;  /* long axis of egg [m] */
   double RadS; /* short axes of egg [m] */
   double aspect_ratio = 1.0;
@@ -185,38 +185,62 @@ int main(int argc, char* argv[]) {
   // Examination of different parameters ///
   //////////////////////////////////////////
 
-  printf ("#aspect_ratio,2Rad,2RadS,spindle_length,time[sec]\n");
-  fprintf (f_out_somesize,"#aspect_ratio,2Rad,2RadS,spindle_length,time[sec]\n");
+  printf ("#aspect_ratio,Rad,RadS,spindle_length,time[sec]\n");
+  fprintf (f_out_somesize,"#aspect_ratio,Rad,RadS,spindle_length,time[sec]\n");
+	// Mitotic stages are dispersed 
+  // for (p=0; p<5; p++) {
+    // switch (p) {
+      // case 0: /*orange*/ /*P0*/
+        // Rad = 23 * pow(10,-6);
+        // RadS = 14 * pow(10,-6);
+        // MetaSpindle_L = 14 * pow(10,-6);
+        // break;
+      // case 1: /*pink*/ /*AB*/
+        // Rad = 18.5 * pow(10,-6);
+        // RadS = 11 * pow(10,-6);
+        // MetaSpindle_L = 12 * pow(10,-6);
+        // break;
+      // case 2: /* black */ /*P1*/
+        // Rad = 16 * pow(10,-6);
+        // RadS = 9 * pow(10,-6);
+        // MetaSpindle_L = 11 * pow(10,-6);
+        // break;
+      // case 3: /* blue */ /*EMS*/
+        // Rad = 15 * pow(10,-6);
+        // RadS = 7 * pow(10,-6);
+        // MetaSpindle_L = 10 * pow(10,-6);
+        // break;
+      // case 4: /* green */ /*P2*/
+        // Rad = 12.5 * pow(10,-6);
+        // RadS = 7.5 * pow(10,-6);
+        // MetaSpindle_L = 8.5 * pow(10,-6);
+        // break;
+    // }
+
   for (p=0; p<5; p++) {
     switch (p) {
-      case 0: /*orange*/ /*P0*/
-        Rad = 23 * pow(10,-6);
-        RadS = 14 * pow(10,-6);
-        MetaSpindle_L = 14 * pow(10,-6);
+      case 0: /*orange*/
+        aspect_ratio = 1.0;
         break;
-      case 1: /*pink*/ /*AB*/
-        Rad = 18.5 * pow(10,-6);
-        RadS = 11 * pow(10,-6);
-        MetaSpindle_L = 12 * pow(10,-6);
+      case 1: /*pink*/
+        aspect_ratio = 1.5;
         break;
-      case 2: /* black */ /*P1*/
-        Rad = 16 * pow(10,-6);
-        RadS = 9 * pow(10,-6);
-        MetaSpindle_L = 11 * pow(10,-6);
+      case 2: /* black */
+        aspect_ratio = 2.0;
         break;
-      case 3: /* blue */ /*EMS*/
-        Rad = 15 * pow(10,-6);
-        RadS = 7 * pow(10,-6);
-        MetaSpindle_L = 10 * pow(10,-6);
+      case 3: /* blue */
+        aspect_ratio = 2.5;
         break;
-      case 4: /* green */ /*P2*/
-        Rad = 12.5 * pow(10,-6);
-        RadS = 7.5 * pow(10,-6);
-        MetaSpindle_L = 8.5 * pow(10,-6);
+      case 4: /* green */
+        aspect_ratio = 3.0;
         break;
     }
+
     g.Stokes_translation = 6.0*PI*g.Stokes_rad*g.Visco;
-    aspect_ratio = Rad/RadS;
+    Rad = Cir_Rad * cbrt(aspect_ratio*aspect_ratio);
+    RadS = Cir_Rad / cbrt(aspect_ratio);
+
+    // aspect_ratio = Rad/RadS;
     /* printf("asp=%lf, Rad=%e, RadS=%e\n",aspect_ratio,Rad,RadS); */
 
     // OUTPUT parameter LOGs
@@ -351,8 +375,8 @@ int main(int argc, char* argv[]) {
       printf("%lf,%.3lf,not_convergence\n", aspect_ratio, fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6));
     }
     else {
-      printf("%.1lf,%.3lf,%.3lf,%.3lf,%lf\n", aspect_ratio, 2*Rad*pow(10,6), 2*RadS*pow(10,6), fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6), step_counter*dT);
-      fprintf(f_out_somesize,"%.1lf,%.3lf,%.3lf,%.3lf,%lf\n", aspect_ratio, 2*Rad*pow(10,6), 2*RadS*pow(10,6), fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6), step_counter*dT);
+      printf("%.1lf,%.3lf,%.3lf,%.3lf,%lf\n", aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6), step_counter*dT);
+      fprintf(f_out_somesize,"%.1lf,%.3lf,%.3lf,%.3lf,%lf\n", aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6), step_counter*dT);
     }
     //////////////// examination with single parameter set FINISHED ///////////////////////////
     /* XStoreName(mtg.d,mtg.w1,"fin"); */

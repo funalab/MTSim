@@ -63,7 +63,7 @@
 /* #define LL (5*pow(10,-6))    /\* radius of pronucleus [m] *\/ */
 /* #define Rad (25*pow(10,-6))  /\* long axis of egg [m] *\/ */
 /* #define RadS (15*pow(10,-6)) /\* short axes of egg [m] *\/ */
-#define Cir_Rad (60*pow(10,-6)) 
+#define Cir_Rad (50.638803*pow(10,-6)) 
 
 /* declaration of functions */
 /* callback.c */

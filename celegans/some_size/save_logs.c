@@ -28,18 +28,6 @@ void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FI
       case 4:
         f_out = f_out5;
         break;
-      /* case 6: */
-      /*   f_out = f_out7; */
-      /*   break; */
-      /* case 7: */
-      /*   f_out = f_out8; */
-      /*   break; */
-      /* case 8: */
-      /*   f_out = f_out9; */
-      /*   break; */
-      /* case 9: */
-      /*   f_out = f_out10; */
-      /*   break; */
     }
     if(i==0){fprintf(f_out,"#p,(int)(i/100),time_sec,cen_distance*10^6,PVecCen[0][0]*10^6,PVecCen[0][2]*10^6,PVecCen[1][0]*10^6,PVecCen[1][2]*10^6\n");}
     fprintf(f_out,"%d,%d,%lf,%lf,%lf,%lf,%lf,%lf" ,p,(int)(i/100),i*dT,fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6),PVecCen[0][0]*pow(10,6),PVecCen[0][2]*pow(10,6),PVecCen[1][0]*pow(10,6),PVecCen[1][2]*pow(10,6));
