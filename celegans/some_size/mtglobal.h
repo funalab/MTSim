@@ -14,8 +14,8 @@ typedef struct _mtGlobal {
   double *L;
   double Buckling_forward_sum;
   double Buckling_backward_sum;
-  double Stokes_rad;
-  double Visco;
+  double Stokes_rad; /* stokes radius of cytosol [m] */
+  double Visco; /* viscosity of cytosol [kg/m sec] */
   double Stokes_rotation;
   double Stokes_translation;
   double **DVecNucCen;
