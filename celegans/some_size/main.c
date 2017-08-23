@@ -174,6 +174,9 @@ int main(int argc, char* argv[]) {
   // variables for local movement
   double CenVel[2][4];
   double RotationMatrix[3][3];
+	// variables of aspect ratio
+	double ar_init = 1.0;
+	double ar_step = 0.1
 
 	//unused variable
   //char filefin[40];
@@ -185,8 +188,8 @@ int main(int argc, char* argv[]) {
   // Examination of different parameters ///
   //////////////////////////////////////////
 
-  printf ("#aspect_ratio,Rad,RadS,spindle_length,time[sec]\n");
-  fprintf (f_out_somesize,"#aspect_ratio,Rad,RadS,spindle_length,time[sec]\n");
+  printf ("#aspect_ratio,Rad,RadS,spindle_length,time[sec],spindle_length/(Rad*2)\n");
+  fprintf (f_out_somesize,"#aspect_ratio,Rad,RadS,spindle_length,time[sec],spindle_length/(Rad*2)\n");
 	// Mitotic stages are dispersed 
   // for (p=0; p<5; p++) {
     // switch (p) {
@@ -220,25 +223,26 @@ int main(int argc, char* argv[]) {
   for (p=0; p<5; p++) {
     switch (p) {
       case 0: /*orange*/
-        aspect_ratio = 1.0;
+        aspect_ratio = ar_init + ar_step * p;
         break;
       case 1: /*pink*/
-        aspect_ratio = 1.5;
+        aspect_ratio = ar_init + ar_step * p;
         break;
       case 2: /* black */
-        aspect_ratio = 2.0;
+        aspect_ratio = ar_init + ar_step * p;
         break;
       case 3: /* blue */
-        aspect_ratio = 2.5;
+        aspect_ratio = ar_init + ar_step * p;
         break;
       case 4: /* green */
-        aspect_ratio = 3.0;
+        aspect_ratio = ar_init + ar_step * p;
         break;
     }
 
     g.Stokes_translation = 6.0*PI*g.Stokes_rad*g.Visco;
     Rad = Cir_Rad * cbrt(aspect_ratio*aspect_ratio);
     RadS = Cir_Rad / cbrt(aspect_ratio);
+		MetaSpindle_L = (0.14 * Rad * pow(10, 6) * 2 + 7.0) * pow(10, -6);
 
     // aspect_ratio = Rad/RadS;
     /* printf("asp=%lf, Rad=%e, RadS=%e\n",aspect_ratio,Rad,RadS); */
@@ -375,8 +379,8 @@ int main(int argc, char* argv[]) {
       printf("%lf,%.3lf,not_convergence\n", aspect_ratio, fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6));
     }
     else {
-      printf("%.1lf,%.3lf,%.3lf,%.3lf,%lf\n", aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6), step_counter*dT);
-      fprintf(f_out_somesize,"%.1lf,%.3lf,%.3lf,%.3lf,%lf\n", aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6), step_counter*dT);
+      printf("%.1lf,%.3lf,%.3lf,%.3lf,%lf,%.3lf\n", aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6), step_counter*dT, fabs(PVecCen[0][0]-PVecCen[1][0])/(Rad*2));
+      fprintf(f_out_somesize,"%.1lf,%.3lf,%.3lf,%.3lf,%lf,%.3lf\n", aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6), step_counter*dT, fabs(PVecCen[0][0]-PVecCen[1][0])/(Rad*2));
     }
     //////////////// examination with single parameter set FINISHED ///////////////////////////
     /* XStoreName(mtg.d,mtg.w1,"fin"); */
