@@ -176,7 +176,7 @@ int main(int argc, char* argv[]) {
   double RotationMatrix[3][3];
 	// variables of aspect ratio
 	double ar_init = 1.0;
-	double ar_step = 0.1
+	double ar_step = 0.1;
 
 	//unused variable
   //char filefin[40];
