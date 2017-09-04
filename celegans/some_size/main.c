@@ -84,7 +84,7 @@ int main(int argc, char* argv[]) {
   g.Stokes_rad = 1.5 * pow(10,-6);
   // pulling force
   double ForceCoef3 = 0.0;
-  double ForceCoef2 = 1.5 * pow(10,-2); /* the elongation continues for 4min */
+  double ForceCoef2 = 1.5 * pow(10,-2); /* attraction coefficient [N/m^2] the elongation continues for 4min */
   double ForceCoef1 = 0.0;
 
   // arrangement of microtubules: calculation of the (maximum) number of MTs
@@ -104,7 +104,7 @@ int main(int argc, char* argv[]) {
     ForceCoef2 = 0.09 * pow(10,-2);
     MTInitAngle_degree = 97;
   }
-  double MTInitAngle = MTInitAngle_degree * PI / 180;
+  double MTInitAngle = MTInitAngle_degree * PI / 180; /* the maximum angle of MTs [radian] */
   double MTAngleDens = MTDiv90/90.0; /* the number of MTs in unit degree [/degree] */
   int MTDivision = (int)(MTInitAngle_degree * MTAngleDens); /* this number defines the (maximum) number of MTs*/
   int MTPerPlane[MTDivision+1];
@@ -125,20 +125,20 @@ int main(int argc, char* argv[]) {
   g.u = dmatrix(0,g.N-1,0,2); ///////////////////////////////
   g.L = dvector(0,g.N-1);
   // arrangement of microtubules: direction of each MT
-  double Sdelta[g.N], Ssita[g.N];
-  Sdelta[0]=0.5*PI; Ssita[0]=0.0;
+  double Sdelta[g.N], Stheta[g.N];
+  Sdelta[0]=0.5*PI; Stheta[0]=0.0;
   kk=0;
   for (k=1;k<g.NN; k++) {
     if (k > MTTotal[kk]-1){kk++;}
     Sdelta[k]=PI/2.0-MTInitAngle*kk/MTDivision;
-    Ssita[k]=2.0*PI*k/(MTPerPlane[kk]);
+    Stheta[k]=2.0*PI*k/(MTPerPlane[kk]);
   }
-  Sdelta[g.NN] = -0.5*PI; Ssita[0]=0.0;
+  Sdelta[g.NN] = -0.5*PI; Stheta[0]=0.0;
   kk=0;
   for (k=g.NN+1;k<g.N; k++) {
     if ((k-g.NN) > MTTotal[kk]-1){kk++;}
     Sdelta[k]=-PI/2.0+MTInitAngle*kk/MTDivision;
-    Ssita[k]=2.0*PI*(k-g.NN)/(MTPerPlane[kk]);
+    Stheta[k]=2.0*PI*(k-g.NN)/(MTPerPlane[kk]);
   }
   // int MTcoefficient = 100; /* a constant used in simulations with increasing number of MTs (Sup Fig S5) */
   
@@ -176,7 +176,7 @@ int main(int argc, char* argv[]) {
   double RotationMatrix[3][3];
 	// variables of aspect ratio
 	double ar_init = 1.0;
-	double ar_step = 0.1;
+	double ar_step = 0.5;
 
 	//unused variable
   //char filefin[40];
@@ -287,8 +287,8 @@ int main(int argc, char* argv[]) {
     for (k=0; k<g.N; k++){
       if (k<g.NN){qq=0;}else{qq=1;}
       g.L[k] = 1.0*pow(10,-9);  
-      g.u[k][0] = cos(Sdelta[k])*cos(Ssita[k]);
-      g.u[k][1] = cos(Sdelta[k])*sin(Ssita[k]);
+      g.u[k][0] = cos(Sdelta[k])*cos(Stheta[k]);
+      g.u[k][1] = cos(Sdelta[k])*sin(Stheta[k]);
       g.u[k][2] = sin(Sdelta[k]);
       for (j=0;j<3;j++){
         VECVEC[j]=g.u[k][j];
