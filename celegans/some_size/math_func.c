@@ -11,8 +11,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-#define PI (3.141592653590)
-
 // Length of a vector: L is the length of a[3]
 double Length(double a[3]) {
   double L;
@@ -99,7 +97,7 @@ void OutProdVector(double vector1[3], double vector2[3], double result[3]) {
   return;
 }
 
-// solution of quadratic equation: a[0]x2+a[1]x+a[2]=0
+// solution of quadratic equation: a[0]x2+a[1]x+a[2]=0 b[0] > b[1]
 void QuadEqu2(double a[3], double b[2]) {
   if (a[0]==0){
     if (a[1]==0){printf("no solution!\n");}

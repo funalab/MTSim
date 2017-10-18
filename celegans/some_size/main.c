@@ -91,7 +91,7 @@ int main(int argc, char* argv[]) {
   /* double starting_degree = 0.0; /\* starting degree of aster: for the simulation with single aster (Sup Fig S9) this value should be changed*\/ */
   double starting_degree = PI/2.0; /* starting degree of aster: for the simulation with single aster (Sup Fig S9) this value should be changed*/
   int MTInitAngle_degree = 115; /* the maximum angle of MTs [degree] */
-  int MTDiv90 = 6; /* distribution of MT in 90 degree [/degree] */
+  int MTDiv90 = 6; /* distribution of MT in 90 degree [num] */
   if (model==0) {
     /* MTInitAngle_degree = 132; */
     /* MTDiv90 = 28; */
@@ -105,18 +105,18 @@ int main(int argc, char* argv[]) {
     MTInitAngle_degree = 97;
   }
   double MTInitAngle = MTInitAngle_degree * PI / 180; /* the maximum angle of MTs [radian] */
-  double MTAngleDens = MTDiv90/90.0; /* the number of MTs in unit degree [/degree] */
-  int MTDivision = (int)(MTInitAngle_degree * MTAngleDens); /* this number defines the (maximum) number of MTs*/
+  double MTAngleDens = MTDiv90/90.0; /* the number of MTs in unit degree [num/degree] */
+  int MTDivision = (int)(MTInitAngle_degree * MTAngleDens); /* this number defines the (maximum) number of MTs [num]*/
   int MTPerPlane[MTDivision+1];
   int MTTotal[MTDivision+1];
-  int kk; /* plane number */
-  int k; /* MT number */
+  int p_num; /* plane number */
+  int MT_num; /* MT number */
   MTPerPlane[0]=1;
   MTTotal[0]=1;
-  for (kk=1; kk<MTDivision+1; kk++) {
-    MTPerPlane[kk]=(int)(2*PI*MTDivision*sin(MTInitAngle*kk/MTDivision)/MTInitAngle);
-    MTTotal[kk]=MTTotal[kk-1]+MTPerPlane[kk];
-    /* printf("%d %d %d\n",MTDivision,MTPerPlane[kk],MTTotal[kk]); */
+  for (p_num=1; p_num<MTDivision+1; p_num++) {
+    MTPerPlane[p_num]=(int)(2*PI*MTDivision*sin(MTInitAngle*p_num/MTDivision)/MTInitAngle);
+    MTTotal[p_num]=MTTotal[p_num-1]+MTPerPlane[p_num];
+    /* printf("%d %d %d\n",MTDivision,MTPerPlane[p_num],MTTotal[p_num]); */
   }
   g.NN = MTTotal[MTDivision];
   g.N = 2*g.NN;
@@ -127,18 +127,18 @@ int main(int argc, char* argv[]) {
   // arrangement of microtubules: direction of each MT
   double Sdelta[g.N], Stheta[g.N];
   Sdelta[0]=0.5*PI; Stheta[0]=0.0;
-  kk=0;
-  for (k=1;k<g.NN; k++) {
-    if (k > MTTotal[kk]-1){kk++;}
-    Sdelta[k]=PI/2.0-MTInitAngle*kk/MTDivision;
-    Stheta[k]=2.0*PI*k/(MTPerPlane[kk]);
+  p_num=0;
+  for (MT_num=1;MT_num<g.NN; MT_num++) {
+    if (MT_num > MTTotal[p_num]-1){p_num++;}
+    Sdelta[MT_num]=PI/2.0-MTInitAngle*p_num/MTDivision;
+    Stheta[MT_num]=2.0*PI*MT_num/(MTPerPlane[p_num]);
   }
   Sdelta[g.NN] = -0.5*PI; Stheta[0]=0.0;
-  kk=0;
-  for (k=g.NN+1;k<g.N; k++) {
-    if ((k-g.NN) > MTTotal[kk]-1){kk++;}
-    Sdelta[k]=-PI/2.0+MTInitAngle*kk/MTDivision;
-    Stheta[k]=2.0*PI*(k-g.NN)/(MTPerPlane[kk]);
+  p_num=0;
+  for (MT_num=g.NN+1;MT_num<g.N; MT_num++) {
+    if ((MT_num-g.NN) > MTTotal[p_num]-1){p_num++;}
+    Sdelta[MT_num]=-PI/2.0+MTInitAngle*p_num/MTDivision;
+    Stheta[MT_num]=2.0*PI*(MT_num-g.NN)/(MTPerPlane[p_num]);
   }
   // int MTcoefficient = 100; /* a constant used in simulations with increasing number of MTs (Sup Fig S5) */
   
@@ -164,19 +164,19 @@ int main(int argc, char* argv[]) {
   // forces //
   double ForceC[2][3]; /* force vector on 1st and 2nd centrosome */
   // translational and rotational movement of the pronucleus //
-  double DirectionDetermination[3];
+  // double DirectionDetermination[3];
   int step_counter;
   ////////////////////////ROTATION
   double rotationAx[3]; /* rotational axis */
   ////////////////////// Nucleus does not cross over the cortex /////////////////
-  double AA[3]; /* three coefficients of the equation */
-  double BB[2]; /* two solutions of the equation */
+  double QuaFuncCoe[3]; /* three coefficients of the equation */
+  double QuaFuncSol[2]; /* two solutions of the equation */
   // variables for local movement
-  double CenVel[2][4];
+  double CenVel[2][4]; /* velocity of centrosome */
   double RotationMatrix[3][3];
-	// variables of aspect ratio
-	double ar_init = 1.0;
-	double ar_step = 0.5;
+  // variables of aspect ratio
+  double ar_init = 1.0;
+  double ar_step = 0.5;
 
   //// DECLARATION of Constants and Variables - FINISHED //
 
@@ -188,28 +188,12 @@ int main(int argc, char* argv[]) {
   fprintf (f_out_somesize,"#aspect_ratio,Rad,RadS,spindle_length,time[sec],spindle_length/(Rad*2)\n");
 	// Mitotic stages are dispersed 
   for (p=0; p<5; p++) {
-    switch (p) {
-      case 0: /*orange*/
-        aspect_ratio = ar_init + ar_step * p;
-        break;
-      case 1: /*pink*/
-        aspect_ratio = ar_init + ar_step * p;
-        break;
-      case 2: /* black */
-        aspect_ratio = ar_init + ar_step * p;
-        break;
-      case 3: /* blue */
-        aspect_ratio = ar_init + ar_step * p;
-        break;
-      case 4: /* green */
-        aspect_ratio = ar_init + ar_step * p;
-        break;
-    }
+    aspect_ratio = ar_init + ar_step * p;
 
     g.Stokes_translation = 6.0*PI*g.Stokes_rad*g.Visco;
     Rad = Cir_Rad * cbrt(aspect_ratio*aspect_ratio);
     RadS = Cir_Rad / cbrt(aspect_ratio);
-		MetaSpindle_L = (0.14 * Rad * pow(10, 6) * 2 + 7.0) * pow(10, -6);
+    MetaSpindle_L = (0.14 * Rad * pow(10, 6) * 2 + 7.0) * pow(10, -6);
 
     // OUTPUT parameter LOGs
     fprintf(f_out_param,"p=%d\nmodel=%d\nMTDiv90=%d MTDivision=%d MTInitAngle_degree=%d N=%d\naspect_ratio=%lf Rad=%lf RadS=%lf\nH=%5.3lf Stokes_rad=%5.3lf\nForceCoef1=%lf Coef2=%lf Coef3=%lf\n\n", p, model, MTDiv90, MTDivision, MTInitAngle_degree, g.N, aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), g.Visco, g.Stokes_rad*1.0e+6, ForceCoef1, ForceCoef2, ForceCoef3);
@@ -225,10 +209,11 @@ int main(int argc, char* argv[]) {
     g.DVecNucCen[0][0]=0.0; g.DVecNucCen[0][1]=0.0; g.DVecNucCen[0][2]=MetaSpindle_L/2;      
     g.DVecNucCen[1][0]=0.0; g.DVecNucCen[1][1]=0.0; g.DVecNucCen[1][2]=(-1.0)*MetaSpindle_L/2;
 
-    // 1st rotation
+    // 1st rotation (rotation axis is y-axis)
     rotationAx[0]=0.0;
     rotationAx[1]=1.0;
     rotationAx[2]=0.0;
+    // Rotation from z-axis to x-axis at -PI/2
     MakeRotationMatrix(RotationMatrix, rotationAx, starting_degree);
 
     ProductJacVec(VECVEC, RotationMatrix, g.DVecNucCen[0]);
@@ -248,29 +233,29 @@ int main(int argc, char* argv[]) {
       }
     }
     // phase and length of MTs
-    for (k=0; k<g.N; k++){
-      if (k<g.NN){qq=0;}else{qq=1;}
-      g.L[k] = 1.0*pow(10,-9);  
-      g.u[k][0] = cos(Sdelta[k])*cos(Stheta[k]);
-      g.u[k][1] = cos(Sdelta[k])*sin(Stheta[k]);
-      g.u[k][2] = sin(Sdelta[k]);
+    for (MT_num=0; MT_num<g.N; MT_num++){
+      if (MT_num<g.NN){qq=0;}else{qq=1;}
+      g.L[MT_num] = 1.0*pow(10,-9);  
+      g.u[MT_num][0] = cos(Sdelta[MT_num])*cos(Stheta[MT_num]);
+      g.u[MT_num][1] = cos(Sdelta[MT_num])*sin(Stheta[MT_num]);
+      g.u[MT_num][2] = sin(Sdelta[MT_num]);
       for (axis=0;axis<3;axis++){
-        VECVEC[axis]=g.u[k][axis];
+        VECVEC[axis]=g.u[MT_num][axis];
       }
       ProductJacVec(VECVECVEC, RotationMatrix, VECVEC);
       for (axis=0;axis<3;axis++){
-        g.u[k][axis]=VECVECVEC[axis];
+        g.u[MT_num][axis]=VECVECVEC[axis];
       }
       for (axis=0; axis<3; axis++) {
-        MTC[axis] = g.L[k]*g.u[k][axis];}
+        MTC[axis] = g.L[MT_num]*g.u[MT_num][axis];}
       // calculation of the distance from the centrosome to the cell cortex at the angle //
-      AA[0]=pow(MTC[0]*RadS,2)+pow(MTC[1]*Rad,2)+pow(MTC[2]*Rad,2); /* quadratic equation */
-      AA[1]=2*(MTC[0]*PVecCen[qq][0]*RadS*RadS+MTC[1]*PVecCen[qq][1]*Rad*Rad+MTC[2]*PVecCen[qq][2]*Rad*Rad);
-      AA[2]=pow(RadS*PVecCen[qq][0],2)+pow(Rad*PVecCen[qq][1],2)+pow(Rad*PVecCen[qq][2],2)-pow(Rad*RadS,2);
-      QuadEqu2(AA,BB);
-      g.L[k] = BB[0]*g.L[k];
+      QuaFuncCoe[0]=pow(MTC[0]*RadS,2)+pow(MTC[1]*Rad,2)+pow(MTC[2]*Rad,2); /* quadratic equation */
+      QuaFuncCoe[1]=2*(MTC[0]*PVecCen[qq][0]*RadS*RadS+MTC[1]*PVecCen[qq][1]*Rad*Rad+MTC[2]*PVecCen[qq][2]*Rad*Rad);
+      QuaFuncCoe[2]=pow(RadS*PVecCen[qq][0],2)+pow(Rad*PVecCen[qq][1],2)+pow(Rad*PVecCen[qq][2],2)-pow(Rad*RadS,2);
+      QuadEqu2(QuaFuncCoe,QuaFuncSol);
+      g.L[MT_num] = QuaFuncSol[0]*g.L[MT_num];
       for (axis=0;axis<3;axis++){
-        MT[k][axis] = PVecCen[qq][axis] + g.L[k]*g.u[k][axis];
+        MT[MT_num][axis] = PVecCen[qq][axis] + g.L[MT_num]*g.u[MT_num][axis];
       }
     }
 
@@ -287,38 +272,38 @@ int main(int argc, char* argv[]) {
           ForceC[qq][axis]=0.0;
         }
       }
-      for (axis=0; axis<3;axis++) {	  
-        DirectionDetermination[axis]=0.0;
-      }
+      // for (axis=0; axis<3;axis++) {	  
+      //   DirectionDetermination[axis]=0.0;
+      // }
 
       if (model==0) /* MT_angle_fixed */
       {
-        for (k=0; k<g.N; k++) {
-          if (k<g.NN){qq=0;}else{qq=1;}
+        for (MT_num=0; MT_num<g.N; MT_num++) {
+          if (MT_num<g.NN){qq=0;}else{qq=1;}
           for (axis=0; axis<3; axis++) {
-            MTC[axis] = g.L[k]*g.u[k][axis];
+            MTC[axis] = g.L[MT_num]*g.u[MT_num][axis];
           }
           // calculation of the distance from the centrosome to the cell cortex at the angle //
-          AA[0]=pow(MTC[0]*RadS,2)+pow(MTC[1]*Rad,2)+pow(MTC[2]*Rad,2); /* quadratic equation */
-          AA[1]=2*(MTC[0]*PVecCen[qq][0]*RadS*RadS+MTC[1]*PVecCen[qq][1]*Rad*Rad+MTC[2]*PVecCen[qq][2]*Rad*Rad);
-          AA[2]=pow(RadS*PVecCen[qq][0],2)+pow(Rad*PVecCen[qq][1],2)+pow(Rad*PVecCen[qq][2],2)-pow(Rad*RadS,2);
-          QuadEqu2(AA,BB);
-          g.L[k] = BB[0]*g.L[k];
+          QuaFuncCoe[0]=pow(MTC[0]*RadS,2)+pow(MTC[1]*Rad,2)+pow(MTC[2]*Rad,2); /* quadratic equation */
+          QuaFuncCoe[1]=2*(MTC[0]*PVecCen[qq][0]*RadS*RadS+MTC[1]*PVecCen[qq][1]*Rad*Rad+MTC[2]*PVecCen[qq][2]*Rad*Rad);
+          QuaFuncCoe[2]=pow(RadS*PVecCen[qq][0],2)+pow(Rad*PVecCen[qq][1],2)+pow(Rad*PVecCen[qq][2],2)-pow(Rad*RadS,2);
+          QuadEqu2(QuaFuncCoe,QuaFuncSol);
+          g.L[MT_num] = QuaFuncSol[0]*g.L[MT_num];
           for (axis=0;axis<3;axis++){
-            MT[k][axis] = PVecCen[qq][axis] + g.L[k]*g.u[k][axis];
-            ForceC[qq][axis] += (ForceCoef3*pow(g.L[k],3)+ForceCoef2*pow(g.L[k],2)+ForceCoef1*g.L[k]) * g.u[k][axis];
+            MT[MT_num][axis] = PVecCen[qq][axis] + g.L[MT_num]*g.u[MT_num][axis];
+            ForceC[qq][axis] += (ForceCoef3*pow(g.L[MT_num],3)+ForceCoef2*pow(g.L[MT_num],2)+ForceCoef1*g.L[MT_num]) * g.u[MT_num][axis];
           }
         }
       }
 
       else if (model==1) /* MT_angle_variable */
       {
-        for (k=0; k<g.N; k++){
-          if (k<g.NN){qq=0;}else{qq=1;}
-          g.L[k] = sqrt(pow(MT[k][0]-PVecCen[qq][0],2)+pow(MT[k][1]-PVecCen[qq][1],2)+pow(MT[k][2]-PVecCen[qq][2],2));
+        for (MT_num=0; MT_num<g.N; MT_num++){
+          if (MT_num<g.NN){qq=0;}else{qq=1;}
+          g.L[MT_num] = sqrt(pow(MT[MT_num][0]-PVecCen[qq][0],2)+pow(MT[MT_num][1]-PVecCen[qq][1],2)+pow(MT[MT_num][2]-PVecCen[qq][2],2));
           for (axis=0; axis<3; axis++) {
-            g.u[k][axis] = (MT[k][axis] - PVecCen[qq][axis]) / g.L[k];
-            ForceC[qq][axis] += (ForceCoef3*pow(g.L[k],3)+ForceCoef2*pow(g.L[k],2)+ForceCoef1*g.L[k]) * g.u[k][axis];
+            g.u[MT_num][axis] = (MT[MT_num][axis] - PVecCen[qq][axis]) / g.L[MT_num];
+            ForceC[qq][axis] += (ForceCoef3*pow(g.L[MT_num],3)+ForceCoef2*pow(g.L[MT_num],2)+ForceCoef1*g.L[MT_num]) * g.u[MT_num][axis];
           }
         }
       }

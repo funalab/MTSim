@@ -11,7 +11,7 @@
 typedef struct _mtGlobal {
   int N; /* the (maximum) number of MTs per two centrosomes */
   int NN;
-  double *L;
+  double *L; /* MTs length */
   double Buckling_forward_sum;
   double Buckling_backward_sum;
   double Stokes_rad; /* stokes radius of cytosol [m] */
@@ -22,7 +22,7 @@ typedef struct _mtGlobal {
   double Vg;
   double k_on;
   double F_dependency;
-  double **u;
+  double **u; /* MTs unit vector */
   unsigned char *pushing_phase;
   unsigned char *pulling_phase;
   unsigned char *phase;
