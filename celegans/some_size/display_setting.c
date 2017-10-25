@@ -19,9 +19,10 @@ void display_setting(mtGraphics *mtg) {
   Colormap cm = mtg->cm;
   XAllocNamedColor(d,cm,"violet", &mtg->c1, &mtg->cc);
   XAllocNamedColor(d,cm,"blue", &mtg->c2, &mtg->cc);
-  XAllocNamedColor(d,cm,"green", &mtg->c3, &mtg->cc);
+  XAllocNamedColor(d,cm,"forestgreen", &mtg->c3, &mtg->cc);
   XAllocNamedColor(d,cm,"orange", &mtg->c4, &mtg->cc);
-  XAllocNamedColor(d,cm,"red", &mtg->c5, &mtg->cc);
+  XAllocNamedColor(d,cm,"limegreen", &mtg->c5, &mtg->cc);
+  XAllocNamedColor(d,cm,"antiquewhite", &mtg->c6, &mtg->cc);
   mtg->w1 = XCreateSimpleWindow(d, RootWindow(d,0), 5, 5, WIN_WIDTH, WIN_HEIGHT, 2, WhitePixel(d,0), WhitePixel(d,0));
   mtg->w2 = XCreateSimpleWindow(d, RootWindow(d,0), 10+WIN_WIDTH, 5, WIN_WIDTH, WIN_HEIGHT, 2, WhitePixel(d,0), WhitePixel(d,0));
   mtg->w3 = XCreateSimpleWindow(d, RootWindow(d,0), 5, 10+WIN_HEIGHT, WIN_WIDTH, WIN_HEIGHT, 2, BlackPixel(d,0), WhitePixel(d,0));

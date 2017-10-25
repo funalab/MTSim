@@ -14,6 +14,9 @@ void draw_graphs(int i, mtGraphics *mtg, mtGlobal *g, double PVecCen[2][3], doub
   // draw graph in window 1: distribution of MTs at the moment
   XFillRectangle(d,mtg->pixmap,mtg->gc_clr,0,0,WIN_WIDTH,WIN_HEIGHT);
   int m;
+  XSetForeground(d,mtg->gc1,mtg->c6.pixel);
+  XFillArc(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2-(int)(Scale1*Rad*pow(10,6)), WIN_HEIGHT/2-(int)(Scale1*RadS*pow(10,6)), (int)(2*Scale1*Rad*pow(10,6)), (int)(2*Scale1*RadS*pow(10,6)), 0, 360*64);
+  XSetForeground(d,mtg->gc1,BlackPixel(d,0));
   XSetForeground(d, mtg->gc1, mtg->c3.pixel);
   for (m=0; m<g->N; m++) {
     if (m<g->NN){XDrawLine(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2+(int)(Scale1*PVecCen[0][0]*pow(10,6)),WIN_HEIGHT/2-(int)(Scale1*PVecCen[0][2]*pow(10,6)),WIN_WIDTH/2+(int)(Scale1*MT[m][0]*pow(10,6)),WIN_HEIGHT/2-(int)(Scale1*MT[m][2]*pow(10,6)));}
@@ -24,6 +27,8 @@ void draw_graphs(int i, mtGraphics *mtg, mtGlobal *g, double PVecCen[2][3], doub
   XFillArc(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2-r-(int)(Scale1*PVecCen[0][0]*pow(10,6)), WIN_HEIGHT/2-r-(int)(Scale1*PVecCen[0][2]*pow(10,6)), (int)(2*r), (int)(2*r), 0, 360*64);
   XFillArc(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2-r-(int)(Scale1*PVecCen[1][0]*pow(10,6)), WIN_HEIGHT/2-r-(int)(Scale1*PVecCen[1][2]*pow(10,6)), (int)(2*r), (int)(2*r), 0, 360*64);
   XSetForeground(d,mtg->gc1,BlackPixel(d,0));
+  XDrawArc(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2-r-(int)(Scale1*PVecCen[0][0]*pow(10,6)), WIN_HEIGHT/2-r-(int)(Scale1*PVecCen[0][2]*pow(10,6)), (int)(2*r), (int)(2*r), 0, 360*64);
+  XDrawArc(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2-r-(int)(Scale1*PVecCen[1][0]*pow(10,6)), WIN_HEIGHT/2-r-(int)(Scale1*PVecCen[1][2]*pow(10,6)), (int)(2*r), (int)(2*r), 0, 360*64);
   /* if (i<laserST && i<anaST) { */
   /*   XDrawLine(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2+(int)(Scale1*PVecCen[0][0]*pow(10,6)),WIN_HEIGHT/2-(int)(Scale1*PVecCen[0][2]*pow(10,6)),WIN_WIDTH/2+(int)(Scale1*PVecCen[1][0]*pow(10,6)),WIN_HEIGHT/2-(int)(Scale1*PVecCen[1][2]*pow(10,6))); */
   /*   XDrawArc(d,mtg->pixmap,mtg->gc1,WIN_WIDTH/2+(int)((Scale1*(Nuc[0]-LL)*pow(10,6))),WIN_HEIGHT/2-(int)((Scale1*(Nuc[2]+LL)*pow(10,6))),(int)(Scale1*2*LL*pow(10,6)),(int)(Scale1*2*LL*pow(10,6)),0,360*64); */
