@@ -11,7 +11,7 @@ void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FI
   int m;
   FILE* f_out;
   // OUTPUT LOGSoutput per every single timepoint (20timepoints=1sec)
-  if (i%100==0) {
+  if (i%20==0) {
     switch (p) {
       case 0:
         f_out = f_out1;
@@ -32,13 +32,14 @@ void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FI
     if(i==0){fprintf(f_out,"#p,(int)(i/100),time_sec,cen_distance*10^6,PVecCen[0][0]*10^6,PVecCen[0][2]*10^6,PVecCen[1][0]*10^6,PVecCen[1][2]*10^6\n");}
     fprintf(f_out,"%d,%d,%lf,%lf,%lf,%lf,%lf,%lf" ,p,(int)(i/100),i*dT,fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6),PVecCen[0][0]*pow(10,6),PVecCen[0][2]*pow(10,6),PVecCen[1][0]*pow(10,6),PVecCen[1][2]*pow(10,6));
     fprintf(f_out,"\n");
-  }
 
-  // OUTPUT DATA FOR 3D animation /////// 
-  if (p ==0) {
-    /* fprintf(data_for_3D,"%lf %lf %lf %lf %lf %lf %lf %lf %lf\n",Nuc[0]*pow(10,6),Nuc[1]*pow(10,6),Nuc[2]*pow(10,6),PVecCen[0][0]*pow(10,6),PVecCen[0][1]*pow(10,6),PVecCen[0][2]*pow(10,6),PVecCen[1][0]*pow(10,6), PVecCen[1][1]*pow(10,6),PVecCen[1][2]*pow(10,6)); */
-    for (m=0; m<N; m++) {
-      fprintf(data_for_3D,"%lf %lf %lf\n",MT[m][0]*pow(10,6),MT[m][1]*pow(10,6),MT[m][2]*pow(10,6));
+    // OUTPUT DATA FOR 3D animation /////// 
+    if (p ==2) {
+      /* fprintf(data_for_3D,"%lf %lf %lf %lf %lf %lf %lf %lf %lf\n",Nuc[0]*pow(10,6),Nuc[1]*pow(10,6),Nuc[2]*pow(10,6),PVecCen[0][0]*pow(10,6),PVecCen[0][1]*pow(10,6),PVecCen[0][2]*pow(10,6),PVecCen[1][0]*pow(10,6), PVecCen[1][1]*pow(10,6),PVecCen[1][2]*pow(10,6)); */
+      if(i==0){fprintf(data_for_3D,"x,y,z\n");}
+      for (m=0; m<N; m++) {
+        fprintf(data_for_3D,"%lf,%lf,%lf\n",MT[m][0]*pow(10,6),MT[m][1]*pow(10,6),MT[m][2]*pow(10,6));
+      }
     }
   }
 
