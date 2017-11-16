@@ -193,7 +193,7 @@ int main(int argc, char* argv[]) {
     g.Stokes_translation = 6.0*PI*g.Stokes_rad*g.Visco;
     Rad = Cir_Rad * cbrt(aspect_ratio*aspect_ratio);
     RadS = Cir_Rad / cbrt(aspect_ratio);
-    MetaSpindle_L = Rad * (-0.113 * aspect_ratio + 0.4569) * pow(10, -6);
+    MetaSpindle_L = Rad * 2 * (-0.113 * aspect_ratio + 0.4569);
 
     // OUTPUT parameter LOGs
     fprintf(f_out_param,"p=%d\nmodel=%d\nMTDiv90=%d MTDivision=%d MTInitAngle_degree=%d N=%d\naspect_ratio=%lf Rad=%lf RadS=%lf\nH=%5.3lf Stokes_rad=%5.3lf\nForceCoef1=%lf Coef2=%lf Coef3=%lf\n\n", p, model, MTDiv90, MTDivision, MTInitAngle_degree, g.N, aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), g.Visco, g.Stokes_rad*1.0e+6, ForceCoef1, ForceCoef2, ForceCoef3);
