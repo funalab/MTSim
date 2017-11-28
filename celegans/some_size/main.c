@@ -30,10 +30,11 @@ int main(int argc, char* argv[]) {
   boolean is_check = false;
   boolean is_verbose = false;
   unsigned int model = 0; /* 0:MT_angle_fixed, 1:MT_angle_moveable */
+  unsigned int len = 0; /* 0:from_Rad_vs_metaspindlelength, 1:from_Rad/RadS_vs_metaspindlelength/Rad */
 
   /* Parse options */
   myname = argv[0];
-  while ((ch = getopt(argc, argv, "m:cvh")) != -1){
+  while ((ch = getopt(argc, argv, "m:l:cvh")) != -1){
     switch (ch) {
       case 'c':
         is_check = true;
@@ -43,6 +44,9 @@ int main(int argc, char* argv[]) {
         break;
       case 'm':
         model = atoi(optarg);
+        break;
+      case 'l':
+        len = atoi(optarg);
         break;
       case 'h':
         usage(myname);
@@ -193,7 +197,12 @@ int main(int argc, char* argv[]) {
     g.Stokes_translation = 6.0*PI*g.Stokes_rad*g.Visco;
     Rad = Cir_Rad * cbrt(aspect_ratio*aspect_ratio);
     RadS = Cir_Rad / cbrt(aspect_ratio);
-    MetaSpindle_L = Rad * 2 * (-0.113 * aspect_ratio + 0.4569);
+    if(len == 0) {
+        MetaSpindle_L = (0.0530 * Rad * 2 + 9.8487 * pow(10, -6));
+    }
+    else if(len == 1) {
+        MetaSpindle_L = Rad * 2 * (-0.113 * aspect_ratio + 0.4569);
+    }
 
     // OUTPUT parameter LOGs
     fprintf(f_out_param,"p=%d\nmodel=%d\nMTDiv90=%d MTDivision=%d MTInitAngle_degree=%d N=%d\naspect_ratio=%lf Rad=%lf RadS=%lf\nH=%5.3lf Stokes_rad=%5.3lf\nForceCoef1=%lf Coef2=%lf Coef3=%lf\n\n", p, model, MTDiv90, MTDivision, MTInitAngle_degree, g.N, aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), g.Visco, g.Stokes_rad*1.0e+6, ForceCoef1, ForceCoef2, ForceCoef3);
