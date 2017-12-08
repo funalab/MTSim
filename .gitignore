@@ -9,6 +9,7 @@
 
 # Output files
 out*
+result.csv
 
 # Binary files
 mtsim
