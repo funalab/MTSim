@@ -13,4 +13,7 @@ void usage(char* myname) {
   printf(" -m # : specify model (ex. -m 1 )\n");
   printf("        0: MT angle fixed\n");
   printf("        1: MT angle variable\n");
+  printf(" -l # : metaspindle length (ex. -l 1 )\n");
+  printf("        0: Rad vs metaspindle length\n");
+  printf("        1: aspect ratio vs metaspindle length / Rad\n");
 }
