@@ -81,7 +81,7 @@ make -s
 ./mtsim -m ${model} -l 0 < enter.txt >> result.csv
 
 # arrange result
-sed -i -e "/NN/d;/aspect/d;/to/d" result.csv
+sed -i -e "/NN/d;/aspect/d;/to/d;/3.[1-4]/d" result.csv
 sed -i -e '1s/^/#aspect_ratio,Rad,RadS,spindle_length,time[sec],spindle_length\/(Rad*2)'"$LF"'/' result.csv
 
 # clear phase
