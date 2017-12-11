@@ -2,7 +2,7 @@
 
 # set variable
 local -A opthash
-zparseopts -D -A opthash -- h m l:
+zparseopts -D -A opthash -- h m: l:
 model=0
 len=0
 LF=$(printf '\\\012_')
