@@ -1,0 +1,13 @@
+[1] "outFile"            "p"                  "requiredPackage"    "requiredPackage_BC" "terminalMTFixed"   
+[6] "terminalMTVariable"
+ed$Nuc_distance.per. and terminalMTVariable$Nuc_distance.per.
+W = 2500, p-value < 2.2e-16
+alternative hypothesis: true location shift is not equal to 0
+
+Wilcoxon Rank Sum Test : Angle of MT Fixed and MT Variable
+	Wilcoxon rank sum test with continuity correction
+
+data:  terminalMTFixed$angel.degree. and terminalMTVariable$angel.degree.
+W = 2367, p-value = 1.394e-14
+alternative hypothesis: true location shift is not equal to 0
+
