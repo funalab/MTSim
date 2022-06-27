@@ -15,3 +15,7 @@ cp vectordata/centering_vector_strain8_rad25_rads10.dat ../../Result/Simulation
 make clean
 
 cd ../../
+
+cd ./src/AnalysisCode
+gnuplot script.plt
+cd ../../
