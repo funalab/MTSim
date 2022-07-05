@@ -24,3 +24,7 @@ rm result.csv-e
 
 make clean
 cd ../../../
+
+cd src/AnalysisCode
+python analysis_cel.py  -s -e
+cd ../../
