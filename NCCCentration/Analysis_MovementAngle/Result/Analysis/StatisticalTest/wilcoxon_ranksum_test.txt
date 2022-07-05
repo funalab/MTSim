@@ -1,10 +1,7 @@
-[1] "outFile"            "p"                  "requiredPackage"    "requiredPackage_BC" "terminalMTFixed"   
-[6] "terminalMTVariable"
-[1] 4100
-[1] 4100
-[1] 2
-[1] 4
-nalMTVariable$Nuc_distance.per.
+Wilcoxon Rank Sum Test : Movement of MT Fixed and MT Variable
+	Wilcoxon rank sum test with continuity correction
+
+data:  terminalMTFixed$Nuc_distance.per. and terminalMTVariable$Nuc_distance.per.
 W = 2500, p-value < 2.2e-16
 alternative hypothesis: true location shift is not equal to 0
 
