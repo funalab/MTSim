@@ -183,7 +183,7 @@ int main(int argc, char* argv[]) {
   // Examination of different parameters ///
   //////////////////////////////////////////
 
-  printf ("#aspect_ratio,Rad,RadS,spindle_length,time[sec]\n");
+  printf ("#aspect_ratio,Rad,RadS,spindle_length,time[sec],spindle_length/(Rad*2)\n");
   fprintf (f_out_someaspect,"#aspect_ratio,Rad,RadS,spindle_length,time[sec]\n");
   for (p=0; p<6; p++) {
     switch (p) {
@@ -343,7 +343,7 @@ int main(int argc, char* argv[]) {
       printf("%lf,%.3lf,not_convergence\n", aspect_ratio, fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6));
     }
     else {
-      printf("%.1lf,%.3lf,%.3lf,%.3lf,%lf\n", aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6), step_counter*dT);
+      printf("%.1lf,%.3lf,%.3lf,%.3lf,%lf,%.3lf\n", aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6), step_counter*dT, fabs(PVecCen[0][0]-PVecCen[1][0])/(Rad*2));
       fprintf(f_out_someaspect,"%.1lf,%.3lf,%.3lf,%.3lf,%lf\n", aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6), step_counter*dT);
     }
     //////////////// examination with single parameter set FINISHED ///////////////////////////
