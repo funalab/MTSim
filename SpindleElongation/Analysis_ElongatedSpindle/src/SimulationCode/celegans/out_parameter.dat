@@ -1,0 +1,35 @@
+p=0
+model=1
+MTDiv90=6 MTDivision=6 MTInitAngle_degree=97 N=194
+aspect_ratio=3.000000 Rad=40.535779 RadS=13.511926
+H=1.000 Stokes_rad=1.500
+ForceCoef1=0.000000 Coef2=0.000900 Coef3=0.000000
+
+p=1
+model=1
+MTDiv90=6 MTDivision=6 MTInitAngle_degree=97 N=194
+aspect_ratio=3.100000 Rad=41.431643 RadS=13.365046
+H=1.000 Stokes_rad=1.500
+ForceCoef1=0.000000 Coef2=0.000900 Coef3=0.000000
+
+p=2
+model=1
+MTDiv90=6 MTDivision=6 MTInitAngle_degree=97 N=194
+aspect_ratio=3.200000 Rad=42.317923 RadS=13.224351
+H=1.000 Stokes_rad=1.500
+ForceCoef1=0.000000 Coef2=0.000900 Coef3=0.000000
+
+p=3
+model=1
+MTDiv90=6 MTDivision=6 MTInitAngle_degree=97 N=194
+aspect_ratio=3.300000 Rad=43.195017 RadS=13.089399
+H=1.000 Stokes_rad=1.500
+ForceCoef1=0.000000 Coef2=0.000900 Coef3=0.000000
+
+p=4
+model=1
+MTDiv90=6 MTDivision=6 MTInitAngle_degree=97 N=194
+aspect_ratio=3.400000 Rad=44.063295 RadS=12.959793
+H=1.000 Stokes_rad=1.500
+ForceCoef1=0.000000 Coef2=0.000900 Coef3=0.000000
+
