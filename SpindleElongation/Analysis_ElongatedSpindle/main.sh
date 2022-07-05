@@ -1,7 +1,7 @@
 cd ./src/SimulationCode/celegans/
-./because_of_graph.sh -m 0 -l 0
+./because_of_graph.sh -m 0 -l 1
 mv result.csv ../../../Result/Simulation/Cel_MTFixed.csv
-./because_of_graph.sh -m 1 -l 0
+./because_of_graph.sh -m 1 -l 1
 mv result.csv ../../../Result/Simulation/Cel_MTVariable.csv
 
 cd ../sea-urchin/
