@@ -336,4 +336,4 @@ fi
 echo ""
 rm *-e
 make clean
-git reset --hard develop
+git reset --hard master
