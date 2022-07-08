@@ -103,7 +103,7 @@ def main():
     plt.legend(loc="upper left", ncol=2, scatterpoints=1, fontsize=12)
     plt.tick_params(labelsize=16, pad=8)
     plt.tight_layout()
-    plt.savefig("../../Result/Analysis/Su_sim_vs_exp.pdf")))
+    plt.savefig("../../Result/Analysis/Su_sim_vs_exp.pdf")
 
 
 if __name__ == "__main__":
