@@ -221,6 +221,9 @@ int main(int argc, char* argv[]) {
       case 5:
         aspect_ratio = 3.5;
         break;
+      case 6:
+        aspect_ratio = 4.0;
+        break;
     }
     g.Stokes_translation = 6.0*PI*g.Stokes_rad*g.Visco;
     Rad = Cir_Rad * sqrt(aspect_ratio);
