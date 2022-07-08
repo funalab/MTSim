@@ -26,5 +26,6 @@ make clean
 cd ../../../
 
 cd src/AnalysisCode
-python analysis_cel.py  -s -e
+python analysis_cel.py -s -e
+python analysis_su.py -e
 cd ../../
