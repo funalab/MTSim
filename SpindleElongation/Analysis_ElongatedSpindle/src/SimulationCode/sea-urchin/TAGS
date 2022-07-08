@@ -1,207 +1,244 @@
-!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
-!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
-!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
-!_TAG_PROGRAM_NAME	Exuberant Ctags	//
-!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
-!_TAG_PROGRAM_VERSION	5.8	//
-AM	ran1_double.c	/^#define AM /;"	d	file:
-AddVector	math_func.c	/^void AddVector(double vector1[3], double vector2[3], double result[3]) {$/;"	f
-BLUE	mtsim.h	/^#define BLUE /;"	d
-BOLD	mtsim.h	/^#define BOLD /;"	d
-BucklingConst	mtglobal.h	/^  double BucklingConst;$/;"	m	struct:_mtGlobal
-Buckling_backward_sum	mtglobal.h	/^  double Buckling_backward_sum;$/;"	m	struct:_mtGlobal
-Buckling_forward_sum	mtglobal.h	/^  double Buckling_forward_sum;$/;"	m	struct:_mtGlobal
-CC	Makefile	/^CC = gcc$/;"	m
-CFLAGS	Makefile	/^CFLAGS = -Wall -O0 -g -I\/usr\/X11R6\/include$/;"	m
-CYAN	mtsim.h	/^#define CYAN /;"	d
-Cir_Rad	mtsim.h	/^#define Cir_Rad /;"	d
-DEBUG_PRINT_FLAG	mtsim.h	/^#define DEBUG_PRINT_FLAG /;"	d
-DEFAULT	mtsim.h	/^#define DEFAULT /;"	d
-DVecNucCen	mtglobal.h	/^  double **DVecNucCen;$/;"	m	struct:_mtGlobal
-EPS	ran1_double.c	/^#define EPS /;"	d	file:
-ERR	my_getopt.h	/^#define ERR(/;"	d
-FONT_DEFAULT	mtsim.h	/^#define FONT_DEFAULT /;"	d
-FREE_ARG	nrutil.c	/^#define FREE_ARG /;"	d	file:
-FV_function	solve_1D_double.c	/^double FV_function(double ff, double vg, double ko, double fd)$/;"	f
-FV_solution	fv_solution.c	/^void FV_solution(double xx, double *f_v, double *fp_v, mtGlobal* g) {$/;"	f
-F_dependency	mtglobal.h	/^  double F_dependency;$/;"	m	struct:_mtGlobal
-Fbackward	mtglobal.h	/^  double Fbackward[6];$/;"	m	struct:_mtGlobal
-Fbuckle	mtglobal.h	/^  double Fbuckle[3];$/;"	m	struct:_mtGlobal
-GREEN	mtsim.h	/^#define GREEN /;"	d
-HEADERS	Makefile	/^HEADERS = $(wildcard *.h)$/;"	m
-IA	ran1_double.c	/^#define IA /;"	d	file:
-IM	ran1_double.c	/^#define IM /;"	d	file:
-IQ	ran1_double.c	/^#define IQ /;"	d	file:
-IR	ran1_double.c	/^#define IR /;"	d	file:
-InnProdVector	math_func.c	/^double InnProdVector(double vector1[3], double vector2[3]) {$/;"	f
-L	mtglobal.h	/^  double *L;$/;"	m	struct:_mtGlobal
-LDFLAGS	Makefile	/^LDFLAGS = -L\/usr\/X11R6\/lib -lX11 -lm$/;"	m
-Length	math_func.c	/^double Length(double a[3]) {$/;"	f
-MAGENTA	mtsim.h	/^#define MAGENTA /;"	d
-MAXIT	solve_1D_double.c	/^#define MAXIT /;"	d	file:
-MakeRotationMatrix	math_func.c	/^void MakeRotationMatrix(double RotationMatrix[3][3], double RotationVector[3], double dt) {$/;"	f
-MotorDensity	mtglobal.h	/^  double MotorDensity;$/;"	m	struct:_mtGlobal
-MotorMaxVel	mtglobal.h	/^  double MotorMaxVel;$/;"	m	struct:_mtGlobal
-MotorStallF	mtglobal.h	/^  double MotorStallF;$/;"	m	struct:_mtGlobal
-N	mtglobal.h	/^  int N; \/* the (maximum) number of MTs per two centrosomes *\/$/;"	m	struct:_mtGlobal
-NDIV	ran1_double.c	/^#define NDIV /;"	d	file:
-NN	mtglobal.h	/^  int NN;$/;"	m	struct:_mtGlobal
-NR_END	nrutil.c	/^#define NR_END /;"	d	file:
-NTAB	ran1_double.c	/^#define NTAB /;"	d	file:
-NumberOfMotor	mtglobal.h	/^  double *NumberOfMotor;$/;"	m	struct:_mtGlobal
-OBJS	Makefile	/^OBJS = $(patsubst %.c, %.o, $(wildcard *.c))$/;"	m
-OutProdVector	math_func.c	/^void OutProdVector(double vector1[3], double vector2[3], double result[3]) {$/;"	f
-PI	math_func.c	/^#define PI /;"	d	file:
-PI	mtsim.h	/^#define PI /;"	d
-PI	solve_1D_double.c	/^#define PI /;"	d	file:
-PROG	Makefile	/^PROG = mtsim$/;"	m
-Poisson	math_func.c	/^double Poisson(double np, int motornumber) {$/;"	f
-ProductJacVec	math_func.c	/^void ProductJacVec(double aa_out[3], double bb_jac[3][3], double cc_in[3]) {$/;"	f
-QuadEqu2	math_func.c	/^void QuadEqu2(double a[3], double b[2]) {$/;"	f
-RED	mtsim.h	/^#define RED /;"	d
-RNMX	ran1_double.c	/^#define RNMX /;"	d	file:
-SC3	mtsim.h	/^#define SC3 /;"	d
-SRCS	Makefile	/^SRCS = $(wildcard *.c)$/;"	m
-ST	mtsim.h	/^#define ST /;"	d
-Scale1	mtgraphics.h	/^  int Scale1;$/;"	m	struct:_mtGraphics
-Stokes_function	solve_1D_double.c	/^double Stokes_function(double ff, double gr, double fb)$/;"	f
-Stokes_rad	mtglobal.h	/^  double Stokes_rad;$/;"	m	struct:_mtGlobal
-Stokes_rotation	mtglobal.h	/^  double Stokes_rotation;$/;"	m	struct:_mtGlobal
-Stokes_translation	mtglobal.h	/^  double Stokes_translation;$/;"	m	struct:_mtGlobal
-SubVector	math_func.c	/^void SubVector(double vector1[3], double vector2[3], double result[3]) {$/;"	f
-TINY	ludcmp_double.c	/^#define TINY /;"	d	file:
-TRACE	mtsim.h	/^#define TRACE(/;"	d
-UNDER_LINE	mtsim.h	/^#define UNDER_LINE /;"	d
-UNITTIME	mtsim.h	/^#define UNITTIME /;"	d
-UnitVector	math_func.c	/^void UnitVector(double vector1[3], double vector2[3]) {$/;"	f
-VectorRotation	math_func.c	/^void VectorRotation(double out[3], double in[3], double rotAx[3], double rotStd[3], double degree) {$/;"	f
-Vg	mtglobal.h	/^  double Vg;$/;"	m	struct:_mtGlobal
-Visco	mtglobal.h	/^  double Visco;$/;"	m	struct:_mtGlobal
-WIN_HEIGHT	mtsim.h	/^#define WIN_HEIGHT /;"	d
-WIN_WIDTH	mtsim.h	/^#define WIN_WIDTH /;"	d
-YELLOW	mtsim.h	/^#define YELLOW /;"	d
-_NR_UTILS_H_	nrutil.h	/^#define _NR_UTILS_H_$/;"	d
-__mtglobal__	mtglobal.h	/^#define __mtglobal__$/;"	d
-__mtgraphics__	mtgraphics.h	/^#define __mtgraphics__$/;"	d
-__mtsim__	mtsim.h	/^#define __mtsim__$/;"	d
-_mtGlobal	mtglobal.h	/^typedef struct _mtGlobal {$/;"	s
-_mtGraphics	mtgraphics.h	/^typedef struct _mtGraphics {$/;"	s
-anaST	mtsim.h	/^#define anaST /;"	d
-att	mtgraphics.h	/^  XSetWindowAttributes att;$/;"	m	struct:_mtGraphics
-boolean	mtsim.h	/^#define boolean /;"	d
-boolean	mtsim.h	/^#undef boolean$/;"	d
-c1	mtgraphics.h	/^  XColor c1,c2,c3,c4,c5,cc;$/;"	m	struct:_mtGraphics
-c2	mtgraphics.h	/^  XColor c1,c2,c3,c4,c5,cc;$/;"	m	struct:_mtGraphics
-c3	mtgraphics.h	/^  XColor c1,c2,c3,c4,c5,cc;$/;"	m	struct:_mtGraphics
-c4	mtgraphics.h	/^  XColor c1,c2,c3,c4,c5,cc;$/;"	m	struct:_mtGraphics
-c5	mtgraphics.h	/^  XColor c1,c2,c3,c4,c5,cc;$/;"	m	struct:_mtGraphics
-cc	mtgraphics.h	/^  XColor c1,c2,c3,c4,c5,cc;$/;"	m	struct:_mtGraphics
-cm	mtgraphics.h	/^  Colormap cm;$/;"	m	struct:_mtGraphics
-color_setting	color_setting.c	/^void color_setting(mtGraphics *mtg, int p) {$/;"	f
-convert_matrix	nrutil.c	/^float **convert_matrix(a,nrl,nrh,ncl,nch)$/;"	f
-convert_matrix	nrutil.c	/^float **convert_matrix(float *a, long nrl, long nrh, long ncl, long nch)$/;"	f
-cvector	nrutil.c	/^unsigned char *cvector(long nl, long nh)$/;"	f
-cvector	nrutil.c	/^unsigned char *cvector(nl,nh)$/;"	f
-d	mtgraphics.h	/^  Display *d;$/;"	m	struct:_mtGraphics
-dT	mtsim.h	/^#define dT /;"	d
-dbg_printf	dbg_printf.c	/^void dbg_printf(const char *fmt, ...)$/;"	f
-debug	Makefile	/^debug := false$/;"	m
-display_setting	display_setting.c	/^void display_setting(mtGraphics *mtg) {$/;"	f
-dmatrix	nrutil.c	/^double **dmatrix(long nrl, long nrh, long ncl, long nch)$/;"	f
-dmatrix	nrutil.c	/^double **dmatrix(nrl,nrh,ncl,nch)$/;"	f
-draw_graphs	draw_graphs.c	/^void draw_graphs(int i, mtGraphics *mtg, mtGlobal *g, double PVecCen[2][3], double MT[][3], double Nuc[3], double Rad, double RadS, double MetaSpindle_L) {$/;"	f
-dvector	nrutil.c	/^double *dvector(long nl, long nh)$/;"	f
-dvector	nrutil.c	/^double *dvector(nl,nh)$/;"	f
-f3tensor	nrutil.c	/^float ***f3tensor(long nrl, long nrh, long ncl, long nch, long ndl, long ndh)$/;"	f
-f3tensor	nrutil.c	/^float ***f3tensor(nrl, nrh, ncl, nch, ndl, ndh)$/;"	f
-false	mtsim.h	/^#define false /;"	d
-fjac_pull	mtglobal.h	/^  double fjac_pull[6][6];$/;"	m	struct:_mtGlobal
-free_convert_matrix	nrutil.c	/^void free_convert_matrix(b, nrl, nrh, ncl, nch)$/;"	f
-free_convert_matrix	nrutil.c	/^void free_convert_matrix(float **b, long nrl, long nrh, long ncl, long nch)$/;"	f
-free_cvector	nrutil.c	/^void free_cvector(unsigned char *v, long nl, long nh)$/;"	f
-free_cvector	nrutil.c	/^void free_cvector(v,nl,nh)$/;"	f
-free_dmatrix	nrutil.c	/^void free_dmatrix(double **m, long nrl, long nrh, long ncl, long nch)$/;"	f
-free_dmatrix	nrutil.c	/^void free_dmatrix(m, nrl, nrh, ncl, nch)$/;"	f
-free_dvector	nrutil.c	/^void free_dvector(double *v, long nl, long nh)$/;"	f
-free_dvector	nrutil.c	/^void free_dvector(v,nl,nh)$/;"	f
-free_f3tensor	nrutil.c	/^void free_f3tensor(float ***t, long nrl, long nrh, long ncl, long nch, long ndl, long ndh)$/;"	f
-free_f3tensor	nrutil.c	/^void free_f3tensor(t,nrl, nrh, ncl, nch, ndl, ndh)$/;"	f
-free_imatrix	nrutil.c	/^void free_imatrix(int **m, long nrl, long nrh, long ncl, long nch)$/;"	f
-free_imatrix	nrutil.c	/^void free_imatrix(m, nrl, nrh, ncl, nch)$/;"	f
-free_ivector	nrutil.c	/^void free_ivector(int *v, long nl, long nh)$/;"	f
-free_ivector	nrutil.c	/^void free_ivector(v,nl,nh)$/;"	f
-free_lvector	nrutil.c	/^void free_lvector(unsigned long *v, long nl, long nh)$/;"	f
-free_lvector	nrutil.c	/^void free_lvector(v,nl,nh)$/;"	f
-free_matrix	nrutil.c	/^void free_matrix(float **m, long nrl, long nrh, long ncl, long nch)$/;"	f
-free_matrix	nrutil.c	/^void free_matrix(m, nrl, nrh, ncl, nch)$/;"	f
-free_return	free.c	/^void free_return(double *fvec, double **fjac, int n, double *p, int *indx) {$/;"	f
-free_submatrix	nrutil.c	/^void free_submatrix(b, nrl, nrh, ncl, nch)$/;"	f
-free_submatrix	nrutil.c	/^void free_submatrix(float **b, long nrl, long nrh, long ncl, long nch)$/;"	f
-free_vector	nrutil.c	/^void free_vector(float *v, long nl, long nh)$/;"	f
-free_vector	nrutil.c	/^void free_vector(v,nl,nh)$/;"	f
-function_FV3D	callback.c	/^void function_FV3D(double *x, int n, double *fvec, double **fjac, mtGlobal* g) {$/;"	f
-function_MotorFV	callback.c	/^void function_MotorFV(double *x, int n, double *fvec, double **fjac, mtGlobal* g) {$/;"	f
-function_anaMotorFV	callback.c	/^void function_anaMotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal* g) {$/;"	f
-function_laserMotorFV	callback.c	/^void function_laserMotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal* g) {$/;"	f
-gc1	mtgraphics.h	/^  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;$/;"	m	struct:_mtGraphics
-gc2	mtgraphics.h	/^  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;$/;"	m	struct:_mtGraphics
-gc3	mtgraphics.h	/^  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;$/;"	m	struct:_mtGraphics
-gc4	mtgraphics.h	/^  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;$/;"	m	struct:_mtGraphics
-gc5	mtgraphics.h	/^  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;$/;"	m	struct:_mtGraphics
-gc6	mtgraphics.h	/^  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;$/;"	m	struct:_mtGraphics
-gc7	mtgraphics.h	/^  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;$/;"	m	struct:_mtGraphics
-gc8	mtgraphics.h	/^  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;$/;"	m	struct:_mtGraphics
-gc9	mtgraphics.h	/^  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;$/;"	m	struct:_mtGraphics
-gc_clr	mtgraphics.h	/^  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;$/;"	m	struct:_mtGraphics
-getopt	my_getopt.h	/^int getopt(int argc, char **argv, char *opts)$/;"	f
-imatrix	nrutil.c	/^int **imatrix(long nrl, long nrh, long ncl, long nch)$/;"	f
-imatrix	nrutil.c	/^int **imatrix(nrl,nrh,ncl,nch)$/;"	f
-ivector	nrutil.c	/^int *ivector(long nl, long nh)$/;"	f
-ivector	nrutil.c	/^int *ivector(nl,nh)$/;"	f
-k_on	mtglobal.h	/^  double k_on;$/;"	m	struct:_mtGlobal
-laserST	mtsim.h	/^#define laserST /;"	d
-lubksb	lubksb_double.c	/^void lubksb(double **a, int n, int *indx, double b[])$/;"	f
-ludcmp	ludcmp_double.c	/^void ludcmp(double **a, int n, int *indx, double *d)$/;"	f
-lvector	nrutil.c	/^unsigned long *lvector(long nl, long nh)$/;"	f
-lvector	nrutil.c	/^unsigned long *lvector(nl,nh)$/;"	f
-main	main.c	/^int main(int argc, char* argv[]) {$/;"	f
-matrix	nrutil.c	/^float **matrix(long nrl, long nrh, long ncl, long nch)$/;"	f
-matrix	nrutil.c	/^float **matrix(nrl,nrh,ncl,nch)$/;"	f
-metaST	mtsim.h	/^#define metaST /;"	d
-mnewt	mnewt.c	/^boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf,$/;"	f
-mtGlobal	mtglobal.h	/^} mtGlobal;$/;"	t	typeref:struct:_mtGlobal
-mtGraphics	mtgraphics.h	/^} mtGraphics;$/;"	t	typeref:struct:_mtGraphics
-mt_end	mtglobal.h	/^  int mt_end;$/;"	m	struct:_mtGlobal
-mt_start	mtglobal.h	/^  int mt_start;$/;"	m	struct:_mtGlobal
-nrerror	nrutil.c	/^void nrerror(char error_text[])$/;"	f
-nrerror	nrutil.c	/^void nrerror(error_text)$/;"	f
-optarg	my_getopt.h	/^char	*optarg;$/;"	v
-opterr	my_getopt.h	/^int	opterr = 1;$/;"	v
-optind	my_getopt.h	/^int	optind = 1;$/;"	v
-optopt	my_getopt.h	/^int	optopt;$/;"	v
-phase	mtglobal.h	/^  unsigned char *phase;$/;"	m	struct:_mtGlobal
-phase_transition_count	mtglobal.h	/^  unsigned int phase_transition_count;$/;"	m	struct:_mtGlobal
-pixmap	mtgraphics.h	/^  Pixmap pixmap;$/;"	m	struct:_mtGraphics
-pulling_phase	mtglobal.h	/^  unsigned char *pulling_phase;$/;"	m	struct:_mtGlobal
-pushing_phase	mtglobal.h	/^  unsigned char *pushing_phase;$/;"	m	struct:_mtGlobal
-ran1	ran1_double.c	/^double ran1(long *idum)$/;"	f
-rtsafe	solve_1D_double.c	/^double rtsafe(void (*funcd)(double, double*, double*, mtGlobal*), double x1, double x2, double xacc, mtGlobal* g)$/;"	f
-rtsafe_mod	solve_1D_double.c	/^double rtsafe_mod(void (*funcd)(double, double *, double *, mtGlobal*), double x1, double x2, double xacc, mtGlobal* g)$/;"	f
-save_logs	save_logs.c	/^void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FILE* f_out4, FILE* f_out5, FILE* f_out6, FILE* data_for_3D, double PVecCen[2][3], double MT[][3]) {$/;"	f
-store_graphs	store_graphs.c	/^void store_graphs(void) {$/;"	f
-submatrix	nrutil.c	/^float **submatrix(a,oldrl,oldrh,oldcl,oldch,newrl,newcl)$/;"	f
-submatrix	nrutil.c	/^float **submatrix(float **a, long oldrl, long oldrh, long oldcl, long oldch, long newrl, long newcl)$/;"	f
-true	mtsim.h	/^#define true /;"	d
-u	mtglobal.h	/^  double **u;$/;"	m	struct:_mtGlobal
-usage	usage.c	/^void usage(char* myname) {$/;"	f
-vector	nrutil.c	/^float *vector(long nl, long nh)$/;"	f
-vector	nrutil.c	/^float *vector(nl,nh)$/;"	f
-w1	mtgraphics.h	/^  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;$/;"	m	struct:_mtGraphics
-w2	mtgraphics.h	/^  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;$/;"	m	struct:_mtGraphics
-w3	mtgraphics.h	/^  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;$/;"	m	struct:_mtGraphics
-w4	mtgraphics.h	/^  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;$/;"	m	struct:_mtGraphics
-w5	mtgraphics.h	/^  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;$/;"	m	struct:_mtGraphics
-w6	mtgraphics.h	/^  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;$/;"	m	struct:_mtGraphics
-w7	mtgraphics.h	/^  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;$/;"	m	struct:_mtGraphics
-w8	mtgraphics.h	/^  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;$/;"	m	struct:_mtGraphics
-w9	mtgraphics.h	/^  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;$/;"	m	struct:_mtGraphics
+
+callback.c,447
+void function_FV3D(double *x, int n, double *fvec, double **fjac, mtGlobal* g) {function_FV3D9,198
+void function_MotorFV(double *x, int n, double *fvec, double **fjac, mtGlobal* g) {function_MotorFV55,1486
+void function_laserMotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal* g) {function_laserMotorFV93,2722
+void function_anaMotorFV (double *x, int n, double *fvec, double **fjac, mtGlobal* g) {function_anaMotorFV129,3862
+
+color_setting.c,66
+void color_setting(mtGraphics *mtg, int p) {color_setting11,390
+
+dbg_printf.c,56
+void dbg_printf(const char *fmt, ...)dbg_printf17,748
+
+display_setting.c,63
+void display_setting(mtGraphics *mtg) {display_setting10,259
+
+draw_graphs.c,175
+void draw_graphs(int i, mtGraphics *mtg, mtGlobal *g, double PVecCen[2][3], double MT[][3], double Nuc[3], double Rad, double RadS, double MetaSpindle_L) {draw_graphs11,508
+
+free.c,95
+void free_return(double *fvec, double **fjac, int n, double *p, int *indx) {free_return8,174
+
+fv_solution.c,89
+void FV_solution(double xx, double *f_v, double *fp_v, mtGlobal* g) {FV_solution10,202
+
+lubksb_double.c,67
+void lubksb(double **a, int n, int *indx, double b[])lubksb9,239
+
+ludcmp_double.c,92
+#define TINY TINY8,238
+void ludcmp(double **a, int n, int *indx, double *d)ludcmp10,261
+
+main.c,47
+int main(int argc, char* argv[]) {main20,531
+
+math_func.c,968
+#define PI PI14,335
+double Length(double a[3]) {Length17,411
+void UnitVector(double vector1[3], double vector2[3]) {UnitVector25,565
+void MakeRotationMatrix(double RotationMatrix[3][3], double RotationVector[3], double dt) {MakeRotationMatrix35,738
+void AddVector(double vector1[3], double vector2[3], double result[3]) {AddVector69,2013
+void SubVector(double vector1[3], double vector2[3], double result[3]) {SubVector78,2228
+double InnProdVector(double vector1[3], double vector2[3]) {InnProdVector87,2443
+void OutProdVector(double vector1[3], double vector2[3], double result[3]) {OutProdVector95,2676
+void QuadEqu2(double a[3], double b[2]) {QuadEqu2103,2992
+void ProductJacVec(double aa_out[3], double bb_jac[3][3], double cc_in[3]) {ProductJacVec126,3519
+void VectorRotation(double out[3], double in[3], double rotAx[3], double rotStd[3], double degree) {VectorRotation142,4192
+double Poisson(double np, int motornumber) {Poisson177,5184
+
+mnewt.c,84
+boolean mnewt(int ntrial, double x[], int n, double tolx, double tolf,mnewt12,321
+
+nrutil.c,3170
+#define NR_END NR_END14,368
+#define FREE_ARG FREE_ARG15,385
+void nrerror(char error_text[])nrerror18,410
+float *vector(long nl, long nh)vector28,653
+int *ivector(long nl, long nh)ivector38,903
+unsigned char *cvector(long nl, long nh)cvector48,1146
+unsigned long *lvector(long nl, long nh)lvector58,1439
+double *dvector(long nl, long nh)dvector68,1732
+float **matrix(long nrl, long nrh, long ncl, long nch)matrix78,1989
+double **dmatrix(long nrl, long nrh, long ncl, long nch)dmatrix103,2686
+int **imatrix(long nrl, long nrh, long ncl, long nch)imatrix128,3393
+float **submatrix(float **a, long oldrl, long oldrh, long oldcl, long oldch, long newrl, long newcl)submatrix153,4080
+float **convert_matrix(float *a, long nrl, long nrh, long ncl, long nch)convert_matrix173,4670
+float ***f3tensor(long nrl, long nrh, long ncl, long nch, long ndl, long ndh)f3tensor194,5402
+void free_vector(float *v, long nl, long nh)free_vector230,6570
+void free_ivector(int *v, long nl, long nh)free_ivector237,6705
+void free_cvector(unsigned char *v, long nl, long nh)free_cvector244,6839
+void free_lvector(unsigned long *v, long nl, long nh)free_lvector251,6993
+void free_dvector(double *v, long nl, long nh)free_dvector258,7147
+void free_matrix(float **m, long nrl, long nrh, long ncl, long nch)free_matrix265,7286
+void free_dmatrix(double **m, long nrl, long nrh, long ncl, long nch)free_dmatrix273,7485
+void free_imatrix(int **m, long nrl, long nrh, long ncl, long nch)free_imatrix281,7688
+void free_submatrix(float **b, long nrl, long nrh, long ncl, long nch)free_submatrix289,7886
+void free_convert_matrix(float **b, long nrl, long nrh, long ncl, long nch)free_convert_matrix296,8048
+void free_f3tensor(float ***t, long nrl, long nrh, long ncl, long nch, long ndl, long ndh)free_f3tensor303,8225
+#define NR_END NR_END316,8555
+#define FREE_ARG FREE_ARG317,8572
+void nrerror(error_text)nrerror320,8597
+float *vector(nl,nh)vector332,8867
+int *ivector(nl,nh)ivector343,9118
+unsigned char *cvector(nl,nh)cvector354,9362
+unsigned long *lvector(nl,nh)lvector365,9656
+double *dvector(nl,nh)dvector376,9950
+float **matrix(nrl,nrh,ncl,nch)matrix387,10208
+double **dmatrix(nrl,nrh,ncl,nch)dmatrix413,10907
+int **imatrix(nrl,nrh,ncl,nch)imatrix439,11616
+float **submatrix(a,oldrl,oldrh,oldcl,oldch,newrl,newcl)submatrix465,12305
+float **convert_matrix(a,nrl,nrh,ncl,nch)convert_matrix487,12909
+float ***f3tensor(nrl, nrh, ncl, nch, ndl, ndh)f3tensor510,13645
+void free_vector(v,nl,nh)free_vector547,14817
+void free_ivector(v,nl,nh)free_ivector556,14956
+void free_cvector(v,nl,nh)free_cvector565,15094
+void free_lvector(v,nl,nh)free_lvector574,15252
+void free_dvector(v,nl,nh)free_dvector583,15410
+void free_matrix(m, nrl, nrh, ncl, nch)free_matrix592,15553
+void free_dmatrix(m, nrl, nrh, ncl, nch)free_dmatrix602,15760
+void free_imatrix(m, nrl, nrh, ncl, nch)free_imatrix612,15971
+void free_submatrix(b, nrl, nrh, ncl, nch)free_submatrix622,16177
+void free_convert_matrix(b, nrl, nrh, ncl, nch)free_convert_matrix631,16347
+void free_f3tensor(t,nrl, nrh, ncl, nch, ndl, ndh)free_f3tensor640,16532
+
+ran1_double.c,248
+#define IA IA12,408
+#define IM IM13,425
+#define AM AM14,447
+#define IQ IQ15,467
+#define IR IR16,485
+#define NTAB NTAB17,501
+#define NDIV NDIV18,517
+#define EPS EPS19,546
+#define RNMX RNMX20,565
+double ran1(long *idum)ran122,589
+
+save_logs.c,196
+void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FILE* f_out4, FILE* f_out5, FILE* f_out6, FILE* data_for_3D, double PVecCen[2][3], double MT[][3]) {save_logs10,295
+
+solve_1D_double.c,476
+#define MAXIT MAXIT7,173
+#define PI PI8,191
+double Stokes_function(double ff, double gr, double fb)Stokes_function10,229
+double FV_function(double ff, double vg, double ko, double fd)FV_function17,347
+double rtsafe(void (*funcd)(double, double*, double*, mtGlobal*), double x1, double x2, double xacc, mtGlobal* g)rtsafe24,485
+double rtsafe_mod(void (*funcd)(double, double *, double *, mtGlobal*), double x1, double x2, double xacc, mtGlobal* g)rtsafe_mod72,1597
+
+store_graphs.c,46
+void store_graphs(void) {store_graphs10,233
+
+usage.c,39
+void usage(char* myname) {usage8,147
+
+mtglobal.h,1282
+#define __mtglobal____mtglobal__8,176
+typedef struct _mtGlobal {_mtGlobal11,260
+  int N; /* the (maximum) number of MTs per two centrosomes */N12,287
+  int NN;NN13,350
+  double *L;L14,360
+  double Buckling_forward_sum;Buckling_forward_sum15,373
+  double Buckling_backward_sum;Buckling_backward_sum16,404
+  double Stokes_rad;Stokes_rad17,436
+  double Visco;Visco18,457
+  double Stokes_rotation;Stokes_rotation19,473
+  double Stokes_translation;Stokes_translation20,499
+  double **DVecNucCen;DVecNucCen21,528
+  double Vg;Vg22,551
+  double k_on;k_on23,564
+  double F_dependency;F_dependency24,579
+  double **u;u25,602
+  unsigned char *pushing_phase;pushing_phase26,616
+  unsigned char *pulling_phase;pulling_phase27,648
+  unsigned char *phase;phase28,680
+  double Fbuckle[3];Fbuckle29,704
+  double Fbackward[6];Fbackward30,725
+  double fjac_pull[6][6];fjac_pull31,748
+  double BucklingConst;BucklingConst32,774
+  double *NumberOfMotor;NumberOfMotor33,798
+  unsigned int phase_transition_count;phase_transition_count34,823
+  double MotorDensity;MotorDensity35,862
+  double MotorMaxVel;MotorMaxVel36,885
+  double MotorStallF;MotorStallF37,907
+  int mt_start;mt_start38,929
+  int mt_end;mt_end39,945
+} mtGlobal;mtGlobal40,959
+
+mtgraphics.h,1614
+#define __mtgraphics____mtgraphics__7,177
+typedef struct _mtGraphics {_mtGraphics12,247
+  int Scale1;Scale113,276
+  Display *d;d14,290
+  Colormap cm;cm15,304
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w116,319
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w216,319
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w316,319
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w416,319
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w516,319
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w616,319
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w716,319
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w816,319
+  Window w1,w2,w3,w4,w5,w6,w7,w8,w9;w916,319
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc117,356
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc217,356
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc317,356
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc417,356
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc517,356
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc617,356
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc717,356
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc817,356
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc917,356
+  GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc_clr17,356
+  Pixmap pixmap;pixmap18,414
+  XSetWindowAttributes att;att19,431
+  XColor c1,c2,c3,c4,c5,cc;c120,459
+  XColor c1,c2,c3,c4,c5,cc;c220,459
+  XColor c1,c2,c3,c4,c5,cc;c320,459
+  XColor c1,c2,c3,c4,c5,cc;c420,459
+  XColor c1,c2,c3,c4,c5,cc;c520,459
+  XColor c1,c2,c3,c4,c5,cc;cc20,459
+} mtGraphics;mtGraphics21,487
+
+mtsim.h,967
+#define __mtsim____mtsim__8,173
+#define false false19,354
+#define true true20,370
+#define DEBUG_PRINT_FLAG DEBUG_PRINT_FLAG24,423
+#define DEBUG_PRINT_FLAG DEBUG_PRINT_FLAG26,456
+#define TRACE(TRACE29,491
+#define true true32,576
+#define false false33,591
+#undef booleanboolean35,622
+#define boolean boolean37,644
+#define RED RED40,677
+#define GREEN GREEN41,704
+#define YELLOW YELLOW42,731
+#define BLUE BLUE43,758
+#define MAGENTA MAGENTA44,785
+#define CYAN CYAN45,812
+#define DEFAULT DEFAULT46,839
+#define UNDER_LINE UNDER_LINE47,866
+#define BOLD BOLD48,897
+#define FONT_DEFAULT FONT_DEFAULT49,928
+#define PI PI52,1003
+#define WIN_WIDTH WIN_WIDTH53,1041
+#define WIN_HEIGHT WIN_HEIGHT54,1095
+#define SC3 SC355,1150
+#define UNITTIME UNITTIME56,1204
+#define ST ST58,1345
+#define laserST laserST59,1413
+#define anaST anaST60,1489
+#define metaST metaST61,1562
+#define dT dT62,1671
+#define Cir_Rad Cir_Rad66,1934
+
+my_getopt.h,204
+#define ERR(ERR27,1050
+int	opterr = 1;opterr29,1133
+int	optind = 1;optind30,1149
+int	optopt;optopt31,1165
+char	*optarg;optarg32,1177
+int getopt(int argc, char **argv, char *opts)getopt34,1192
+
+nrutil.h,40
+#define _NR_UTILS_H__NR_UTILS_H_9,241

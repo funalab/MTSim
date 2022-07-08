@@ -29,5 +29,5 @@ $(PROG): $(OBJS)
 clean: 
 	rm -f $(PROG) $(OBJS)
 
-#TAGS: $(SRCS) $(HEADERS)
-	#ctags -Re *.c *.h
+TAGS: $(SRCS) $(HEADERS)
+	ctags -Re *.c *.h
