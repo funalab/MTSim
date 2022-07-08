@@ -54,8 +54,8 @@ def main():
     # path
     data_path = os.path.join(
         os.path.abspath('../../../'))
-    fixed_path = os.path.join(data_path, 'Analysis_ElongatedSpindle', 'Result','Simulation', 'Cel_MTFixed.csv')
-    variable_path = os.path.join(data_path,'Analysis_ElongatedSpindle','Result','Simulation', 'Cel_MTVariable.csv')
+    fixed_path = os.path.join(data_path, 'Analysis_ElongatedSpindle', 'Result','Simulation', 'Su_MTFixed.csv')
+    variable_path = os.path.join(data_path,'Analysis_ElongatedSpindle','Result','Simulation', 'Su_MTVariable.csv')
     exp_path = os.path.join(data_path,'Experiment_ElongatedSpindle' ,'exp_su.csv')
 
     # read data
