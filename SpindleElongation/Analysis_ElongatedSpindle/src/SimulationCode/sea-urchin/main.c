@@ -201,7 +201,7 @@ int main(int argc, char* argv[]) {
 
   printf ("#aspect_ratio,Rad,RadS,MetaSpindle_L,spindle_length,time[sec],spindle_length/(Rad*2)\n");
   fprintf (f_out_someaspect,"#aspect_ratio,Rad,RadS,MetaSpindle_L,spindle_length,time[sec],spindle_length/(Rad*2)\n");
-  for (p=0; p<6; p++) {
+  for (p=0; p<7; p++) {
     switch (p) {
       case 0: /*orange*/
         aspect_ratio = 1.0;
