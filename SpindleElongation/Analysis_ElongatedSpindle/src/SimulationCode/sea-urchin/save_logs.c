@@ -7,7 +7,7 @@
  */
 #include "mtsim.h"
 
-void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FILE* f_out4, FILE* f_out5, FILE* f_out6, FILE* data_for_3D, double PVecCen[2][3], double MT[][3]) {
+void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FILE* f_out4, FILE* f_out5, FILE* f_out6, FILE* f_out7, FILE* data_for_3D, double PVecCen[2][3], double MT[][3]) {
   int m;
   FILE* f_out;
   // OUTPUT LOGSoutput per every single timepoint (20timepoints=1sec)
@@ -30,6 +30,9 @@ void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FI
         break;
       case 5:
         f_out = f_out6;
+        break;
+      case 6:
+        f_out = f_out7;
         break;
       /* case 6: */
       /*   f_out = f_out7; */

@@ -114,8 +114,8 @@ ran1_double.c,248
 #define RNMX RNMX20,565
 double ran1(long *idum)ran122,589
 
-save_logs.c,196
-void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FILE* f_out4, FILE* f_out5, FILE* f_out6, FILE* data_for_3D, double PVecCen[2][3], double MT[][3]) {save_logs10,295
+save_logs.c,210
+void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FILE* f_out4, FILE* f_out5, FILE* f_out6, FILE* f_out7, FILE* data_for_3D, double PVecCen[2][3], double MT[][3]) {save_logs10,295
 
 solve_1D_double.c,476
 #define MAXIT MAXIT7,173
@@ -164,7 +164,7 @@ typedef struct _mtGlobal {_mtGlobal11,260
   int mt_end;mt_end39,945
 } mtGlobal;mtGlobal40,959
 
-mtgraphics.h,1614
+mtgraphics.h,1673
 #define __mtgraphics____mtgraphics__7,177
 typedef struct _mtGraphics {_mtGraphics12,247
   int Scale1;Scale113,276
@@ -191,13 +191,14 @@ typedef struct _mtGraphics {_mtGraphics12,247
   GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;gc_clr17,356
   Pixmap pixmap;pixmap18,414
   XSetWindowAttributes att;att19,431
-  XColor c1,c2,c3,c4,c5,cc;c120,459
-  XColor c1,c2,c3,c4,c5,cc;c220,459
-  XColor c1,c2,c3,c4,c5,cc;c320,459
-  XColor c1,c2,c3,c4,c5,cc;c420,459
-  XColor c1,c2,c3,c4,c5,cc;c520,459
-  XColor c1,c2,c3,c4,c5,cc;cc20,459
-} mtGraphics;mtGraphics21,487
+  XColor c1,c2,c3,c4,c5,c6,cc;c120,459
+  XColor c1,c2,c3,c4,c5,c6,cc;c220,459
+  XColor c1,c2,c3,c4,c5,c6,cc;c320,459
+  XColor c1,c2,c3,c4,c5,c6,cc;c420,459
+  XColor c1,c2,c3,c4,c5,c6,cc;c520,459
+  XColor c1,c2,c3,c4,c5,c6,cc;c620,459
+  XColor c1,c2,c3,c4,c5,c6,cc;cc20,459
+} mtGraphics;mtGraphics21,490
 
 mtsim.h,967
 #define __mtsim____mtsim__8,173

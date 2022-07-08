@@ -17,7 +17,7 @@ typedef struct _mtGraphics {
   GC gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc_clr;
   Pixmap pixmap;
   XSetWindowAttributes att;
-  XColor c1,c2,c3,c4,c5,cc;
+  XColor c1,c2,c3,c4,c5,c6,cc;
 } mtGraphics;
 
 #endif

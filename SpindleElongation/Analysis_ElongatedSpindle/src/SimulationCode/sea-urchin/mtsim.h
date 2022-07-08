@@ -115,13 +115,13 @@ void store_graphs(void);
 
 /* save_logs.c */
 /* void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FILE* f_out4, FILE* f_out5, FILE* f_out6, FILE* f_out7, FILE* f_out8, FILE* f_out9, FILE* f_out10, FILE* data_for_3D, double Nuc[3], double PVecCen[2][3], double MT[][3]); */
-void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FILE* f_out4, FILE* f_out5, FILE* f_out6, FILE* data_for_3D, double PVecCen[2][3], double MT[][3]);
+void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FILE* f_out4, FILE* f_out5, FILE* f_out6, FILE* f_out7, FILE* data_for_3D, double PVecCen[2][3], double MT[][3]);
 
 /* free.c */
 void free_return(double *fvec, double **fjac, int n, double *p, int *indx);
 
 /* draw_graphs.c */
-/* void draw_graphs(int i, mtGraphics *mtg, mtGlobal *g, double PVecCen[2][3], double MT[][3], double Nuc[3], double DistanceFromPP, double min, double max, double sum, int currentN, double OldVel, double NewVel); */
+/* void draw_graphs(int i, mtGrahics *mtg, mtGlobal *g, double PVecCen[2][3], double MT[][3], double Nuc[3], double DistanceFromPP, double min, double max, double sum, int currentN, double OldVel, double NewVel); */
 void draw_graphs(int i, mtGraphics *mtg, mtGlobal *g, double PVecCen[2][3], double MT[][3], double Nuc[3], double Rad, double RadS, double MetaSpindle_L);
 
 /* display_setting.c */

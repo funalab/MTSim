@@ -67,6 +67,7 @@ int main(int argc, char* argv[]) {
   FILE *f_out4 = fopen("out04.csv","w");
   FILE *f_out5 = fopen("out05.csv","w");
   FILE *f_out6 = fopen("out06.csv","w");
+  FILE *f_out7 = fopen("out07.csv","w");
   FILE *f_out_someaspect = fopen("out_someaspect.csv","w");
   FILE *f_out_param = fopen("out_parameter.dat","w");
   FILE *f_out_mtnum = fopen("out_MTnumber.dat","w");
@@ -383,7 +384,7 @@ int main(int argc, char* argv[]) {
       /* draw graphs in X-window */
       draw_graphs(step_counter, &mtg, &g, PVecCen, MT, Nuc, Rad, RadS, MetaSpindle_L);
       /* save logs in texts */
-      save_logs(step_counter, p, g.N, f_out1, f_out2, f_out3, f_out4, f_out5, f_out6, f_out_for3d, PVecCen, MT);
+      save_logs(step_counter, p, g.N, f_out1, f_out2, f_out3, f_out4, f_out5, f_out6, f_out7, f_out_for3d, PVecCen, MT);
     /* } while ((step_counter<100000000) && (0.1*pow(10,-6)<sqrt(pow(CenVel[0][0+1]-CenVel[1][0+1],2))*10)); */
     } while ((step_counter<100000000) && (1.0*pow(10,-11)<fabs(CenVel[0][0+1]-CenVel[1][0+1])));
 
@@ -408,6 +409,7 @@ int main(int argc, char* argv[]) {
   fclose(f_out4);
   fclose(f_out5);
   fclose(f_out6);
+  fclose(f_out7);
   fclose(f_out_someaspect);
   fclose(f_out_param);
   fclose(f_out_for3d);

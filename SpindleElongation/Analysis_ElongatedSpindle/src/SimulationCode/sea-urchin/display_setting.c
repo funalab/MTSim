@@ -22,6 +22,8 @@ void display_setting(mtGraphics *mtg) {
   XAllocNamedColor(d,cm,"green", &mtg->c3, &mtg->cc);
   XAllocNamedColor(d,cm,"orange", &mtg->c4, &mtg->cc);
   XAllocNamedColor(d,cm,"red", &mtg->c5, &mtg->cc);
+  XAllocNamedColor(d,cm,"red", &mtg->c6, &mtg->cc);
+
   mtg->w1 = XCreateSimpleWindow(d, RootWindow(d,0), 5, 5, WIN_WIDTH, WIN_HEIGHT, 2, WhitePixel(d,0), WhitePixel(d,0));
   mtg->w2 = XCreateSimpleWindow(d, RootWindow(d,0), 10+WIN_WIDTH, 5, WIN_WIDTH, WIN_HEIGHT, 2, WhitePixel(d,0), WhitePixel(d,0));
   mtg->w3 = XCreateSimpleWindow(d, RootWindow(d,0), 5, 10+WIN_HEIGHT, WIN_WIDTH, WIN_HEIGHT, 2, BlackPixel(d,0), WhitePixel(d,0));
