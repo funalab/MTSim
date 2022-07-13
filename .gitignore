@@ -1,6 +1,74 @@
+# Created by https://www.toptal.com/developers/gitignore/api/python,r,c,macos,windows,linux
+# Edit at https://www.toptal.com/developers/gitignore?templates=python,r,c,macos,windows,linux
 
-# Created by https://www.toptal.com/developers/gitignore/api/python,r,macos
-# Edit at https://www.toptal.com/developers/gitignore?templates=python,r,macos
+### C ###
+# Prerequisites
+*.d
+
+# Object files
+*.o
+*.ko
+*.obj
+*.elf
+
+# Linker output
+*.ilk
+*.map
+*.exp
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Libraries
+*.lib
+*.a
+*.la
+*.lo
+
+# Shared objects (inc. Windows DLLs)
+*.dll
+*.so
+*.so.*
+*.dylib
+
+# Executables
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+# Kernel Module Compile Results
+*.mod*
+*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
+
+### Linux ###
+*~
+
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+# .nfs files are created when an open file is removed but is still being accessed
+.nfs*
 
 ### macOS ###
 # General
@@ -30,6 +98,10 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+### macOS Patch ###
+# iCloud generated files
+*.icloud
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -37,7 +109,6 @@ __pycache__/
 *$py.class
 
 # C extensions
-*.so
 
 # Distribution / packaging
 .Python
@@ -53,7 +124,6 @@ parts/
 sdist/
 var/
 wheels/
-pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
 .installed.cfg
@@ -83,7 +153,7 @@ coverage.xml
 *.py,cover
 .hypothesis/
 .pytest_cache/
-pytestdebug.log
+cover/
 
 # Translations
 *.mo
@@ -104,9 +174,9 @@ instance/
 
 # Sphinx documentation
 docs/_build/
-doc/_build/
 
 # PyBuilder
+.pybuilder/
 target/
 
 # Jupyter Notebook
@@ -117,7 +187,9 @@ profile_default/
 ipython_config.py
 
 # pyenv
-.python-version
+#   For a library or package, you might want to ignore these files since the code is
+#   intended to run in multiple environments; otherwise, check them in:
+# .python-version
 
 # pipenv
 #   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
@@ -126,7 +198,22 @@ ipython_config.py
 #   install all needed dependencies.
 #Pipfile.lock
 
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow
+# poetry
+#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
+#   This is especially recommended for binary packages to ensure reproducibility, and is more
+#   commonly ignored for libraries.
+#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
+#poetry.lock
+
+# pdm
+#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
+#pdm.lock
+#   pdm stores project-wide configurations in .pdm.toml, but it is recommended to not include it
+#   in version control.
+#   https://pdm.fming.dev/#use-with-ide
+.pdm.toml
+
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
 __pypackages__/
 
 # Celery stuff
@@ -144,7 +231,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-pythonenv*
 
 # Spyder project settings
 .spyderproject
@@ -167,8 +253,15 @@ dmypy.json
 # pytype static type analyzer
 .pytype/
 
-# profiling data
-.prof
+# Cython debug symbols
+cython_debug/
+
+# PyCharm
+#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
+#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
+#  and can be added to the global gitignore or merged into this file.  For a more nuclear
+#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
+#.idea/
 
 ### R ###
 # History files
@@ -177,6 +270,7 @@ dmypy.json
 
 # Session Data files
 .RData
+.RDataTmp
 
 # User-specific files
 .Ruserdata
@@ -211,9 +305,46 @@ vignettes/*.pdf
 # R Environment Variables
 .Renviron
 
+# pkgdown site
+docs/
+
+# translation temp files
+po/*~
+
+# RStudio Connect folder
+rsconnect/
+
 ### R.Bookdown Stack ###
 # R package: bookdown caching files
 /*_files/
+
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# End of https://www.toptal.com/developers/gitignore/api/python,r,c,macos,windows,linux
 
 # Output files
 out*
@@ -221,4 +352,3 @@ result.csv
 
 # Binary files
 mtsim
-a.out
