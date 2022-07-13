@@ -1,13 +1,12 @@
 # Switching from weak to strong cortical attachment of microtubules accounts for the transition from nuclear centration to spindle elongation in metazoans
 
-================
-
+## Authors
 - Shohei Tada: <>;
 - Yoshitaka Yamazaki: <>;
 - Takahiro G Yamada: <yamada@fun.bio.keio.ac.jp>;
 - Akira Funahashi: <funa@bio.keio.ac.jp>;
 
-Last Modified: Wed, 13 Jul 2022 23:30:23 +0900
+Last Modified: Wed, 13 Jul 2022 23:32:52 +0900
 
 Copyright (c) 2013-2022 Funahashi Lab., Keio University.
 
