@@ -7,11 +7,11 @@ CC = gcc
 
 UNAME_S := $(shell uname -s)
 ifeq ($(UNAME_S),Darwin)
-		CFLAGS += -Wall -O0 -g -I/opt/local/include
-		LDFLAGS = -L/opt/local/lib -lX11 -lm
+	CFLAGS += -Wall -O0 -g -I/opt/local/include
+	LDFLAGS = -L/opt/local/lib -lX11 -lm
 else
-		CFLAGS += -Wall -O0 -g -I/usr/X11R6/include
-		LDFLAGS = -L/usr/X11R6/lib -lX11 -lm
+	CFLAGS += -Wall -O0 -g -I/usr/X11R6/include
+	LDFLAGS = -L/usr/X11R6/lib -lX11 -lm
 endif
 
 debug := false
