@@ -6,7 +6,7 @@
 - Takahiro G Yamada: <yamada@fun.bio.keio.ac.jp>;
 - Akira Funahashi: <funa@bio.keio.ac.jp>;
 
-Last Modified: Wed, 13 Jul 2022 23:54:40 +0900
+Last Modified: Thu, 14 Jul 2022 00:16:16 +0900
 
 Copyright (c) 2013-2022 Funahashi Lab., Keio University.
 
@@ -19,6 +19,7 @@ This program simulates centrosome movement based on a mechanical model for two p
 - gcc  (confirmed to work with 11.3.0)
 - X11 (confirmed to work with 1.20.11)
 - xwd (confirmed to work with 1.0.8)
+- ImageMagick (confirmed to work with 6.9.11-60)
 - python3 (confirmed to work with 3.9.12)
   - py39-matplotlib (confirmed to work with 0.1.3_0)
   - py39-pandas (confirmed to work with 1.3.3_0)
