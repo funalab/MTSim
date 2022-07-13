@@ -4,18 +4,29 @@
 
 - Akira Funahashi: <funa@bio.keio.ac.jp>;
 
-Last Modified: Tue, 05 Jul 2022 23:49:01 +0900
+Last Modified: Wed, 13 Jul 2022 22:02:13 +0900
 
 Copyright (c) 2013-2022 Funahashi Lab., Keio University.
 
 ## Introduction
 This program simulates centrosome movement based on a mechanical model for two phenomena, centrosome centralization and spindle elongation, observed in the first cell division of fertilized eggs of C. elegans and sea urchins. In particular, the mechanical model in this program considers the force associated with the contact of microtubules extending from the centrosome with the cell membrane as the central force, and constructs a model in which the angle of microtubules is fixed (MTFixed) due to the weak coupling of these microtubules with the cell membrane, and a model in which the angle is variable (MTVariable) due to the strong coupling of microtubules with the cell membrane.
 ## All code and how to use
+### Requirements
+- make (3.81)
+- ctags (5.8)
+- gcc  (11.3.0)
+- X11 (1.20.11)
+- python3 (3.9.12)
+	- py39-matplotlib (0.1.3_0)
+	- py39-pandas (1.3.3_0)
+- R (4.0.4)
+- gnuplot (5.4)
+ 
+
 ### NCCCentration
 This program performs simulation and analysis of the movement and rotation of the centrosome in the nucleus-centrosome complex centralization based on MT Fixed and MT Variable. Analysi\_MovementAngle compares the steady state between MT Fixed and MT Variable for the translation and rotation of the central body, and Analysis_SteadyState analyzes the steady state for a wide range of initial positions and rotation angles for the centrosome.
 
 #### Analysis_MovementAngle
-##### Requirements
 ##### How to use
 ```sh
 % cd NCCCentration/Analysis_MovementAngle/
@@ -39,7 +50,6 @@ This program performs simulation and analysis of the movement and rotation of th
 	Results of the Wilcoxon rank sum test for steady-state movement distance and rotation angle for simulations of centrosome movement based on MTFixed and MTVariable
 	
 #### Analysis_SteadyState
-##### Requirements
 ##### How to use
 ```sh
 % cd NCCCentration/Analysis_SteadyState
@@ -63,7 +73,6 @@ This program performs simulation and analysis of the movement and rotation of th
 ### SpindleElongation
 This program simulates the movement of the nuclus-centrosome complex in spindle elongation based on MT Fixed and MT Variable and compares their steady states. The steady-state comparison is performed by changing the shape of the embryo in which the nucleus-centrosome complex exists in terms of aspect ratio, which is the ratio of the long axis to the short axis, over a wide range.
 #### Analysis_ElongatedSpindle
-##### Requirements
 ##### How to use
 ```sh
 % cd cd SpindleElongation/Analysis_ElongatedSpindle/
@@ -80,6 +89,19 @@ This program simulates the movement of the nuclus-centrosome complex in spindle 
 - ``SpindleElongation/Analysis_ElongatedSpindle/Result/Analysis/Su_sim_vs_exp.pdf``
 
 	Steady-state positions obtained from simulations of centrosome movement during spindle elongation based on MTFixed and MTVariable in embryos of various aspect ratios for sea urchin compared to those obtained from experiments.	
+
+####  Experiment_ElongatedSpindle
+The directory stores measurements of the aspect ratio of each embryo and the position of the centrosome at convergence, based on images taken of spindle elongation for C. elegans and sea urchins.	
+
+##### Results
+- ``SpindleElongation/Experiment_ElongatedSpindle/exp_cel.csv``
+	
+	Measurements of the aspect ratio of each embryo and the position of the centrosome at convergence, based on images taken of spindle elongation relative to C. elegans.
+
+- ``SpindleElongation/Experiment_ElongatedSpindle/exp_su.csv``
+
+	Measurements of the aspect ratio of each embryo and the position of the centrosome at convergence, based on images taken of spindle elongation relative to sea urchin.
+	
 	
 ## Citation
 Coming soon...
