@@ -8,6 +8,16 @@ popd () {
     command popd "$@" > /dev/null
 }
 
+if [ "$1" = "clean" ]; then
+  pushd ./src/SimulationCode/celegans/
+  make clean
+  popd
+  pushd ./src/SimulationCode/sea-urchin/
+  make clean
+  popd
+  exit 0
+fi
+
 pushd ./src/SimulationCode/celegans/
 ./because_of_graph.sh -m 0 -l 0 &&
 mv result.csv ../../../Result/Simulation/Cel_MTFixed.csv &&
