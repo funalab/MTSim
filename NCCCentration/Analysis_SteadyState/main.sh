@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 cd ./src/SimulationCode
 make CRADS="15*pow\(10,-6\)"
 ./mtsim

@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 cd ./src/SimulationCode/celegans/
 ./because_of_graph.sh -m 0 -l 0
 mv result.csv ../../../Result/Simulation/Cel_MTFixed.csv

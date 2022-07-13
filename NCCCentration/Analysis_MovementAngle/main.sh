@@ -1,3 +1,4 @@
+#!/usr/bin/env sh
 cd src/SimulationCode
 make
 ./mtsim -m 0
