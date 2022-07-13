@@ -1,13 +1,22 @@
-#!/usr/bin/env sh
-cd src/SimulationCode
-make
-./mtsim -m 0
-cp out_* ../../Result/Simulation/MTFixed/
-./mtsim -m 1
-cp out_* ../../Result/Simulation/MTVariable/
-cd ../..
+#!/usr/bin/env bash
 
-cd src/AnalysisCode/
-python main.py
+if [ "$1" = "clean" ]; then
+  pushd src/SimulationCode
+  make clean
+  popd
+  exit 0
+fi
+
+pushd src/SimulationCode
+make &&
+./mtsim -m 0 &&
+cp out_* ../../Result/Simulation/MTFixed/ &&
+./mtsim -m 1 &&
+cp out_* ../../Result/Simulation/MTVariable/
+popd
+pwd
+
+pushd src/AnalysisCode/
+python main.py &&
 Rscript wilcoxonTest.R
-cd ../../
+popd
