@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+pushd () {
+    command pushd "$@" > /dev/null
+}
+
+popd () {
+    command popd "$@" > /dev/null
+}
+
 if [ "$1" = "clean" ]; then
   pushd src/SimulationCode
   make clean
