@@ -2,7 +2,7 @@
 
 ## Authors
 - Shohei Tada: <>;
-- Yoshitaka Yamazaki: <>;
+- Yoshitaka Yamazaki: <yoshi65.ymzk@gmail.com>;
 - Takahiro G Yamada: <yamada@fun.bio.keio.ac.jp>;
 - Akira Funahashi: <funa@bio.keio.ac.jp>;
 
