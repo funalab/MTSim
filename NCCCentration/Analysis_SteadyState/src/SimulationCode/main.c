@@ -7,7 +7,7 @@
  * to compile: make (see Makefile for detail)
  * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
  *         Akira Funahashi <funa@bio.keio.ac.jp>
- * Last modified: Thu, 25 Jul 2013 03:16:52 +0900
+ * Last modified: Wed, 20 Jul 2022 01:46:32 +0900
  */
 
 #include "mtsim.h"
@@ -630,7 +630,7 @@ int main(int argc, char* argv[]) {
   XStoreName(mtg.d,mtg.w1,"fin");
   /* sprintf (filefin, "xwd -name \'fin\' -out outFIN%d",p); */
   system (filefin);
-  /* sprintf (filefin2, "convert outFIN%d outFIN%d.jpg",p,p); */
+  /* sprintf (filefin2, "convert xwd:outFIN%d outFIN%d.jpg",p,p); */
   system (filefin2);
   ///////////// examination with all parameter sets FINISHED ///////////////////
   fclose(f_out1);

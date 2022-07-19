@@ -3,7 +3,7 @@
  * this code is to store simulation results of the position of MTs and pronucleus in text files
  * Author: Akatsuki Kimura <akkimura@nig.ac.jp>
  *         Akira Funahashi <funa@bio.keio.ac.jp>
- * Last modified: Thu, 25 Jul 2013 02:38:27 +0900
+ * Last modified: Wed, 20 Jul 2022 01:49:08 +0900
  */
 #include "mtsim.h"
 
@@ -73,11 +73,11 @@ void save_logs(int i, int p, int N, FILE* f_out1, FILE* f_out2, FILE* f_out3, FI
         system (filefin);
 
         char filefin2[40];
-        sprintf (filefin2, "convert FIN%d%d%d FIN%d%d%d.jpg",lll,ll,l,lll,ll,l);
+        sprintf (filefin2, "convert xwd:FIN%d%d%d FIN%d%d%d.jpg",lll,ll,l,lll,ll,l);
         system (filefin2);
 
         char filefin3[40];
-        sprintf (filefin3, "convert FIN%d%d%d FIN%d%d%d.bmp",lll,ll,l,lll,ll,l);
+        sprintf (filefin3, "convert xwd:FIN%d%d%d FIN%d%d%d.bmp",lll,ll,l,lll,ll,l);
         system (filefin3);
         }
         */
