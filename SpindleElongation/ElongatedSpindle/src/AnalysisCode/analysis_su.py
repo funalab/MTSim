@@ -17,46 +17,53 @@ import pandas as pd
 def main():
     # setting option
     parser = argparse.ArgumentParser(
-        description="draw graph for simulation vs. experiment")
+        description="draw graph for simulation vs. experiment"
+    )
     parser.add_argument(
-        '-e',
-        '--experiment',
-        action='store_true',
-        help='draw experimental data',
-        default=False)
+        "-e",
+        "--experiment",
+        action="store_true",
+        help="draw experimental data",
+        default=False,
+    )
     parser.add_argument(
-        '-b',
-        '--before-graph',
-        action='store_true',
-        help='draw before graph',
-        default=False)
+        "-b",
+        "--before-graph",
+        action="store_true",
+        help="draw before graph",
+        default=False,
+    )
     parser.add_argument(
-        '-el',
-        '--ellipsoid',
-        action='store_true',
-        help='draw ellipsoid data',
-        default=False)
+        "-el",
+        "--ellipsoid",
+        action="store_true",
+        help="draw ellipsoid data",
+        default=False,
+    )
     args = parser.parse_args()
 
     # check option
-    data_type = '_cy_fit'
+    data_type = "_cy_fit"
     if args.ellipsoid:
-        data_type = '_el'
-    x_name = '#aspect_ratio'
-    y_name = 'spindle_length/(Rad*2)'
+        data_type = "_el"
+    x_name = "#aspect_ratio"
+    y_name = "spindle_length/(Rad*2)"
     y_lim_size = 1
     y_lim_name = "Elongated pole-to-pole distance/Cell size"
     if args.before_graph:
-        y_name = 'spindle_length'
+        y_name = "spindle_length"
         y_lim_size = 200
         y_lim_name = r"Elongated pole-to-pole distance[${\rm \mu m}$]"
 
     # path
-    data_path = os.path.join(
-        os.path.abspath('../../../'))
-    fixed_path = os.path.join(data_path, 'Analysis_ElongatedSpindle', 'Result','Simulation', 'Su_MTFixed.csv')
-    variable_path = os.path.join(data_path,'Analysis_ElongatedSpindle','Result','Simulation', 'Su_MTVariable.csv')
-    exp_path = os.path.join(data_path,'Experiment_ElongatedSpindle' ,'exp_su.csv')
+    data_path = os.path.join(os.path.abspath("../../../"))
+    fixed_path = os.path.join(
+        data_path, "ElongatedSpindle", "Result", "Simulation", "Su_MTFixed.csv"
+    )
+    variable_path = os.path.join(
+        data_path, "ElongatedSpindle", "Result", "Simulation", "Su_MTVariable.csv"
+    )
+    exp_path = os.path.join(data_path, "Experiment_ElongatedSpindle", "exp_su.csv")
 
     # read data
     fixed = pd.read_csv(fixed_path)
@@ -64,33 +71,31 @@ def main():
     experiment = pd.read_csv(exp_path)
 
     # draw graph
-    plt.rc('text', usetex=True)
-    plt.rc('font', family='serif')
-    plt.rc('xtick', direction='in')
-    plt.rc('ytick', direction='in')
+    plt.rc("text", usetex=True)
+    plt.rc("font", family="serif")
+    plt.rc("xtick", direction="in")
+    plt.rc("ytick", direction="in")
     plt.plot(
-        fixed[x_name],
-        fixed[y_name],
-        lw=5,
-        zorder=1,
-        c='blue',
-        label="MT Fixed Model")
+        fixed[x_name], fixed[y_name], lw=5, zorder=1, c="blue", label="MT Fixed Model"
+    )
     plt.plot(
         variable[x_name],
         variable[y_name],
         zorder=2,
         lw=5,
-        c='green',
-        label="MT Variable Model")
+        c="green",
+        label="MT Variable Model",
+    )
     if args.experiment:
         plt.scatter(
             experiment[x_name],
             experiment[y_name],
             zorder=6,
             s=80,
-            facecolor='red',
-            edgecolors='black',
-            label="Experimental data")
+            facecolor="red",
+            edgecolors="black",
+            label="Experimental data",
+        )
 
     # settig graph
     n = len(experiment)
