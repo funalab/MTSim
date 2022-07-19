@@ -6,7 +6,7 @@
 - Takahiro G Yamada: <yamada@fun.bio.keio.ac.jp>;
 - Akira Funahashi: <funa@bio.keio.ac.jp>;
 
-Last Modified: Wed, 20 Jul 2022 02:10:18 +0900
+Last Modified: Wed, 20 Jul 2022 02:17:41 +0900
 
 Copyright (c) 2013-2022 Funahashi Lab., Keio University.
 
@@ -76,21 +76,20 @@ This program performs simulation and analysis of the movement and rotation of th
 
 ### SpindleElongation
 This program simulates the movement of the nuclus-centrosome complex in spindle elongation based on MT Fixed and MT Variable and compares their steady states. The steady-state comparison is performed by changing the shape of the embryo in which the nucleus-centrosome complex exists in terms of aspect ratio, which is the ratio of the long axis to the short axis, over a wide range.
-#### ElongatedSpindle
 ##### How to use
 ```sh
-% cd SpindleElongation/ElongatedSpindle/
+% cd SpindleElongation/
 % ./main.sh
 ```
 
 ##### Results
-- ``SpindleElongation/ElongatedSpindle/Result/Simulation/``
+- ``SpindleElongation/Result/Simulation/``
 
 	Simulation results for centrosome movement in spindle elongation based on MTFixed and MTVariable
-- ``SpindleElongation/ElongatedSpindle/Result/Analysis/Cel_sim_vs_exp.pdf``
+- ``SpindleElongation/Result/Analysis/Cel_sim_vs_exp.pdf``
 
 	Steady-state positions obtained from simulations of centrosome movement during spindle elongation based on MTFixed and MTVariable in embryos of various aspect ratios for C. elegans compared to those obtained from experiments.
-- ``SpindleElongation/ElongatedSpindle/Result/Analysis/Su_sim_vs_exp.pdf``
+- ``SpindleElongation/Result/Analysis/Su_sim_vs_exp.pdf``
 
 	Steady-state positions obtained from simulations of centrosome movement during spindle elongation based on MTFixed and MTVariable in embryos of various aspect ratios for sea urchin compared to those obtained from experiments.	
 
