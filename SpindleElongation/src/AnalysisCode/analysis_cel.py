@@ -35,7 +35,7 @@ def main():
     args = parser.parse_args()
 
     # path
-    data_path = os.path.join("../../../")
+    data_path = os.path.join("../../")
     fixed_path = os.path.join(data_path, "Result/Simulation/Cel_MTFixed.csv")
     variable_path = os.path.join(data_path, "Result/Simulation/Cel_MTVariable.csv")
     exp_path = os.path.join(data_path, "Experiment/exp_cel.csv")

@@ -56,7 +56,7 @@ def main():
         y_lim_name = r"Elongated pole-to-pole distance[${\rm \mu m}$]"
 
     # path
-    data_path = os.path.join(os.path.abspath("../../../"))
+    data_path = os.path.join(os.path.abspath("../../"))
     fixed_path = os.path.join(data_path, "Result", "Simulation", "Su_MTFixed.csv")
     variable_path = os.path.join(data_path, "Result", "Simulation", "Su_MTVariable.csv")
     exp_path = os.path.join(data_path, "Experiment", "exp_su.csv")
