@@ -6,7 +6,7 @@
 - Takahiro G Yamada: <yamada@fun.bio.keio.ac.jp>;
 - Akira Funahashi: <funa@bio.keio.ac.jp>;
 
-Last Modified: Wed, 20 Jul 2022 02:02:46 +0900
+Last Modified: Wed, 20 Jul 2022 02:10:18 +0900
 
 Copyright (c) 2013-2022 Funahashi Lab., Keio University.
 
@@ -94,15 +94,15 @@ This program simulates the movement of the nuclus-centrosome complex in spindle 
 
 	Steady-state positions obtained from simulations of centrosome movement during spindle elongation based on MTFixed and MTVariable in embryos of various aspect ratios for sea urchin compared to those obtained from experiments.	
 
-####  Experiment_ElongatedSpindle
+####  Experiment
 The directory stores measurements of the aspect ratio of each embryo and the position of the centrosome at convergence, based on images taken of spindle elongation for C. elegans and sea urchins.	
 
 ##### Results
-- ``SpindleElongation/Experiment_ElongatedSpindle/exp_cel.csv``
+- ``SpindleElongation/Experiment/exp_cel.csv``
 	
 	Measurements of the aspect ratio of each embryo and the position of the centrosome at convergence, based on images taken of spindle elongation relative to C. elegans.
 
-- ``SpindleElongation/Experiment_ElongatedSpindle/exp_su.csv``
+- ``SpindleElongation/Experiment/exp_su.csv``
 
 	Measurements of the aspect ratio of each embryo and the position of the centrosome at convergence, based on images taken of spindle elongation relative to sea urchin.
 	

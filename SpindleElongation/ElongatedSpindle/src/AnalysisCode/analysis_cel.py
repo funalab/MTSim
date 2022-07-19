@@ -42,7 +42,7 @@ def main():
     variable_path = os.path.join(
         data_path, "ElongatedSpindle/Result/Simulation/Cel_MTVariable.csv"
     )
-    exp_path = os.path.join(data_path, "Experiment_ElongatedSpindle/exp_cel.csv")
+    exp_path = os.path.join(data_path, "Experiment/exp_cel.csv")
 
     # read data
     fixed = pd.read_csv(fixed_path)
