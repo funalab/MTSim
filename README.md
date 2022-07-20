@@ -9,7 +9,7 @@
 - Takahiro G Yamada: <yamada@fun.bio.keio.ac.jp>;
 - Akira Funahashi: <funa@bio.keio.ac.jp>;
 
-Last Modified: Thu, 21 Jul 2022 00:28:24 +0900
+Last Modified: Thu, 21 Jul 2022 00:39:09 +0900
 
 Copyright (c) 2013-2022 Funahashi Lab., Keio University.
 
@@ -31,7 +31,7 @@ This program simulates centrosome movement based on a mechanical model for two p
   - gnuplot (confirmed to work with 5.4)
   
 - When running on docker
-  - Please follow the instructions in this [README.md](./docker/README.md)
+  - Please follow the instructions in this [README.md](./docker/)
 
 ### NCCCentration
 This program performs simulation and analysis of the movement and rotation of the centrosome in the nucleus-centrosome complex centralization based on MT Fixed and MT Variable. MovementAngle compares the steady state between MT Fixed and MT Variable for the translation and rotation of the central body, and SteadyState analyzes the steady state for a wide range of initial positions and rotation angles for the centrosome.
