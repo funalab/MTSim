@@ -9,7 +9,7 @@
 - Takahiro G Yamada: <yamada@fun.bio.keio.ac.jp>;
 - Akira Funahashi: <funa@bio.keio.ac.jp>;
 
-Last Modified: Thu, 21 Jul 2022 00:39:09 +0900
+Last Modified: Thu, 21 Jul 2022 00:47:09 +0900
 
 Copyright (c) 2013-2022 Funahashi Lab., Keio University.
 
@@ -29,6 +29,12 @@ This program simulates centrosome movement based on a mechanical model for two p
     - py39-pandas (confirmed to work with 1.1.5)
   - R (confirmed to work with 4.0.4)
   - gnuplot (confirmed to work with 5.4)
+  - zsh (confirmed to work with 5.8)
+  - cm-super (confirmed to work with 0.3.4-15)
+  - dvipng (confirmed to work with 1.15)
+  - texlive-latex-base (confirmed to work with 2020.20210202-3)
+  - texlive-latex-extra (confirmed to work with 2020.20210202-3)
+  - texlive-fonts-recommended (confirmed to work with 2020.20210202-3)
   
 - When running on docker
   - Please follow the instructions in this [README.md](./docker/)
