@@ -1,4 +1,5 @@
-# MTSim (Microtubule Simulator):  Switching from weak to strong cortical attachment of microtubules accounts for the transition from nuclear centration to spindle elongation in metazoans
+# MTSim: Microtubule Simulator
+This code was used in the research for the paper titled "Switching from weak to strong cortical attachment of microtubules accounts for the transition from nuclear centration to spindle elongation in metazoans".
 
 ## Screenshot
 ![screenshot](https://github.com/funalab/MTSim/blob/images/screenshot.png)
@@ -9,7 +10,7 @@
 - Takahiro G Yamada: <yamada@fun.bio.keio.ac.jp>;
 - Akira Funahashi: <funa@bio.keio.ac.jp>;
 
-Last Modified: Thu, 21 Jul 2022 20:02:57 +0900
+Last Modified: Thu, 21 Jul 2022 20:05:44 +0900
 
 Copyright (c) 2013-2022 Funahashi Lab., Keio University.
 
