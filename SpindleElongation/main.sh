@@ -39,7 +39,7 @@ mv result.csv ../../../Result/Simulation/Su_MTFixed.csv &&
 
 sed -i -e "/NN/d;/aspect/d;/to/d;/^3.[1-4]/d" result.csv &&
 sed -i -e '1s/^/#aspect_ratio,Rad,RadS,MetaSpindle_L,spindle_length,time[sec],spindle_length\/(Rad*2)'"$LF"'/' result.csv &&
-mv result.csv ../../../Result/Simulation/Su_MTVariable.csv &&
+mv result.csv ../../../Result/Simulation/Su_MTVariable.csv
 make clean
 popd
 
