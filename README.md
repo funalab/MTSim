@@ -9,8 +9,9 @@ This code was used in the research for the paper titled "Switching from weak to 
 - Yoshitaka Yamazaki: <yoshi65.ymzk@gmail.com>;
 - Takahiro G Yamada: <yamada@fun.bio.keio.ac.jp>;
 - Akira Funahashi: <funa@bio.keio.ac.jp>;
+- Akatsuki Kimura: <akkimura@nig.ac.jp>;
 
-Last Modified: Thu, 21 Jul 2022 20:05:44 +0900
+Last Modified: Thu, 21 Jul 2022 20:09:40 +0900
 
 Copyright (c) 2013-2022 Funahashi Lab., Keio University.
 
