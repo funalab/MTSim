@@ -345,6 +345,8 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/python,r,c,macos,windows,linux
+# GDB
+.gdb_history
 
 # Output files
 out*
