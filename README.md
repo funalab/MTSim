@@ -5,13 +5,13 @@ This code was used in the research for the paper titled "Switching from weak to 
 ![screenshot](https://github.com/funalab/MTSim/blob/images/screenshot.png)
 
 ## Authors
-- [Shohei Tada](<mailto:tadashohei.24@gmail.com>)
-- [Yoshitaka Yamazaki](<mailto:yoshi65.ymzk@gmail.com>)
-- [Takahiro G Yamada](<mailto:yamada@fun.bio.keio.ac.jp>)
-- [Akira Funahashi](<mailto:funa@bio.keio.ac.jp>)
-- [Akatsuki Kimura](<mailto:akkimura@nig.ac.jp>)
+- [Shohei Tada](https://github.com/Shohei3404)
+- [Yoshitaka Yamazaki](https://github.com/yoshi65)
+- [Takahiro G Yamada](https://github.com/TakahiroYamada)
+- [Akira Funahashi](https://github.com/funasoul)
+- [Akatsuki Kimura](https://www.nig.ac.jp/nig/research/organization-top/organization/kimura)
 
-Last Modified: Thu, 21 Jul 2022 20:13:57 +0900
+Last Modified: Sat, 23 Jul 2022 19:55:19 +0900
 
 Copyright (c) 2013-2022 Funahashi Lab., Keio University.
 
