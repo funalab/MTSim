@@ -31,9 +31,9 @@ class draw_graph_ncc_centering:
         self.ang_str = 'angel[degree]'
 
         self.pos_ylab = 'Migration length of NCC / cell size [\%]'
-        self.ang_ylab = r'Angle of NCC rotaion $\phi$ [deg]'
+        self.ang_ylab = r'Angle of NCC rotation $\phi$ [deg]'
 
-        self.label = ['MT Fixed\nmodel', 'MT Variable\nmodel']
+        self.label = ['The MT-Fixed\nmodel', 'The MT-Variable\nmodel']
         self.width = 0.4
 
         # read
