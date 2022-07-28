@@ -72,7 +72,7 @@ def main():
     plt.rc("xtick", direction="in")
     plt.rc("ytick", direction="in")
     plt.plot(
-        fixed[x_name], fixed[y_name], lw=5, zorder=1, c="blue", label="MT Fixed Model"
+        fixed[x_name], fixed[y_name], lw=5, zorder=1, c="blue", label="The MT-Fixed Model"
     )
     plt.plot(
         variable[x_name],
@@ -80,7 +80,7 @@ def main():
         zorder=2,
         lw=5,
         c="green",
-        label="MT Variable Model",
+        label="The MT-Variable Model",
     )
     if args.experiment:
         plt.scatter(
