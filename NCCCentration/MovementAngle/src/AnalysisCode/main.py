@@ -30,8 +30,8 @@ class draw_graph_ncc_centering:
         self.pos_str = 'Nuc_distance[per]'
         self.ang_str = 'angel[degree]'
 
-        self.pos_ylab = 'Migration length of NCC / cell size [\%]'
-        self.ang_ylab = r'Angle of NCC rotation $\phi$ [deg]'
+        self.pos_ylab = 'Migration length of\n nucleus-centrosome complex / cell size [\%]'
+        self.ang_ylab = 'Angle of\n nucleus-centrosome complex rotation $\phi$ [deg]'
 
         self.label = ['The MT-Fixed\nmodel', 'The MT-Variable\nmodel']
         self.width = 0.4
@@ -73,7 +73,7 @@ class draw_graph_ncc_centering:
                     positions=pos,
                     labels=self.label)
         plt.xlim(pos[0] - self.width * 0.7, pos[1] + self.width * 0.7)
-        plt.ylabel(lab)
+        plt.ylabel(lab, fontsize = 14)
         # plt.ylim(0, )
         barplot_annotate_brackets(0, 1, val[1], pos, heights)
 

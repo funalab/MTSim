@@ -57,7 +57,7 @@ def main():
             lw=5,
             zorder=1,
             c="blue",
-            label="MT Fixed Model",
+            label="The MT-Fixed Model",
         )
         plt.plot(
             variable["#aspect_ratio"],
@@ -65,7 +65,7 @@ def main():
             zorder=2,
             lw=5,
             c="green",
-            label="MT Variable Model",
+            label="The MT-Variable Model",
         )
     if args.experiment:
         exp_data1 = experiment[
@@ -88,7 +88,7 @@ def main():
             s=80,
             facecolor="red",
             edgecolors="black",
-            label="TH27,TH32",
+            label="control",
         )
         plt.scatter(
             exp_data2["aspect ratio"],
@@ -98,7 +98,7 @@ def main():
             s=80,
             facecolor="magenta",
             edgecolors="black",
-            label=r"TH27,TH32;\textit{dpy-11}(RNAi)",
+            label=r"dpy-11 (RNAi)",
         )
         plt.scatter(
             exp_data4["aspect ratio"],
@@ -108,7 +108,7 @@ def main():
             s=120,
             facecolor="yellow",
             edgecolors="black",
-            label="CAL1628",
+            label="lon-1",
         )
         plt.scatter(
             exp_data3["aspect ratio"],
@@ -118,7 +118,7 @@ def main():
             s=80,
             facecolor="cyan",
             edgecolors="black",
-            label=r"CAL1628;\textit{C27D9.1}(RNAi)",
+            label=r"lon-1; C27D9.1 (RNAi)",
         )
 
     # settig graph
