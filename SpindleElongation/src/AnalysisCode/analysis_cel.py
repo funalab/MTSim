@@ -98,7 +98,7 @@ def main():
             s=80,
             facecolor="magenta",
             edgecolors="black",
-            label=r"dpy-11 (RNAi)",
+            label=r"$\it{dpy}$-$\it{11}$ (RNAi)",
         )
         plt.scatter(
             exp_data4["aspect ratio"],
@@ -108,7 +108,7 @@ def main():
             s=120,
             facecolor="yellow",
             edgecolors="black",
-            label="lon-1",
+            label="$\it{lon}$-$\it{1}$",
         )
         plt.scatter(
             exp_data3["aspect ratio"],
@@ -118,7 +118,7 @@ def main():
             s=80,
             facecolor="cyan",
             edgecolors="black",
-            label=r"lon-1; C27D9.1 (RNAi)",
+            label=r"$\it{lon}$-$\it{1}$; $\it{C27D9.1}$ (RNAi)",
         )
 
     # settig graph
