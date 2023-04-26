@@ -47,5 +47,6 @@ popd
 
 pushd src/AnalysisCode
 python analysis_cel.py -s -e &&
+python analysis_cel_sq.py -s -e &&
 python analysis_su.py -e
 popd
