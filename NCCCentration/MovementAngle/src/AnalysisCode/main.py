@@ -21,8 +21,8 @@ class draw_graph_ncc_centering:
         # variable
         base_dir = Path("../../Result/",
                         "Simulation")
-        variable_path = base_dir / 'MTFixed/out_terminal.csv'
-        fixed_path = base_dir / 'MTVariable/out_terminal.csv'
+        fixed_path = base_dir / 'MTFixed/led/out_terminal.csv'
+        variable_path = base_dir / 'MTVariable/out_terminal.csv'
 
         self.output_pos = Path.cwd() / '../../Result/Analysis/PositionAngle/position.pdf'
         self.output_ang = Path.cwd() / '../../Result/Analysis/PositionAngle/angle.pdf'
@@ -40,10 +40,10 @@ class draw_graph_ncc_centering:
         self.variable_model = pd.read_csv(variable_path)
         self.fixed_model = pd.read_csv(fixed_path)
 
-        self.pos_val = stats.ttest_ind(self.variable_model[self.pos_str],
-                                       self.fixed_model[self.pos_str])
-        self.ang_val = stats.ttest_ind(self.variable_model[self.ang_str],
-                                       self.fixed_model[self.ang_str])
+        self.pos_val = stats.ttest_ind(self.fixed_model[self.pos_str],
+                                       self.variable_model[self.pos_str])
+        self.ang_val = stats.ttest_ind(self.fixed_model[self.ang_str],
+                                       self.variable_model[self.ang_str])
 
         # setting matplotlib
         plt.rc('text', usetex=True)
@@ -64,11 +64,11 @@ class draw_graph_ncc_centering:
             val = self.ang_val
             lab = self.ang_ylab
 
-        heights = [self.variable_model[str].max(), self.fixed_model[str].max()]
+        heights = [self.fixed_model[str].max(), self.variable_model[str].max()]
         pos = np.arange(0, len(heights)) / 2
 
         plt.clf()
-        plt.boxplot([self.variable_model[str], self.fixed_model[str]],
+        plt.boxplot([self.fixed_model[str], self.variable_model[str]],
                     widths=self.width,
                     positions=pos,
                     labels=self.label)

@@ -1,4 +1,4 @@
-terminalMTFixed <- read.csv("../../Result/Simulation/MTFixed/out_terminal.csv")
+terminalMTFixed <- read.csv("../../Result/Simulation/MTFixed/led/out_terminal.csv")
 terminalMTVariable <- read.csv("../../Result/Simulation/MTVariable/out_terminal.csv")
 
 outFile <- "../../Result/Analysis/StatisticalTest/wilcoxon_ranksum_test.txt"
