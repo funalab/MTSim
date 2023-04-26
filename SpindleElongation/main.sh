@@ -23,6 +23,8 @@ pushd ./src/SimulationCode/celegans/
 mv result.csv ../../../Result/Simulation/Cel_MTFixed.csv &&
 ./because_of_graph.sh -m 1 -l 0 &&
 mv result.csv ../../../Result/Simulation/Cel_MTVariable.csv
+./because_of_graph.sh -m 1 -l 0 -s &&
+mv result.csv ../../../Result/Simulation/Cel_led_MTVariable.csv
 popd
 
 pushd ./src/SimulationCode/sea-urchin/

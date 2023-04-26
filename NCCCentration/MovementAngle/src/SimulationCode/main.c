@@ -30,9 +30,10 @@ int main(int argc, char* argv[]) {
   boolean is_check = false;
   boolean is_verbose = false;
   unsigned int model = 0; /* 0:MT_angle_fixed, 1:MT_angle_variable 2:cortex polarity*/
+  boolean sq = false;
   /* Parse options */
   myname = argv[0];
-  while ((ch = getopt(argc, argv, "m:cvh")) != -1){
+  while ((ch = getopt(argc, argv, "m:csvh")) != -1){
     switch (ch) {
       case 'c':
         is_check = true;
@@ -42,6 +43,9 @@ int main(int argc, char* argv[]) {
         break;
       case 'm':
         model = atoi(optarg);
+        break;
+      case 's':
+        sq = true;
         break;
       case 'h':
         usage(myname);
@@ -503,7 +507,12 @@ int main(int argc, char* argv[]) {
           }
           //TRACE(("%4d %4d N=%3.1lf MT=(%3.2lf %3.2lf %3.2lf %3.2lf %3.2lf %3.2lf)\n",i,k,NumberOfMotor[k],u[k][0],u[k][1],u[k][2],u[k][3],u[k][4],u[k][5]));
           for (j=0;j<6;j++){
-            ForceC[qq][j] += g.NumberOfMotor[k] * g.u[k][j] * g.MotorStallF;
+            if( sq ){
+              ForceC[qq][j] += g.NumberOfMotor[k] * g.u[k][j] * g.MotorStallF * g.L[k];
+            }
+            else{
+              ForceC[qq][j] += g.NumberOfMotor[k] * g.u[k][j] * g.MotorStallF;
+            }
           } /* an initial guess */
 
         // to monitor microtubules profile
@@ -580,7 +589,12 @@ int main(int argc, char* argv[]) {
                     }
                     g.pulling_phase[k] = 2;
                     for (j=0;j<6;j++) {
-                      g.Fbackward[j] += g.u[k][j] * g.MotorStallF * g.NumberOfMotor[k];
+                      if( sq ){
+                        g.Fbackward[j] += g.u[k][j] * g.MotorStallF * g.NumberOfMotor[k] * g.L[k];
+                      }
+                      else{
+                        g.Fbackward[j] += g.u[k][j] * g.MotorStallF * g.NumberOfMotor[k];
+                      }
                     }
                   } else {
                     if (g.pulling_phase[k]!=1) { /* the motors on this MT exert force dependent on their velocity: pulling_phase[k]=1 */
@@ -594,7 +608,12 @@ int main(int argc, char* argv[]) {
                     dvid[5] = g.DVecNucCen[qq][1]*g.u[k][0] - g.DVecNucCen[qq][0]*g.u[k][1];
                     for (j=0; j<6; j++) {
                       for (jj=0; jj<6; jj++) {
-                        g.fjac_pull[j][jj] -= (g.MotorStallF*g.NumberOfMotor[k]/g.MotorMaxVel)*dvid[jj]*g.u[k][j];
+                        if( sq ){
+                          g.fjac_pull[j][jj] -= (g.MotorStallF*g.NumberOfMotor[k]/g.MotorMaxVel)*dvid[jj]*g.u[k][j] * g.L[ k ];
+                        }
+                        else{
+                          g.fjac_pull[j][jj] -= (g.MotorStallF*g.NumberOfMotor[k]/g.MotorMaxVel)*dvid[jj]*g.u[k][j];
+                        }
                       }
                     }
                   }
@@ -664,7 +683,12 @@ int main(int argc, char* argv[]) {
                         }
                         g.pulling_phase[k] = 2;
                         for (j=0;j<3;j++) {
-                          g.Fbackward[j] += g.u[k][j] * g.MotorStallF * g.NumberOfMotor[k];
+                          if( sq ){
+                            g.Fbackward[j] += g.u[k][j] * g.MotorStallF * g.NumberOfMotor[k] * g.L[ k ];
+                          }
+                          else{
+                            g.Fbackward[j] += g.u[k][j] * g.MotorStallF * g.NumberOfMotor[k];
+                          }
                         }
                       } else {
                         if (g.pulling_phase[k]!=1) { /* the motors on this MT exert force dependent on their velocity */
@@ -731,7 +755,12 @@ int main(int argc, char* argv[]) {
                         }
                         g.pulling_phase[k] = 2;
                         for (j=0;j<3;j++) {
-                          g.Fbackward[j] += g.u[k][j] * g.MotorStallF * g.NumberOfMotor[k];
+                          if( sq ){
+                            g.Fbackward[j] += g.u[k][j] * g.MotorStallF * g.NumberOfMotor[k] * g.L[k];
+                          }
+                          else{
+                            g.Fbackward[j] += g.u[k][j] * g.MotorStallF * g.NumberOfMotor[k];
+                          }
                         }
                       } else {
                         if (g.pulling_phase[k]!=1) { /* the motors on this MT exert force dependent on their velocity */
