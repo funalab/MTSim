@@ -31,10 +31,10 @@ int main(int argc, char* argv[]) {
   boolean is_verbose = false;
   unsigned int model = 0; /* 0:MT_angle_fixed, 1:MT_angle_moveable */
   unsigned int len = 0; /* 0:from_Rad_vs_metaspindlelength, 1:from_Rad/RadS_vs_metaspindlelength/Rad */
-
+  boolean sq = false;
   /* Parse options */
   myname = argv[0];
-  while ((ch = getopt(argc, argv, "m:l:cvh")) != -1){
+  while ((ch = getopt(argc, argv, "m:l:csvh")) != -1){
     switch (ch) {
       case 'c':
         is_check = true;
@@ -47,6 +47,9 @@ int main(int argc, char* argv[]) {
         break;
       case 'l':
         len = atoi(optarg);
+        break;
+      case 's':
+        sq = true;
         break;
       case 'h':
         usage(myname);
@@ -105,7 +108,13 @@ int main(int argc, char* argv[]) {
   else if (model==1) {
     /* MTInitAngle_degree = 103; */
     /* MTDiv90 = 28; */
-    ForceCoef2 = 0.09 * pow(10,-2);
+    if( sq ){
+      ForceCoef2 = 0;
+      ForceCoef1 = 0.09 * pow(10,-2) * Cir_Rad;
+    }
+    else{
+      ForceCoef2 = 0.09 * pow(10,-2);
+    }
     MTInitAngle_degree = 97;
   }
   double MTInitAngle = MTInitAngle_degree * PI / 180; /* the maximum angle of MTs [radian] */
