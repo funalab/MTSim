@@ -16,7 +16,7 @@ import pandas as pd
 def main():
     # setting option
     parser = argparse.ArgumentParser(
-        description="draw graph for simulation vs. experiment"
+        description="draw graph for simulation vs. simulation"
     )
     parser.add_argument(
         "-s",
@@ -57,7 +57,7 @@ def main():
             lw=5,
             zorder=1,
             c="blue",
-            label="The MT-Variable Model",
+            label="Squared Length Dependent",
         )
         plt.plot(
             variable["#aspect_ratio"],
@@ -65,7 +65,7 @@ def main():
             zorder=2,
             lw=5,
             c="green",
-            label="The MT-Variable Model length dependent",
+            label="Length Dependent",
         )
     if args.experiment:
         exp_data1 = experiment[
