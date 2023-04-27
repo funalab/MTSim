@@ -109,6 +109,7 @@ int main(int argc, char* argv[]) {
     /* MTInitAngle_degree = 103; */
     /* MTDiv90 = 28; */
     if( sq ){
+      printf("hoge");
       ForceCoef2 = 0;
       ForceCoef1 = 0.09 * pow(10,-2) * Cir_Rad;
     }
