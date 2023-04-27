@@ -309,23 +309,23 @@ else
     sed -i -e "s/ar_step = 0.5/ar_step = 0.1/g" main.c
     
     make -s
-    ./mtsim -m ${model} -l ${len} < enter.txt > result.csv
+    ./mtsim -m ${model} -l ${len} -s < enter.txt > result.csv
     
     sed -i -e "s/ar_init = 1.0/ar_init = 1.5/g" main.c
     make -s
-    ./mtsim -m ${model} -l ${len} < enter.txt >> result.csv
+    ./mtsim -m ${model} -l ${len} -s < enter.txt >> result.csv
     
     sed -i -e "s/ar_init = 1.5/ar_init = 2.0/g" main.c
     make -s
-    ./mtsim -m ${model} -l ${len} < enter.txt >> result.csv
+    ./mtsim -m ${model} -l ${len} -s < enter.txt >> result.csv
     
     sed -i -e "s/ar_init = 2.0/ar_init = 2.5/g" main.c
     make -s
-    ./mtsim -m ${model} -l ${len}< enter.txt >> result.csv
+    ./mtsim -m ${model} -l ${len} -s < enter.txt >> result.csv
     
     sed -i -e "s/ar_init = 2.5/ar_init = 3.0/g" main.c
     make -s
-    ./mtsim -m ${model} -l ${len}< enter.txt >> result.csv
+    ./mtsim -m ${model} -l ${len} -s < enter.txt >> result.csv
     
     # arrange result
     sed -i -e "/NN/d;/aspect/d;/to/d;/^3.[1-4]/d" result.csv
