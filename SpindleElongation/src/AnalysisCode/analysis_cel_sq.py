@@ -37,7 +37,7 @@ def main():
     # path
     data_path = os.path.join("../../")
     fixed_path = os.path.join(data_path, "Result/Simulation/Cel_MTVariable.csv")
-    variable_path = os.path.join(data_path, "Result/Simulation/Cel_led_Variable.csv")
+    variable_path = os.path.join(data_path, "Result/Simulation/Cel_led_MTVariable.csv")
     exp_path = os.path.join(data_path, "Experiment/exp_cel.csv")
 
     # read data
