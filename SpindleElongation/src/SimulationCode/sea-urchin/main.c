@@ -75,6 +75,7 @@ int main(int argc, char* argv[]) {
   FILE *f_out_3dcheck = fopen("out_3Dcheck.dat","w");
   FILE *f_out_for3d = fopen("out_for_3D.dat","w");
   FILE *f_out_MTP = fopen("out_MTP.csv","w");
+  FILE *f_out_MTPI = fopen("out_f_MTPI.csv", "aw");
   ////////////////////////////////////////////
   // DECLEARATION of Constants and Variables//
   ////////////////////////////////////////////
@@ -308,6 +309,10 @@ int main(int argc, char* argv[]) {
       }
     }
 
+    fprintf( f_out_MTPI, "%lf\n" , aspect_ratio);
+    for( k = 0 ; k < g.N ; k ++ ){
+      fprintf( f_out_MTPI, "%lf,%lf,%lf\n" , g.u[ k ][ 0 ], g.u[ k ][ 1 ], g.u[ k ][ 2 ]);
+    }
     ////////////////////////////////////////
     ///// Repetition for each time step ////
     ////////////////////////////////////////
@@ -422,6 +427,8 @@ int main(int argc, char* argv[]) {
   fclose(f_out_mtnum);
   fclose(f_out_fvcheck);
   fclose(f_out_3dcheck);
+  fclose(f_out_MTP);
+  fclose(f_out_MTPI);
   XStoreName(mtg.d,mtg.w1,"fin");
   XStoreName(mtg.d,mtg.w2,"path");
   XStoreName(mtg.d,mtg.w3,"distance");

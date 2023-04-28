@@ -80,6 +80,7 @@ int main(int argc, char* argv[]) {
   FILE *f_out_3dcheck = fopen("out_3Dcheck.dat","w");
   FILE *f_out_for3d = fopen("out_for_3D.csv","w");
   FILE *f_out_MTP = fopen("out_f_MTP.csv", "aw");
+  FILE *f_out_MTPI = fopen("out_f_MTPI.csv", "aw");
   ////////////////////////////////////////////
   // DECLEARATION of Constants and Variables//
   ////////////////////////////////////////////
@@ -277,6 +278,10 @@ int main(int argc, char* argv[]) {
       }
     }
 
+    fprintf( f_out_MTPI , "%lf\n", aspect_ratio);
+    for( MT_num = 0 ; MT_num < g.N ; MT_num ++){
+      fprintf( f_out_MTPI, "%lf,%lf,%lf\n", g.u[ MT_num ][ 0 ], g.u[ MT_num ][ 1 ], g.u[ MT_num ][ 2 ]);
+    }
     ////////////////////////////////////////
     ///// Repetition for each time step ////
     ////////////////////////////////////////
@@ -354,7 +359,7 @@ int main(int argc, char* argv[]) {
     for( MT_num = 0 ; MT_num < g.N ; MT_num ++){
       fprintf( f_out_MTP, "%lf,%lf,%lf\n", g.u[ MT_num ][ 0 ], g.u[ MT_num ][ 1 ], g.u[ MT_num ][ 2 ]);
     }
-    //////////////// examination with single parameter set FINISHED ///////////////////////////
+    //////////////// Examination with single parameter set FINISHED ///////////////////////////
     /* XStoreName(mtg.d,mtg.w1,"fin"); */
     /* sprintf (filefin, "xwd -name \'fin\' -out outFIN%d",p); */
     /* system (filefin); */
@@ -373,6 +378,8 @@ int main(int argc, char* argv[]) {
   fclose(f_out_mtnum);
   fclose(f_out_fvcheck);
   fclose(f_out_3dcheck);
+  fclose(f_out_MTP);
+  fclose(f_out_MTPI);
   XStoreName(mtg.d,mtg.w1,"fin");
   XStoreName(mtg.d,mtg.w2,"path");
   XStoreName(mtg.d,mtg.w3,"distance");
