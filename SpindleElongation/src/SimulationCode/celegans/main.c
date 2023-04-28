@@ -352,7 +352,7 @@ int main(int argc, char* argv[]) {
 
     fprintf( f_out_MTP , "%lf\n", aspect_ratio);
     for( MT_num = 0 ; MT_num < g.N ; MT_num ++){
-      fprintf( f_out__MTP, "%lf,%lf,%lf\n", g.u[ MT_num ][ 0 ], g.u[ MT_num ][ 1 ], g.u[ MT_num ][ 2 ]);
+      fprintf( f_out_MTP, "%lf,%lf,%lf\n", g.u[ MT_num ][ 0 ], g.u[ MT_num ][ 1 ], g.u[ MT_num ][ 2 ]);
     }
     //////////////// examination with single parameter set FINISHED ///////////////////////////
     /* XStoreName(mtg.d,mtg.w1,"fin"); */
