@@ -1,5 +1,6 @@
 #!/bin/zsh
 
+rm out_f_MTP.csv
 # set variable
 local -A opthash
 zparseopts -D -A opthash -- h m: l: p: a:
