@@ -129,7 +129,7 @@ int main(int argc, char* argv[]) {
   double CortexPullingFreq;
 
   // arrangement of microtubules: calculation of the (maximum) number of MTs
-  double starting_degree = 90.0; /* starting degree of aster: for the simulation with single aster (Sup Fig S9) this value should be changed*/
+  double starting_degree = PI/2.0; /* starting degree of aster: for the simulation with single aster (Sup Fig S9) this value should be changed*/
   //double starting_degree = PI/2.0; /* starting degree of aster: for the simulation with single aster (Sup Fig S9) this value should be changed*/
   /* int MTDivision = 4; /\* this number defines the (maximum) number of MTs*\/ */
   int MTDivision = 6; /* this number defines the (maximum) number of MTs*/

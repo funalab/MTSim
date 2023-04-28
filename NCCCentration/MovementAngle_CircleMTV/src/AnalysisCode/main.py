@@ -38,8 +38,8 @@ class draw_graph_ncc_centering:
         # read
         self.variable_model = pd.read_csv(variable_path)
 
-        self.pos_val = stats.ttest_ind(self.variable_model[self.pos_str])
-        self.ang_val = stats.ttest_ind(self.variable_model[self.ang_str])
+        #self.pos_val = stats.ttest_ind(self.variable_model[self.pos_str])
+        #self.ang_val = stats.ttest_ind(self.variable_model[self.ang_str])
 
         # setting matplotlib
         plt.rc('text', usetex=True)
@@ -52,12 +52,10 @@ class draw_graph_ncc_centering:
         if mode == 'pos':
             name = self.output_pos
             str = self.pos_str
-            val = self.pos_val
             lab = self.pos_ylab
         else:
             name = self.output_ang
             str = self.ang_str
-            val = self.ang_val
             lab = self.ang_ylab
 
         heights = [self.variable_model[str].max()]
@@ -68,9 +66,13 @@ class draw_graph_ncc_centering:
                     widths=self.width,
                     positions=pos,
                     labels=self.label)
-        plt.xlim(pos[0] - self.width * 0.7, pos[1] + self.width * 0.7)
+        #plt.xlim(pos[0] - self.width * 0.7, pos[1] + self.width * 0.7)
         plt.ylabel(lab, fontsize = 14)
-        # plt.ylim(0, )
+        if mode == 'pos':
+            plt.yticks(np.arange(30,60,10))
+            plt.ylim(25,55)
+        else:
+            plt.ylim(0, 100 )
 
         plt.tight_layout()
         plt.savefig(name)
