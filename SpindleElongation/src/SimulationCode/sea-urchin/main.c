@@ -74,7 +74,7 @@ int main(int argc, char* argv[]) {
   FILE *f_out_fvcheck = fopen("out_FVcheck.dat","w");
   FILE *f_out_3dcheck = fopen("out_3Dcheck.dat","w");
   FILE *f_out_for3d = fopen("out_for_3D.dat","w");
-
+  FILE *f_out_MTP = fopen("out_MTP.csv","w");
   ////////////////////////////////////////////
   // DECLEARATION of Constants and Variables//
   ////////////////////////////////////////////
@@ -395,6 +395,12 @@ int main(int argc, char* argv[]) {
       printf("%.1lf,%.3lf,%.3lf,%.3lf,%.3lf,%lf,%.3lf\n", aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), MetaSpindle_L*pow(10,6), fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6), step_counter*dT, fabs(PVecCen[0][0]-PVecCen[1][0])/(Rad*2));
       fprintf(f_out_someaspect,"%.1lf,%.3lf,%.3lf,%.3lf,%lf,%.3lf\n", aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6), step_counter*dT, fabs(PVecCen[0][0]-PVecCen[1][0])/(Rad*2));
     }
+
+    fprintf( f_out_MTP, "%lf\n", aspect_ratio);
+    for( MT_num = 0 ; MT_num < g.N ; MT_num ++){
+      fprintf( f_out_MTP, "%lf,%lf,%lf\n", g.u[MT_num][0], g.u[MT_num][1], g.u[MT_num][2]);
+    }
+        
     //////////////// examination with single parameter set FINISHED ///////////////////////////
     /* XStoreName(mtg.d,mtg.w1,"fin"); */
     /* sprintf (filefin, "xwd -name \'fin\' -out outFIN%d",p); */
