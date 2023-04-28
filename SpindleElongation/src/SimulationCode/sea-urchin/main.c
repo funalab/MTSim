@@ -397,8 +397,8 @@ int main(int argc, char* argv[]) {
     }
 
     fprintf( f_out_MTP, "%lf\n", aspect_ratio);
-    for( MT_num = 0 ; MT_num < g.N ; MT_num ++){
-      fprintf( f_out_MTP, "%lf,%lf,%lf\n", g.u[MT_num][0], g.u[MT_num][1], g.u[MT_num][2]);
+    for( k = 0 ; k < g.N ; k ++){
+      fprintf( f_out_MTP, "%lf,%lf,%lf\n", g.u[k][0], g.u[k][1], g.u[k][2]);
     }
         
     //////////////// examination with single parameter set FINISHED ///////////////////////////
