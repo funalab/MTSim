@@ -350,9 +350,9 @@ int main(int argc, char* argv[]) {
       fprintf(f_out_somesize,"%.1lf,%.3lf,%.3lf,%.3lf,%lf,%.3lf\n", aspect_ratio, Rad*pow(10,6), RadS*pow(10,6), fabs(PVecCen[0][0]-PVecCen[1][0])*pow(10,6), step_counter*dT, fabs(PVecCen[0][0]-PVecCen[1][0])/(Rad*2));
     }
 
-    fprintf( out_f_MTP , "%lf\n", aspect_ratio);
+    fprintf( f_out_MTP , "%lf\n", aspect_ratio);
     for( MT_num = 0 ; MT_num < g.N ; MT_num ++){
-      fprintf( out_f_MTP, "%lf,%lf,%lf\n", g.u[ MT_num ][ 0 ], g.u[ MT_num ][ 1 ], g.u[ MT_num ][ 2 ]);
+      fprintf( f_out__MTP, "%lf,%lf,%lf\n", g.u[ MT_num ][ 0 ], g.u[ MT_num ][ 1 ], g.u[ MT_num ][ 2 ]);
     }
     //////////////// examination with single parameter set FINISHED ///////////////////////////
     /* XStoreName(mtg.d,mtg.w1,"fin"); */
