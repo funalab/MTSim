@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
   FILE *f_out_3dcheck = fopen("out_3Dcheck.dat","w");
   FILE *f_out_for3d = fopen("out_for_3D.dat","w");
   FILE *f_out_MTP = fopen("out_MTP.csv","w");
-  FILE *f_out_MTPI = fopen("out_f_MTPI.csv", "aw");
+  FILE *f_out_MTPI = fopen("out_MTPI.csv", "aw");
   ////////////////////////////////////////////
   // DECLEARATION of Constants and Variables//
   ////////////////////////////////////////////
